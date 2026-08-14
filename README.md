@@ -1,5 +1,7 @@
 # dsh-whale-animation
 
+[![Awesome](https://awesome.re/badge.svg)](https://awesome.re) [![Awesome DSH Plugin](https://awesome-dsh-plugin.com/badge.svg)](https://awesome-dsh-plugin.com)
+
 A persistent [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) Web UI plugin that places a black whale-dive animation beside the turn status (such as **Deep diving...**).
 
 The animation is a self-contained 184×184 lossless animated WebP with a reduced-motion PNG fallback. Its 618-frame closed trajectory eliminates the former end-to-start hard cut while keeping every frame at 17ms for 60Hz-safe playback.
