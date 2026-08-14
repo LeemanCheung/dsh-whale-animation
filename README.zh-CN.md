@@ -28,6 +28,23 @@
 
 > 为减小仓库页面负担，预览图每隔一帧采样一次；插件实际携带完整的 **618 帧**无损动画。
 
+## 截图
+
+<table>
+  <tr>
+    <td width="33%"><img src="docs/screenshots/launch.png" alt="鲸鱼跃出水面的动作截图" /></td>
+    <td width="33%"><img src="docs/screenshots/apex.png" alt="鲸鱼在跃起顶点卷曲身体的动作截图" /></td>
+    <td width="33%"><img src="docs/screenshots/deep-dive.png" alt="鲸鱼重新潜入水下的动作截图" /></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>01 — 破水跃起</strong></td>
+    <td align="center"><strong>02 — 跃起顶点</strong></td>
+    <td align="center"><strong>03 — 入水深潜</strong></td>
+  </tr>
+</table>
+
+所有截图均直接从仓库中的 `assets/whale-dive.webp` 渲染，因此展示的是用户实际安装后收到的动画帧，而不是单独绘制的概念图。
+
 ## 特性
 
 | | 特性 | 说明 |
@@ -101,6 +118,7 @@ assets/
 docs/
   hero.png               README 头图
   preview.webp           README 轻量动画预览
+  screenshots/           破水、顶点与深潜动作截图
 lib/
   client.js              预构建 DSH 浏览器客户端
 scripts/

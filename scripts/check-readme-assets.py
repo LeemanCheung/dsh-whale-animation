@@ -8,6 +8,11 @@ ROOT = Path(__file__).resolve().parents[1]
 HERO = ROOT / 'docs' / 'hero.png'
 PREVIEW = ROOT / 'docs' / 'preview.webp'
 READMES = [ROOT / 'README.md', ROOT / 'README.zh-CN.md']
+SCREENSHOTS = [
+    ROOT / 'docs' / 'screenshots' / 'launch.png',
+    ROOT / 'docs' / 'screenshots' / 'apex.png',
+    ROOT / 'docs' / 'screenshots' / 'deep-dive.png',
+]
 
 
 def webp_animation(path):
@@ -39,6 +44,10 @@ def main():
     hero = Image.open(HERO)
     preview = Image.open(PREVIEW)
     durations = webp_animation(PREVIEW)
+    screenshots = {
+        path.name: {'size': Image.open(path).size, 'bytes': path.stat().st_size}
+        for path in SCREENSHOTS
+    }
     readmes = {}
     for path in READMES:
         text, refs = local_references(path)
@@ -55,6 +64,8 @@ def main():
         'previewRiffFramesInExpectedRange': 300 <= len(durations) <= 309,
         'previewDurationMatchesSource': sum(durations) == 618 * 17,
         'previewUnder800KiB': PREVIEW.stat().st_size < 800 * 1024,
+        'threeScreenshotsPresent': len(screenshots) == 3,
+        'screenshotsAre900x520': all(value['size'] == (900, 520) for value in screenshots.values()),
         'readmeLinksResolve': all(not value['missing'] for value in readmes.values()),
     }
     report = {
@@ -67,6 +78,7 @@ def main():
             'totalMs': sum(durations),
             'bytes': PREVIEW.stat().st_size,
         },
+        'screenshots': screenshots,
         'readmes': readmes,
         'checks': checks,
         'ok': all(checks.values()),

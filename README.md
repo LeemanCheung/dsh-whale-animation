@@ -28,6 +28,23 @@
 
 > The preview uses every second frame to keep the repository page lightweight. The plugin ships the full **618-frame** lossless animation.
 
+## Screenshots
+
+<table>
+  <tr>
+    <td width="33%"><img src="docs/screenshots/launch.png" alt="The whale breaching the waterline" /></td>
+    <td width="33%"><img src="docs/screenshots/apex.png" alt="The whale curling at the leap apex" /></td>
+    <td width="33%"><img src="docs/screenshots/deep-dive.png" alt="The whale returning below the surface" /></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>01 — Breach</strong></td>
+    <td align="center"><strong>02 — Apex</strong></td>
+    <td align="center"><strong>03 — Deep dive</strong></td>
+  </tr>
+</table>
+
+Each screenshot is rendered from the committed `assets/whale-dive.webp`, so the gallery represents the frames users actually receive—not separate concept art.
+
 ## Highlights
 
 | | Feature | What it means |
@@ -101,6 +118,7 @@ assets/
 docs/
   hero.png               README hero artwork
   preview.webp           Lightweight animated README preview
+  screenshots/           Breach, apex, and deep-dive frame gallery
 lib/
   client.js              Prebuilt DSH browser client
 scripts/

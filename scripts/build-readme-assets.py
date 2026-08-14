@@ -8,7 +8,9 @@ SOURCE = ROOT / 'assets' / 'whale-dive.webp'
 DOCS = ROOT / 'docs'
 HERO = DOCS / 'hero.png'
 PREVIEW = DOCS / 'preview.webp'
+SCREENSHOTS = DOCS / 'screenshots'
 DOCS.mkdir(exist_ok=True)
+SCREENSHOTS.mkdir(exist_ok=True)
 
 FONT_REGULAR = Path(r'C:\Windows\Fonts\segoeui.ttf')
 FONT_SEMIBOLD = Path(r'C:\Windows\Fonts\seguisb.ttf')
@@ -132,18 +134,43 @@ def build_preview(frames, delays):
     )
 
 
+def build_stage_screenshots(frames):
+    stages = [
+        ('01', 'BREACH', 'Powering through the waterline', 55, 'launch.png'),
+        ('02', 'APEX', 'Body curl and tail follow-through', 135, 'apex.png'),
+        ('03', 'DEEP DIVE', 'Returning below the surface', 242, 'deep-dive.png'),
+    ]
+    for number, title, caption, frame_index, filename in stages:
+        canvas = gradient((900, 520), (241, 248, 255), (214, 232, 254))
+        decorate_background(canvas)
+        draw = ImageDraw.Draw(canvas)
+        draw.rounded_rectangle((42, 36, 858, 474), radius=34, fill=(255, 255, 255, 246))
+        draw.rounded_rectangle((74, 70, 135, 106), radius=18, fill=(224, 237, 255, 255))
+        draw.text((92, 77), number, font=font(FONT_BOLD, 17), fill=(25, 83, 167, 255))
+        draw.text((74, 132), title, font=font(FONT_BOLD, 44), fill=(15, 30, 54, 255))
+        draw.text((76, 190), caption, font=font(FONT_REGULAR, 21), fill=(78, 96, 123, 255))
+        draw.rounded_rectangle((74, 250, 390, 330), radius=22, fill=(239, 246, 255, 255))
+        draw.text((100, 269), 'Deep diving...', font=font(FONT_SEMIBOLD, 29), fill=(22, 35, 55, 255))
+        draw.text((77, 402), f'Rendered from source frame {frame_index + 1} / 618', font=font(FONT_SEMIBOLD, 16), fill=(43, 79, 130, 255))
+        whale = frames[frame_index].resize((330, 330), Image.Resampling.LANCZOS)
+        canvas.alpha_composite(whale, (500, 105))
+        canvas.convert('RGB').save(SCREENSHOTS / filename, optimize=True)
+
+
 def main():
     frames, delays = source_frames()
     if len(frames) != 618 or set(delays) != {17}:
         raise RuntimeError(f'Unexpected animation source: {len(frames)} frames, delays={sorted(set(delays))}')
     build_hero(frames)
     build_preview(frames, delays)
+    build_stage_screenshots(frames)
     print({
         'hero': str(HERO),
         'heroBytes': HERO.stat().st_size,
         'preview': str(PREVIEW),
         'previewBytes': PREVIEW.stat().st_size,
         'previewFrames': len(range(0, len(frames), 2)),
+        'screenshots': [str(path) for path in sorted(SCREENSHOTS.glob('*.png'))],
     })
 
 
