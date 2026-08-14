@@ -31,7 +31,7 @@ if (!removed) throw new Error('Client style was not disposed')
 delete globalThis.document
 const animated = await stat(resolve(root, 'assets/whale-dive.webp'))
 const reduced = await stat(resolve(root, 'assets/whale-static.png'))
-if (animated.size !== 1514022) throw new Error(`Unexpected WebP size: ${animated.size}`)
+if (animated.size !== 629936) throw new Error(`Unexpected WebP size: ${animated.size}`)
 if (reduced.size < 100) throw new Error('Reduced-motion PNG is empty')
 if (!source.includes('data:image/webp;base64,') || !source.includes('data:image/png;base64,')) throw new Error('Embedded data URLs missing')
 console.log(JSON.stringify({ ok: true, moduleId: loaded.id, animatedBytes: animated.size, reducedBytes: reduced.size, clientBytes: Buffer.byteLength(source) }))

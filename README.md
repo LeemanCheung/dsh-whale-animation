@@ -2,7 +2,7 @@
 
 A persistent [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) Web UI plugin that places a black whale-dive animation beside the turn status (such as **Deep diving...**).
 
-The animation is a self-contained 184×184 lossless animated WebP with a reduced-motion PNG fallback. Its 720-frame continuous official-logo trajectory combines image-2 motion design with smooth geometric in-betweens, keeps every frame at 17ms for 60Hz-safe playback, and eliminates the former end-to-start hard cut.
+The animation is a self-contained 184×184 lossless animated WebP with a reduced-motion PNG fallback. Its 618-frame closed trajectory eliminates the former end-to-start hard cut while keeping every frame at 17ms for 60Hz-safe playback.
 
 ## Install
 
@@ -25,7 +25,7 @@ dsh plugin --profile web remove dsh-whale-animation
 - Adds a pure-black whale animation immediately after the DSH turn-status label.
 - Uses an embedded animated WebP; no network request or external asset path is required while DSH runs.
 - Respects `prefers-reduced-motion` by using the included static PNG.
-- Uses a continuous closed leap, entry, and deep-dive trajectory so the loop does not snap from the final dive pose back to its first pose.
+- Uses a closed forward/return trajectory so the loop does not snap from the final dive pose back to its first pose.
 
 ## Development
 
