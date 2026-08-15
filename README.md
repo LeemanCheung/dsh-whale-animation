@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <strong>A persistent black whale-dive animation beside the DeepSeek Harness turn status.</strong><br />
+  <strong>A persistent, theme-aware monochrome whale-dive animation beside the DeepSeek Harness turn status.</strong><br />
   Closed-loop playback, no runtime network requests, and a static fallback for reduced-motion users.
 </p>
 
@@ -26,7 +26,7 @@
   <img src="docs/preview.webp" alt="Animated preview of the whale beside the Deep diving status" width="900" />
 </p>
 
-> The preview preserves all **60 native image-2 drawings** and their production timing; no extra in-between frames are inserted. v0.3.0 locks a compact head, lifted snout, eye, mouth and short fluke while keeping the torso and tail articulated frame by frame.
+> The preview has 60 frames at the production 33 ms cadence, with no extra in-between frames. v0.3.0 uses a compact head, lifted snout, eye, mouth, and short fluke while the torso and tail remain articulated frame by frame.
 
 ## Screenshots
 
@@ -49,13 +49,15 @@ Each screenshot is rendered from the committed `assets/whale-dive.webp`, so the 
 
 | | Feature | What it means |
 |---|---|---|
-| 🌊 | **Propagating water surface** | Breach and entry generate outward-travelling crests, recoil and damped settling instead of a frozen waterline. |
-| 🐋 | **Stable original whale identity** | The compact head, lifted snout, eye and short fluke stay consistent while the torso follows head-led, tail-lagged flexion. |
+| 🌊 | **Propagating water surface** | Breach and entry produce travelling crests, recoil, and damped settling instead of a frozen waterline. |
+| 🐋 | **Original articulated whale** | A compact head, lifted snout, eye, mouth, and short fluke remain legible while the torso and tail flex through the loop. |
+| 🌗 | **Theme aware** | The whale uses its normal monochrome treatment in light mode and is inverted for `prefers-color-scheme: dark`, `html.dark`, and `html[data-theme="dark"]`. |
 | 📦 | **Self-contained bundle** | Animated WebP and PNG fallback are embedded in the built client; no runtime URL or source-frame directory is required. |
 | ♿ | **Reduced-motion aware** | `prefers-reduced-motion` switches the animation to the included static PNG. |
+| ⚙️ | **Zero configuration** | Size, offset, selector, and animation assets are fixed at build time; customization means rebuilding `lib/client.js`. |
 | 🎯 | **Strictly visual scope** | Decorates only the Web turn-status surface; it has no settings, model tools, storage, workspace access, network calls, or user-content processing. |
-| ♻️ | **Lifecycle-clean** | The package-owned style belongs to the Cordis client fiber and is removed completely when the plugin stops or is uninstalled. |
-| 🔌 | **Persistent DSH plugin** | The `dsh.bundle` manifest and `cordis.patch.yml` mount the client automatically in the Web profile. |
+| ♻️ | **Lifecycle-clean and idempotent** | Activation removes an older plugin style before adding one owned by the Cordis client fiber; stop or uninstall removes it completely. |
+| 🔌 | **Persistent DSH plugin** | The `dsh.bundle` manifest and `cordis.patch.yml` mount the browser client automatically in the Web profile. |
 
 ## Install
 
@@ -83,17 +85,17 @@ dsh plugin --profile web remove dsh-whale-animation
 
 | Property | Value |
 |---|---:|
-| Canvas | 352 × 352 px (displayed at 84 × 84 CSS px) |
-| Source frames | 60 unique native drawings |
+| Source canvas | 352 × 352 px (displayed at 84 × 84 CSS px) |
+| Animation frames | 60 |
 | Frame duration | 33 ms |
 | Loop duration | 1.980 s |
-| Encoding | Lossless animated WebP with alpha |
-| Reduced-motion asset | Transparent PNG |
+| Encoding | Animated RIFF WebP |
+| Reduced-motion asset | PNG |
 | Runtime asset requests | None |
 
-The final encoded WebP is decoded during validation—not merely checked at the source-frame level. It contains 60 unique frames at 33 ms each; the current closed-loop seam has an alpha-difference score of `0.00306` and a centroid step of `0.27 px`. Body area never falls below 98.7% of the median, so entry and deep-dive frames keep the whale visible.
+`npm run check` verifies client registration and disposal, RIFF/WebP framing, 60 × 33 ms animation timing, embedded WebP/PNG data URLs, the 84 px layout rule, and the dark-theme CSS rule. It does not score artistic continuity or prove the source artwork is unique.
 
-The water layer combines a closed travelling wave with two damped wave packets. The cycle contains 59 continuously changing surface profiles with an exact last-to-first closure; the maximum crest-to-trough span is `23.45 px`, while the maximum mean adjacent-profile change is `1.90 px`, making the motion visible without flicker.
+`python scripts/check-readme-assets.py` independently verifies the generated 1200 × 380 hero, 1000 × 320 60-frame preview and 1.980 s timing, the three 900 × 520 screenshots, the preview size budget, local README links, and one Mermaid diagram per README.
 
 ## How it works
 
@@ -101,20 +103,26 @@ The water layer combines a closed travelling wave with two damped wave packets. 
 flowchart LR
   A[Animated WebP + static PNG] --> B[scripts/build-client.mjs]
   B --> C[Embedded data URLs]
-  C --> D[DSH client bundle]
-  D --> E[Turn-status ::after element]
-  F[prefers-reduced-motion] --> D
+  C --> D[DSH Web client bundle]
+  D --> E[turn-status ::after]
+  F[dark-theme selectors] --> D
+  G[prefers-reduced-motion] --> D
 ```
 
-The client adds a package-owned stylesheet to the DSH turn-status element. Both assets are embedded as data URLs in `lib/client.js`, so activation does not depend on the repository checkout after installation.
+`lib/index.js` is an intentional no-op Host entry: all behavior runs in the browser through the package's `dsh.client` Web registration. Both assets are embedded as data URLs in `lib/client.js`, so activation does not depend on the repository checkout after installation.
+
+The client first removes an existing `style[data-plugin="dsh-whale-animation"]`, then adds one style through `ctx.effect()` and removes it on disposal. The CSS targets the current hashed turn-status class plus the `[class*="_turnStatus"]` fallback, clears that element's `::before` content, and paints a non-interactive 84 × 84 px `::after` 6 px to its right. This broad fallback and the two pseudo-elements can conflict with a future Shell refactor or another plugin that styles the same surface.
+
+Dark-mode selectors invert the monochrome artwork; `prefers-reduced-motion` swaps in the PNG. There is no settings UI or runtime configuration—the size, offset, selectors, and assets are generated into `lib/client.js`.
 
 ## Development
 
-Requirements: **Node.js 20+**. Python and Pillow are needed only when rebuilding the README artwork.
+Requirements: **Node.js 20+**. Rebuilding README artwork additionally needs Python 3, Pillow, and NumPy:
 
 ```powershell
-node scripts/build-client.mjs
-node scripts/check.mjs
+python -m pip install Pillow numpy
+npm run build
+npm run check
 python scripts/build-readme-assets.py
 python scripts/check-readme-assets.py
 ```
@@ -123,13 +131,14 @@ python scripts/check-readme-assets.py
 
 ```text
 assets/
-  whale-dive.webp        Full lossless animation
+  whale-dive.webp        Full animated asset
   whale-static.png       Reduced-motion fallback
 docs/
   hero.png               README hero artwork
   preview.webp           Lightweight animated README preview
   screenshots/           Breach, apex, and deep-dive frame gallery
 lib/
+  index.js               Intentional no-op Host entry
   client.js              Prebuilt DSH browser client
 scripts/
   build-client.mjs       Embeds source assets into the client
@@ -143,9 +152,9 @@ cordis.patch.yml         Persistent DSH bundle composition patch
 
 ## Compatibility
 
-- Targets the **DeepSeek Harness Web UI**.
-- Requires a DSH version compatible with `@deepseek-ai/dsh-client-runtime ^0.1.0-rc.6`.
-- Relies on the current turn-status CSS class pattern; a future DSH shell redesign may require a selector update.
+- Targets the **DeepSeek Harness Web UI** only and requires a DSH version compatible with `@deepseek-ai/dsh-client-runtime ^0.1.0-rc.6`.
+- Uses the current hashed turn-status class and a `[class*="_turnStatus"]` fallback. A Shell DOM/class or pseudo-element redesign may require a selector update; plugins that also own that target's `::before` or `::after` can conflict.
+- Light, OS-dark, `html.dark`, and `html[data-theme="dark"]` modes are covered by CSS inversion; reduced motion receives the static PNG. The plugin does not offer runtime settings, and its 84 px size/right-side offset are build-time constants.
 
 ## Attribution
 

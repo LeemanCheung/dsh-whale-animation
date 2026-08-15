@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-  <strong>在 DeepSeek Harness 状态文字旁显示持久化黑色鲸鱼深潜动画。</strong><br />
+  <strong>在 DeepSeek Harness 状态文字旁显示持久化、随主题适配的单色鲸鱼深潜动画。</strong><br />
   无缝闭环、运行时零网络请求，并为减少动态效果用户提供静态回退。
 </p>
 
@@ -26,7 +26,7 @@
   <img src="docs/preview.webp" alt="鲸鱼在 Deep diving 状态文字旁跃起和深潜的动画预览" width="900" />
 </p>
 
-> 预览完整保留 **60 张 image-2 原生画面**及其正式播放节奏；不会额外插入过渡帧。v0.3.0 统一了紧凑头型、上扬吻部、眼睛、嘴部和短尾鳍等身份特征，同时保持躯干与尾部逐帧弯曲。
+> 预览包含 60 帧、每帧 33 ms 的正式播放节奏；不会额外插入过渡帧。v0.3.0 使用紧凑头型、上扬吻部、眼睛、嘴部和短尾鳍，同时保持躯干与尾部逐帧弯曲。
 
 ## 截图
 
@@ -49,13 +49,15 @@
 
 | | 特性 | 说明 |
 |---|---|---|
-| 🌊 | **传播式水面** | 破水和入水会产生向外传播、回弹并逐步衰减的波峰，水线不再静止。 |
-| 🐋 | **稳定的原创鲸鱼身份** | 紧凑头型、上扬吻部、眼神和短尾鳍保持一致，躯干则按头部带动、尾部滞后的规律弯曲。 |
+| 🌊 | **传播式水面** | 破水和入水会产生传播、回弹并逐步衰减的波峰，水线不再静止。 |
+| 🐋 | **原创的关节化鲸鱼** | 紧凑头型、上扬吻部、眼睛、嘴部和短尾鳍保持清晰，躯干与尾部在循环中弯曲。 |
+| 🌗 | **随主题适配** | 浅色模式使用正常单色图形；`prefers-color-scheme: dark`、`html.dark` 和 `html[data-theme="dark"]` 下自动反色。 |
 | 📦 | **自包含 Bundle** | 动态 WebP 与静态 PNG 已嵌入客户端，无需运行时 URL 或原始帧目录。 |
 | ♿ | **支持减少动态效果** | 检测到 `prefers-reduced-motion` 时自动切换为静态 PNG。 |
+| ⚙️ | **零配置** | 尺寸、偏移、选择器和动画资源均在构建时固定；自定义需要重新构建 `lib/client.js`。 |
 | 🎯 | **严格的纯视觉范围** | 只装饰 Web 回合状态区域；没有设置项、模型工具、持久化存储、工作区访问、网络请求或用户内容处理。 |
-| ♻️ | **生命周期可清理** | 插件拥有的样式绑定到 Cordis Client fiber，停止或卸载时会被完整移除。 |
-| 🔌 | **持久化 DSH 插件** | `dsh.bundle` manifest 与 `cordis.patch.yml` 会在 Web profile 中自动挂载客户端。 |
+| ♻️ | **生命周期可清理且幂等** | 激活时先移除旧的插件样式，再由 Cordis Client fiber 挂载一个新样式；停止或卸载时完整移除。 |
+| 🔌 | **持久化 DSH 插件** | `dsh.bundle` manifest 与 `cordis.patch.yml` 会在 Web profile 中自动挂载浏览器客户端。 |
 
 ## 安装
 
@@ -83,17 +85,17 @@ dsh plugin --profile web remove dsh-whale-animation
 
 | 属性 | 数值 |
 |---|---:|
-| 画布 | 352 × 352 px（CSS 显示为 84 × 84 px） |
-| 原始帧数 | 60 张唯一原生画面 |
+| 源画布 | 352 × 352 px（CSS 显示为 84 × 84 px） |
+| 动画帧数 | 60 |
 | 单帧时长 | 33 ms |
 | 循环时长 | 1.980 秒 |
-| 编码 | 带 Alpha 的无损动画 WebP |
-| 减少动态效果资源 | 透明 PNG |
+| 编码 | 动画 RIFF WebP |
+| 减少动态效果资源 | PNG |
 | 运行时资源请求 | 无 |
 
-项目会对最终编码后的 WebP 进行实际解码验证，而不只是检查源帧。成品包含 60 张唯一画面，每帧 33 ms；当前闭环接缝的 Alpha 差异为 `0.00306`，质心步长为 `0.27 px`。鲸鱼主体面积全程不低于中位数的 98.7%，入水和深潜阶段都不会消失。
+`npm run check` 会验证客户端注册与清理、RIFF/WebP 帧结构、60 × 33 ms 的动画时序、内嵌 WebP/PNG data URL、84 px 布局规则与深色主题 CSS 规则。它不对美术连续性打分，也不证明源素材画面唯一。
 
-水面使用闭环行进波与两组阻尼波包：完整循环包含 59 个连续变化的独立水面轮廓，末帧与首帧精确闭合；最大峰谷差为 `23.45 px`，相邻水面轮廓的最大平均变化为 `1.90 px`，因此既能看见波动，也不会闪跳。
+`python scripts/check-readme-assets.py` 会独立验证 1200 × 380 头图、1000 × 320 且为 60 帧/1.980 秒的预览、三张 900 × 520 截图、预览文件大小预算、本地 README 链接，以及每份 README 恰有一个 Mermaid 图。
 
 ## 工作原理
 
@@ -101,20 +103,26 @@ dsh plugin --profile web remove dsh-whale-animation
 flowchart LR
   A[动画 WebP + 静态 PNG] --> B[scripts/build-client.mjs]
   B --> C[嵌入式 data URL]
-  C --> D[DSH 客户端 Bundle]
-  D --> E[状态文字 ::after 元素]
-  F[prefers-reduced-motion] --> D
+  C --> D[DSH Web 客户端 Bundle]
+  D --> E[状态文字 ::after]
+  F[深色主题选择器] --> D
+  G[prefers-reduced-motion] --> D
 ```
 
-客户端向 DSH 状态文字元素添加一个归属于插件生命周期的样式表。两个资源都以内嵌 data URL 形式写入 `lib/client.js`，因此安装后运行时不依赖仓库检出目录。
+`lib/index.js` 是刻意保持为空的 Host 入口：全部行为都通过软件包的 `dsh.client` Web 注册在浏览器中运行。两个资源都以内嵌 data URL 形式写入 `lib/client.js`，因此安装后运行时不依赖仓库检出目录。
+
+客户端会先移除已有的 `style[data-plugin="dsh-whale-animation"]`，再通过 `ctx.effect()` 添加一个样式，并在 dispose 时移除。CSS 同时匹配当前哈希化状态类和 `[class*="_turnStatus"]` 后备选择器，清空该元素的 `::before` 内容，并在其右侧 6 px 绘制不可交互的 84 × 84 px `::after`。该宽泛后备选择器及两个伪元素，可能与未来 Shell 改版或同一表面上的其他插件样式发生冲突。
+
+深色主题选择器会反转单色素材；`prefers-reduced-motion` 会切换为 PNG。没有设置页或运行时配置——尺寸、偏移、选择器和素材都会生成到 `lib/client.js` 中。
 
 ## 开发
 
-要求：**Node.js 20+**。只有重新生成 README 配图时才需要 Python 与 Pillow。
+要求：**Node.js 20+**。只有重新生成 README 配图时才额外需要 Python 3、Pillow 和 NumPy：
 
 ```powershell
-node scripts/build-client.mjs
-node scripts/check.mjs
+python -m pip install Pillow numpy
+npm run build
+npm run check
 python scripts/build-readme-assets.py
 python scripts/check-readme-assets.py
 ```
@@ -123,13 +131,14 @@ python scripts/check-readme-assets.py
 
 ```text
 assets/
-  whale-dive.webp        完整无损动画
+  whale-dive.webp        完整动画资源
   whale-static.png       减少动态效果静态回退
 docs/
   hero.png               README 头图
   preview.webp           README 轻量动画预览
   screenshots/           破水、顶点与深潜动作截图
 lib/
+  index.js               刻意保持为空的 Host 入口
   client.js              预构建 DSH 浏览器客户端
 scripts/
   build-client.mjs       将源资源嵌入客户端
@@ -143,9 +152,9 @@ cordis.patch.yml         持久化 DSH Bundle 组合补丁
 
 ## 兼容性
 
-- 目标平台为 **DeepSeek Harness Web UI**。
-- 需要兼容 `@deepseek-ai/dsh-client-runtime ^0.1.0-rc.6` 的 DSH 版本。
-- 当前依赖 DSH 状态文字的 CSS 类名模式；未来 DSH Shell 若重新设计，可能需要更新选择器。
+- 仅面向 **DeepSeek Harness Web UI**，并需要兼容 `@deepseek-ai/dsh-client-runtime ^0.1.0-rc.6` 的 DSH 版本。
+- 使用当前哈希化状态类与 `[class*="_turnStatus"]` 后备选择器。Shell 的 DOM、类名或伪元素若重构，可能需要更新选择器；也会与同样占用目标元素 `::before` 或 `::after` 的插件冲突。
+- 浅色、系统深色、`html.dark` 与 `html[data-theme="dark"]` 均通过 CSS 反色适配；减少动态效果使用静态 PNG。插件没有运行时设置，84 px 尺寸和右侧偏移为构建时常量。
 
 ## 声明
 
