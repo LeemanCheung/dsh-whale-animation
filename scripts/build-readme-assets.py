@@ -70,7 +70,7 @@ def source_frames():
     for index in range(image.n_frames):
         image.seek(index)
         frames.append(image.convert('RGBA').copy())
-        delays.append(int(image.info.get('duration', 17)))
+        delays.append(int(image.info.get('duration') or 33))
     return frames, delays
 
 
@@ -88,7 +88,7 @@ def build_hero(frames):
     card = rounded_card((300, 270), 36, (255, 255, 255, 242), shadow_blur=28, shadow_offset=12)
     canvas.alpha_composite(card, (820, 48))
     # A mid-leap frame gives the static hero a clear dynamic silhouette.
-    whale = frames[135 % len(frames)].resize((255, 255), Image.Resampling.LANCZOS)
+    whale = frames[24 % len(frames)].resize((255, 255), Image.Resampling.LANCZOS)
     canvas.alpha_composite(whale, (870, 66))
     draw = ImageDraw.Draw(canvas)
     draw.rounded_rectangle((872, 306, 1067, 338), radius=16, fill=(15, 30, 54, 220))
@@ -107,21 +107,21 @@ def preview_base():
     draw.text((128, 151), 'Deep diving...', font=font(FONT_SEMIBOLD, 30), fill=(22, 35, 55, 255))
     draw.text((128, 196), 'The real embedded animation, shown beside the turn status.', font=font(FONT_REGULAR, 17), fill=(91, 107, 132, 255))
     draw.rounded_rectangle((280, 264, 720, 298), radius=17, fill=(238, 246, 255, 235))
-    draw.text((320, 272), '618 frames   •   17 ms/frame   •   reduced-motion fallback', font=font(FONT_SEMIBOLD, 16), fill=(43, 79, 130, 255))
+    draw.text((320, 272), '60 native frames   •   33 ms/frame   •   reduced-motion fallback', font=font(FONT_SEMIBOLD, 16), fill=(43, 79, 130, 255))
     return canvas
 
 
 def build_preview(frames, delays):
     base = preview_base()
     rendered, rendered_delays = [], []
-    # Keep every second source frame: ~29.4 fps remains fluid in a README while
-    # halving repository weight. The source asset remains full 618-frame quality.
-    for index in range(0, len(frames), 2):
+    # The production asset is already a compact 60-frame, ~30 fps loop, so the
+    # README preview preserves every native drawing and its exact timing.
+    for index in range(len(frames)):
         frame = base.copy()
         whale = frames[index].resize((184, 184), Image.Resampling.LANCZOS)
         frame.alpha_composite(whale, (642, 58))
         rendered.append(frame.convert('RGBA'))
-        rendered_delays.append(sum(delays[index:index + 2]))
+        rendered_delays.append(delays[index])
     rendered[0].save(
         PREVIEW,
         save_all=True,
@@ -136,9 +136,9 @@ def build_preview(frames, delays):
 
 def build_stage_screenshots(frames):
     stages = [
-        ('01', 'BREACH', 'Powering through the waterline', 55, 'launch.png'),
-        ('02', 'APEX', 'Body curl and tail follow-through', 135, 'apex.png'),
-        ('03', 'DEEP DIVE', 'Returning below the surface', 242, 'deep-dive.png'),
+        ('01', 'BREACH', 'Powering through the waterline', 17, 'launch.png'),
+        ('02', 'APEX', 'Body curl and tail follow-through', 24, 'apex.png'),
+        ('03', 'DEEP DIVE', 'Returning below the surface', 47, 'deep-dive.png'),
     ]
     for number, title, caption, frame_index, filename in stages:
         canvas = gradient((900, 520), (241, 248, 255), (214, 232, 254))
@@ -151,7 +151,7 @@ def build_stage_screenshots(frames):
         draw.text((76, 190), caption, font=font(FONT_REGULAR, 21), fill=(78, 96, 123, 255))
         draw.rounded_rectangle((74, 250, 390, 330), radius=22, fill=(239, 246, 255, 255))
         draw.text((100, 269), 'Deep diving...', font=font(FONT_SEMIBOLD, 29), fill=(22, 35, 55, 255))
-        draw.text((77, 402), f'Rendered from source frame {frame_index + 1} / 618', font=font(FONT_SEMIBOLD, 16), fill=(43, 79, 130, 255))
+        draw.text((77, 402), f'Rendered from source frame {frame_index + 1} / {len(frames)}', font=font(FONT_SEMIBOLD, 16), fill=(43, 79, 130, 255))
         whale = frames[frame_index].resize((330, 330), Image.Resampling.LANCZOS)
         canvas.alpha_composite(whale, (500, 105))
         canvas.convert('RGB').save(SCREENSHOTS / filename, optimize=True)
@@ -159,7 +159,7 @@ def build_stage_screenshots(frames):
 
 def main():
     frames, delays = source_frames()
-    if len(frames) != 618 or set(delays) != {17}:
+    if len(frames) != 60 or set(delays) != {33}:
         raise RuntimeError(f'Unexpected animation source: {len(frames)} frames, delays={sorted(set(delays))}')
     build_hero(frames)
     build_preview(frames, delays)
@@ -169,7 +169,7 @@ def main():
         'heroBytes': HERO.stat().st_size,
         'preview': str(PREVIEW),
         'previewBytes': PREVIEW.stat().st_size,
-        'previewFrames': len(range(0, len(frames), 2)),
+        'previewFrames': len(frames),
         'screenshots': [str(path) for path in sorted(SCREENSHOTS.glob('*.png'))],
     })
 

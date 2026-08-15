@@ -60,9 +60,9 @@ def main():
     checks = {
         'heroSize': hero.size == (1200, 380),
         'previewSize': preview.size == (1000, 320),
-        'previewDecodesAnimated': getattr(preview, 'n_frames', 1) >= 300,
-        'previewRiffFramesInExpectedRange': 300 <= len(durations) <= 309,
-        'previewDurationMatchesSource': sum(durations) == 618 * 17,
+        'previewDecodesAnimated': getattr(preview, 'n_frames', 1) == 60,
+        'previewRiffFramesInExpectedRange': len(durations) == 60,
+        'previewDurationMatchesSource': sum(durations) == 60 * 33,
         'previewUnder800KiB': PREVIEW.stat().st_size < 800 * 1024,
         'threeScreenshotsPresent': len(screenshots) == 3,
         'screenshotsAre900x520': all(value['size'] == (900, 520) for value in screenshots.values()),

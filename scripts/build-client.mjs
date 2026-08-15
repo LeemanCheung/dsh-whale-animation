@@ -22,11 +22,11 @@ const css = `
   position: absolute;
   pointer-events: none;
   left: 100%;
-  margin-left: 8px;
+  margin-left: 6px;
   top: 50%;
-  margin-top: -46px;
-  width: 92px;
-  height: 92px;
+  margin-top: -42px;
+  width: 84px;
+  height: 84px;
   background-image: url("${animatedUrl}");
   background-position: center;
   background-size: contain;
@@ -35,6 +35,18 @@ const css = `
   -webkit-mask: none;
   mask: none;
   contain: paint;
+}
+@media (prefers-color-scheme: dark) {
+  .Md3f7G_turnStatus::after,
+  [class*="_turnStatus"]::after {
+    filter: invert(1);
+  }
+}
+html.dark .Md3f7G_turnStatus::after,
+html.dark [class*="_turnStatus"]::after,
+html[data-theme="dark"] .Md3f7G_turnStatus::after,
+html[data-theme="dark"] [class*="_turnStatus"]::after {
+  filter: invert(1);
 }
 @media (prefers-reduced-motion: reduce) {
   .Md3f7G_turnStatus::after,

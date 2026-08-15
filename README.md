@@ -26,7 +26,7 @@
   <img src="docs/preview.webp" alt="Animated preview of the whale beside the Deep diving status" width="900" />
 </p>
 
-> The preview uses every second frame to keep the repository page lightweight. The plugin ships the full **618-frame** lossless animation.
+> The preview preserves all **60 native image-2 drawings** and their production timing; no extra in-between frames are inserted. v0.3.0 locks a compact head, lifted snout, eye, mouth and short fluke while keeping the torso and tail articulated frame by frame.
 
 ## Screenshots
 
@@ -49,10 +49,12 @@ Each screenshot is rendered from the committed `assets/whale-dive.webp`, so the 
 
 | | Feature | What it means |
 |---|---|---|
-| 🌊 | **Seamless closed loop** | A forward/return trajectory avoids the visible final-frame-to-first-frame snap. |
-| 🐋 | **Recognizable black whale** | A monochrome whale silhouette stays legible beside the compact turn-status label. |
+| 🌊 | **Propagating water surface** | Breach and entry generate outward-travelling crests, recoil and damped settling instead of a frozen waterline. |
+| 🐋 | **Stable original whale identity** | The compact head, lifted snout, eye and short fluke stay consistent while the torso follows head-led, tail-lagged flexion. |
 | 📦 | **Self-contained bundle** | Animated WebP and PNG fallback are embedded in the built client; no runtime URL or source-frame directory is required. |
 | ♿ | **Reduced-motion aware** | `prefers-reduced-motion` switches the animation to the included static PNG. |
+| 🎯 | **Strictly visual scope** | Decorates only the Web turn-status surface; it has no settings, model tools, storage, workspace access, network calls, or user-content processing. |
+| ♻️ | **Lifecycle-clean** | The package-owned style belongs to the Cordis client fiber and is removed completely when the plugin stops or is uninstalled. |
 | 🔌 | **Persistent DSH plugin** | The `dsh.bundle` manifest and `cordis.patch.yml` mount the client automatically in the Web profile. |
 
 ## Install
@@ -65,6 +67,12 @@ dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation
 
 Then hard-refresh the DSH Web page. Restart DSH if the running profile has already cached its client bundle.
 
+For the current release, pin `#v0.3.0`:
+
+```powershell
+dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation#v0.3.0
+```
+
 ### Uninstall
 
 ```powershell
@@ -75,15 +83,17 @@ dsh plugin --profile web remove dsh-whale-animation
 
 | Property | Value |
 |---|---:|
-| Canvas | 184 × 184 px |
-| Source frames | 618 |
-| Frame duration | 17 ms |
-| Loop duration | 10.506 s |
+| Canvas | 352 × 352 px (displayed at 84 × 84 CSS px) |
+| Source frames | 60 unique native drawings |
+| Frame duration | 33 ms |
+| Loop duration | 1.980 s |
 | Encoding | Lossless animated WebP with alpha |
 | Reduced-motion asset | Transparent PNG |
 | Runtime asset requests | None |
 
-The final encoded WebP is decoded during validation—not merely checked at the source-frame level. The current closed-loop seam has an alpha-difference score of `0.01858`, and its 17 ms cadence produces no skipped source frames under the project’s 60 Hz sampling check.
+The final encoded WebP is decoded during validation—not merely checked at the source-frame level. It contains 60 unique frames at 33 ms each; the current closed-loop seam has an alpha-difference score of `0.00306` and a centroid step of `0.27 px`. Body area never falls below 98.7% of the median, so entry and deep-dive frames keep the whale visible.
+
+The water layer combines a closed travelling wave with two damped wave packets. The cycle contains 59 continuously changing surface profiles with an exact last-to-first closure; the maximum crest-to-trough span is `23.45 px`, while the maximum mean adjacent-profile change is `1.90 px`, making the motion visible without flicker.
 
 ## How it works
 
