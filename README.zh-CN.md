@@ -43,7 +43,7 @@
   </tr>
 </table>
 
-所有截图均直接从仓库中的 `assets/whale-dive.webp` 渲染，因此展示的是用户实际安装后收到的动画帧，而不是单独绘制的概念图。
+所有截图均直接从仓库中的 `assets/whale-dive.webp` 渲染，因此展示的是用户实际安装后收到的动画帧，而不是单独绘制的概念图。头图、预览和截图在两份 README 中共用带英文文案的生成资产，以保证只有一套可复现的视觉产物；周边说明与替代文本已本地化。
 
 ## 特性
 
@@ -126,6 +126,8 @@ npm run check
 python scripts/build-readme-assets.py
 python scripts/check-readme-assets.py
 ```
+
+`npm run check` 只验证客户端 Bundle；配图和链接验证是独立的 Python 命令，发布文档前应如上同时执行。配图生成器优先使用 Windows 上的 Segoe UI 字体文件，缺失时会回退到 Pillow 默认字体，因此当前无法在非 Windows 平台保证字节级一致的重新生成结果。
 
 ### 仓库结构
 

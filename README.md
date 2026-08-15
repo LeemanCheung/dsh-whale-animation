@@ -43,7 +43,7 @@
   </tr>
 </table>
 
-Each screenshot is rendered from the committed `assets/whale-dive.webp`, so the gallery represents the frames users actually receive—not separate concept art.
+Each screenshot is rendered from the committed `assets/whale-dive.webp`, so the gallery represents the frames users actually receive—not separate concept art. The generated hero, preview, and gallery use shared English captions in both README translations so they remain one reproducible visual artifact; the surrounding descriptions and alt text are localized.
 
 ## Highlights
 
@@ -126,6 +126,8 @@ npm run check
 python scripts/build-readme-assets.py
 python scripts/check-readme-assets.py
 ```
+
+`npm run check` validates only the client bundle; artwork/link validation is a separate Python command and should be run as shown before publishing docs. The artwork generator prefers the Windows Segoe UI font files when present and otherwise falls back to Pillow's default font, so byte-identical regenerated artwork is currently Windows-dependent.
 
 ### Repository layout
 
