@@ -57,7 +57,7 @@ Each screenshot is rendered from the committed `assets/whale-dive.webp`, so the 
 | ⚙️ | **Zero configuration** | Size, offset, selector, and animation assets are fixed at build time; customization means rebuilding `lib/client.js`. |
 | 🎯 | **Strictly visual scope** | Decorates only the Web turn-status surface; it has no settings, model tools, storage, workspace access, network calls, or user-content processing. |
 | ♻️ | **Lifecycle-clean and idempotent** | Activation removes an older plugin style before adding one owned by the Cordis client fiber; stop or uninstall removes it completely. |
-| 🔌 | **Persistent DSH plugin** | The `dsh.bundle` manifest and `cordis.patch.yml` mount the browser client automatically in the Web profile. |
+| 🔌 | **Web-profile declaration** | The `dsh.bundle` manifest and `cordis.patch.yml` declare the browser client for automatic Web-profile mounting when DSH loads the bundle. |
 
 ## Install
 
@@ -96,6 +96,8 @@ dsh plugin --profile web remove dsh-whale-animation
 `npm run check` verifies client registration and disposal, RIFF/WebP framing, 60 × 33 ms animation timing, embedded WebP/PNG data URLs, the 84 px layout rule, and the dark-theme CSS rule. It does not score artistic continuity or prove the source artwork is unique.
 
 `python scripts/check-readme-assets.py` independently verifies the generated 1200 × 380 hero, 1000 × 320 60-frame preview and 1.980 s timing, the three 900 × 520 screenshots, the preview size budget, local README links, and one Mermaid diagram per README.
+
+These are static bundle/asset checks. The release has not been installed and activated in a real DSH Web profile as part of this verification, so automatic mounting and live GUI rendering remain manifest/source-derived behavior rather than end-to-end evidence.
 
 ## How it works
 

@@ -57,7 +57,7 @@
 | ⚙️ | **零配置** | 尺寸、偏移、选择器和动画资源均在构建时固定；自定义需要重新构建 `lib/client.js`。 |
 | 🎯 | **严格的纯视觉范围** | 只装饰 Web 回合状态区域；没有设置项、模型工具、持久化存储、工作区访问、网络请求或用户内容处理。 |
 | ♻️ | **生命周期可清理且幂等** | 激活时先移除旧的插件样式，再由 Cordis Client fiber 挂载一个新样式；停止或卸载时完整移除。 |
-| 🔌 | **持久化 DSH 插件** | `dsh.bundle` manifest 与 `cordis.patch.yml` 会在 Web profile 中自动挂载浏览器客户端。 |
+| 🔌 | **Web profile 挂载声明** | `dsh.bundle` manifest 与 `cordis.patch.yml` 声明浏览器客户端应在 DSH 加载 bundle 时自动挂载到 Web profile。 |
 
 ## 安装
 
@@ -96,6 +96,8 @@ dsh plugin --profile web remove dsh-whale-animation
 `npm run check` 会验证客户端注册与清理、RIFF/WebP 帧结构、60 × 33 ms 的动画时序、内嵌 WebP/PNG data URL、84 px 布局规则与深色主题 CSS 规则。它不对美术连续性打分，也不证明源素材画面唯一。
 
 `python scripts/check-readme-assets.py` 会独立验证 1200 × 380 头图、1000 × 320 且为 60 帧/1.980 秒的预览、三张 900 × 520 截图、预览文件大小预算、本地 README 链接，以及每份 README 恰有一个 Mermaid 图。
+
+这些属于静态 bundle/资源校验。本次验证未在真实 DSH Web profile 中完成安装和激活，因此自动挂载与 GUI 实际渲染目前是基于 manifest/源码的行为说明，而非端到端证据。
 
 ## 工作原理
 
