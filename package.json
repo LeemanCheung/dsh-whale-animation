@@ -1,7 +1,7 @@
 {
   "name": "dsh-whale-animation",
-  "version": "0.3.0",
-  "description": "Persistent DeepSeek-inspired whale-dive and reactive-water animation for the Harness Web turn status.",
+  "version": "0.4.0",
+  "description": "Reactive six-state whale animation director for the DeepSeek Harness Web turn status.",
   "license": "MIT",
   "author": "LeemanCheung",
   "type": "module",
@@ -15,8 +15,16 @@
     "assets",
     "docs",
     "lib",
-    "scripts",
+    "src",
+    "scripts/browser-smoke.html",
+    "scripts/build-client.mjs",
+    "scripts/build-whale-assets.py",
+    "scripts/check-browser.sh",
+    "scripts/check-readme-assets.py",
+    "scripts/check.mjs",
+    "scripts/whale_assets/*.py",
     "cordis.patch.yml",
+    "CHANGELOG.md",
     "README.md",
     "README.zh-CN.md",
     "LICENSE",
@@ -27,7 +35,9 @@
     "deepseek-harness",
     "dsh-plugin",
     "cordis",
-    "web-ui"
+    "web-ui",
+    "animation",
+    "whale"
   ],
   "repository": {
     "type": "git",
@@ -53,7 +63,10 @@
   },
   "scripts": {
     "build": "node scripts/build-client.mjs",
-    "check": "node scripts/check.mjs"
+    "build:assets": "python scripts/build-whale-assets.py",
+    "check": "node scripts/check.mjs && python scripts/check-readme-assets.py",
+    "check:browser": "bash scripts/check-browser.sh",
+    "verify": "npm run build && npm run check"
   },
   "peerDependencies": {
     "@deepseek-ai/cordis": "^4.0.1",
