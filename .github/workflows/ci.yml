@@ -44,13 +44,20 @@ jobs:
       - name: Run Chromium browser smoke test
         run: bash scripts/check-browser.sh
 
-      - name: Upload browser smoke screenshot
+      - name: Upload browser smoke screenshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: whale-browser-smoke
           path: .artifacts/browser-smoke-*.png
-          if-no-files-found: warn
+          if-no-files-found: error
+          include-hidden-files: true
 
       - name: Validate package contents
-        run: npm pack --dry-run
+        shell: bash
+        run: |
+          npm pack --dry-run 2>&1 | tee /tmp/npm-pack.txt
+          if grep -E '__pycache__|\.py[co]' /tmp/npm-pack.txt; then
+            echo "Python cache files leaked into the package" >&2
+            exit 1
+          fi
