@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "canvas": [
+    352,
+    352
+  ],
+  "defaultState": "dive",
+  "playlist": [
+    "dive",
+    "sonar",
+    "work",
+    "compose",
+    "idle"
+  ],
+  "playlistIntervalMs": 9000,
+  "states": {
+    "dive": {
+      "label": "DEEP DIVE",
+      "summary": "Breach, roll and return below the surface",
+      "playlist": true,
+      "animated": "whale-dive.webp",
+      "static": "whale-dive.png",
+      "frames": 48,
+      "frameDurationMs": 40,
+      "loopDurationMs": 1920,
+      "animatedBytes": 183024,
+      "staticBytes": 7789,
+      "animatedSha256": "0312553101925f5779f2df01caa786681c6af2d894b72581d119f846b66f7f25",
+      "staticSha256": "c5fa44755e4013e854c6cd3b6714c35d2661586e4c568fdd462227c1a03cdac9"
+    },
+    "sonar": {
+      "label": "SONAR",
+      "summary": "Expanding echolocation rings for discovery",
+      "playlist": true,
+      "animated": "whale-sonar.webp",
+      "static": "whale-sonar.png",
+      "frames": 48,
+      "frameDurationMs": 40,
+      "loopDurationMs": 1920,
+      "animatedBytes": 231090,
+      "staticBytes": 11481,
+      "animatedSha256": "db04425c973ff1028493da533fa7a59c3c163928066f6386bed39c8280c17f4d",
+      "staticSha256": "1cf822a3e9d2a39c86f5b16a2ee20362eb859f6e91b90a4dfef420731fd70df4"
+    },
+    "work": {
+      "label": "TOOL RUN",
+      "summary": "Fast tail cadence, speed trails and work particles",
+      "playlist": true,
+      "animated": "whale-work.webp",
+      "static": "whale-work.png",
+      "frames": 48,
+      "frameDurationMs": 40,
+      "loopDurationMs": 1920,
+      "animatedBytes": 202680,
+      "staticBytes": 8823,
+      "animatedSha256": "2f7d1b82ba5a74bc060bb5411f5d4997c855aae7f4e3253ace2a8e8e2f84516b",
+      "staticSha256": "63ce8e43e078c25029ba95f39b8cff3ecca5ba5e1f2b8bd4abd2781e0076f951"
+    },
+    "compose": {
+      "label": "STREAM",
+      "summary": "Token-like particles flow from the whale's path",
+      "playlist": true,
+      "animated": "whale-compose.webp",
+      "static": "whale-compose.png",
+      "frames": 48,
+      "frameDurationMs": 40,
+      "loopDurationMs": 1920,
+      "animatedBytes": 190016,
+      "staticBytes": 8734,
+      "animatedSha256": "e8b36cd8df58aa805e66c148ba9333e1e98ab9eeb8889b640dfcaefb41167ba8",
+      "staticSha256": "8254eeea154d319785dfd79151d0575c96452c02fc6b294815e3673ebe7ef422"
+    },
+    "idle": {
+      "label": "CALM",
+      "summary": "Low-motion breathing loop for waiting periods",
+      "playlist": true,
+      "animated": "whale-idle.webp",
+      "static": "whale-idle.png",
+      "frames": 48,
+      "frameDurationMs": 40,
+      "loopDurationMs": 1920,
+      "animatedBytes": 183430,
+      "staticBytes": 8389,
+      "animatedSha256": "36b86b1d79c0d883ccb3273c28ab3115feb0e7ee0d83646d07a6f79b25b15a71",
+      "staticSha256": "bba9ea419ade3568169a21bb8bd5600d541d503607ba0c62f0347edaf4666fc3"
+    },
+    "alert": {
+      "label": "RETRY",
+      "summary": "A restrained attention pulse for errors or retries",
+      "playlist": false,
+      "animated": "whale-alert.webp",
+      "static": "whale-alert.png",
+      "frames": 48,
+      "frameDurationMs": 40,
+      "loopDurationMs": 1920,
+      "animatedBytes": 216710,
+      "staticBytes": 9741,
+      "animatedSha256": "4cfffa72182d1cbebf71ac88beb09616afd533d96ca77c3661588fdb8c9e4c22",
+      "staticSha256": "a884a059aec1317c17f9cb3d0f25aeb7e4758b688364fc9911d7cbb53a8878ab"
+    }
+  }
+}
