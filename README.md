@@ -1,19 +1,19 @@
 <p align="center">
-  <img src="docs/hero.png" alt="dsh-whale-animation — a seamless whale-dive status animation for DeepSeek Harness" width="100%" />
+  <img src="docs/hero.png" alt="dsh-whale-animation six-state whale animation system" width="100%" />
 </p>
 
 <p align="center">
   <a href="https://awesome.re"><img src="https://awesome.re/badge.svg" alt="Awesome" /></a>
   <a href="https://awesome-dsh-plugin.com"><img src="https://awesome-dsh-plugin.com/badge.svg" alt="Awesome DSH Plugin" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-2563eb.svg" alt="MIT license" /></a>
-  <img src="https://img.shields.io/badge/DSH-Web-0f172a.svg" alt="DeepSeek Harness Web" />
-  <img src="https://img.shields.io/badge/runtime-offline-0f766e.svg" alt="Offline at runtime" />
+  <img src="https://img.shields.io/badge/version-v0.4.0-0f766e.svg" alt="v0.4.0" />
+  <img src="https://img.shields.io/badge/runtime-offline-0f172a.svg" alt="Offline at runtime" />
   <img src="https://img.shields.io/badge/motion-reduced--motion%20ready-7c3aed.svg" alt="Reduced-motion ready" />
 </p>
 
 <p align="center">
-  <strong>A persistent, theme-aware monochrome whale-dive animation beside the DeepSeek Harness turn status.</strong><br />
-  Closed-loop playback, no runtime network requests, and a static fallback for reduced-motion users.
+  <strong>Six original whale loops and a lightweight animation director for the DeepSeek Harness Web turn status.</strong><br />
+  Timed rotation, keyword overrides, dark-theme support, zero runtime requests, and a static fallback for every state.
 </p>
 
 <p align="center">
@@ -23,56 +23,63 @@
 ## Preview
 
 <p align="center">
-  <img src="docs/preview.webp" alt="Animated preview of the whale beside the Deep diving status" width="900" />
+  <img src="docs/preview.webp" alt="Deep Dive, Sonar, Tool Run, Stream, and Calm whale animations rotating in sequence" width="900" />
 </p>
 
-> The preview has 60 frames at the production 33 ms cadence, with no extra in-between frames. v0.3.0 uses a compact head, lifted snout, eye, mouth, and short fluke while the torso and tail remain articulated frame by frame.
+v0.4.0 replaces the single permanent dive clip with a multi-state system. The current Harness turn surface normally keeps the same `Deep diving...` label throughout a running turn, so the plugin rotates through `dive → sonar → work → compose → idle` every **9 seconds**. If a future or customized UI exposes recognizable search, tool, writing, waiting, or error text, keyword detection overrides the timed playlist immediately.
 
-## Screenshots
+## Six states
 
-<table>
-  <tr>
-    <td width="33%"><img src="docs/screenshots/launch.png" alt="The whale breaching the waterline" /></td>
-    <td width="33%"><img src="docs/screenshots/apex.png" alt="The whale curling at the leap apex" /></td>
-    <td width="33%"><img src="docs/screenshots/deep-dive.png" alt="The whale returning below the surface" /></td>
-  </tr>
-  <tr>
-    <td align="center"><strong>01 — Breach</strong></td>
-    <td align="center"><strong>02 — Apex</strong></td>
-    <td align="center"><strong>03 — Deep dive</strong></td>
-  </tr>
-</table>
+<p align="center">
+  <img src="docs/state-gallery.png" alt="Gallery of the six whale animation states" width="1000" />
+</p>
 
-Each screenshot is rendered from the committed `assets/whale-dive.webp`, so the gallery represents the frames users actually receive—not separate concept art. The generated hero, preview, and gallery use shared English captions in both README translations so they remain one reproducible visual artifact; the surrounding descriptions and alt text are localized.
+| State | Motion language | Trigger logic |
+|---|---|---|
+| **Deep Dive** | Breach, roll, and return below the surface | Playlist; thinking, reasoning, analysis, planning |
+| **Sonar** | Echolocation rings propagating from the snout | Playlist; search, browse, lookup, research |
+| **Tool Run** | Fast tail cadence, speed trails, and work particles | Playlist; tool, execute, shell, build, test |
+| **Stream** | Token-like particles flowing forward | Playlist; writing, generating, responding, streaming |
+| **Calm** | Low-amplitude breathing and rising bubbles | Playlist; waiting, queued, paused |
+| **Retry** | Restrained body wobble and attention pulse | Error, failure, exception, and retry keywords only |
+
+English and Chinese keywords are included. The ordinary `Deep diving...` label is deliberately not treated as an explicit state, allowing the current UI to show the complete five-state playlist.
 
 ## Highlights
 
 | | Feature | What it means |
 |---|---|---|
-| 🌊 | **Propagating water surface** | Breach and entry produce travelling crests, recoil, and damped settling instead of a frozen waterline. |
-| 🐋 | **Original articulated whale** | A compact head, lifted snout, eye, mouth, and short fluke remain legible while the torso and tail flex through the loop. |
-| 🌗 | **Theme aware** | The whale uses its normal monochrome treatment in light mode and is inverted for `prefers-color-scheme: dark`, `html.dark`, and `html[data-theme="dark"]`. |
-| 📦 | **Self-contained bundle** | Animated WebP and PNG fallback are embedded in the built client; no runtime URL or source-frame directory is required. |
-| ♿ | **Reduced-motion aware** | `prefers-reduced-motion` switches the animation to the included static PNG. |
-| ⚙️ | **Zero configuration** | Size, offset, selector, and animation assets are fixed at build time; customization means rebuilding `lib/client.js`. |
-| 🎯 | **Strictly visual scope** | Decorates only the Web turn-status surface; it has no settings, model tools, storage, workspace access, network calls, or user-content processing. |
-| ♻️ | **Lifecycle-clean and idempotent** | Activation removes an older plugin style before adding one owned by the Cordis client fiber; stop or uninstall removes it completely. |
-| 🔌 | **Web-profile declaration** | The `dsh.bundle` manifest and `cordis.patch.yml` declare the browser client for automatic Web-profile mounting when DSH loads the bundle. |
+| 🐋 | **Six original frame animations** | Every state uses a 352 × 352 canvas, 48 frames, 40 ms per frame, and a 1.92-second loop. |
+| 🎬 | **Dual-track animation director** | The current fixed label uses timed rotation; future status labels use immediate keyword overrides. |
+| ♿ | **Per-state reduced motion** | `prefers-reduced-motion` stops playlist rotation and uses the matching PNG frame. |
+| 🌗 | **Theme and viewport aware** | System dark mode, `html.dark`, and `data-theme="dark"` invert the monochrome artwork; sizing steps down through 84 / 72 / 60 px. |
+| 📦 | **Completely self-contained** | Six WebPs and six PNGs are embedded in `lib/client.js`; activation makes no external request. |
+| 🧩 | **Stronger mount selector** | Combines semantic `role="status"` targeting with the `_turnStatus` class fallback. |
+| 🫧 | **Lower style intrusion** | Owns only the status element's `::after`; it no longer clears `::before` or changes the label. |
+| ♻️ | **Idempotent and lifecycle-clean** | Re-activation removes stale ownership; disposal removes styles, timer, observer, and data attributes. |
+| 🔒 | **Strictly visual scope** | No accounts, model tools, storage, workspace reads, networking, or user-content processing. |
 
 ## Install
 
-Install directly from GitHub into the DSH Web profile:
+Install the latest release into the DSH Web profile:
+
+```powershell
+dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation#v0.4.0
+```
+
+Follow the main branch:
 
 ```powershell
 dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation
 ```
 
-Then hard-refresh the DSH Web page. Restart DSH if the running profile has already cached its client bundle.
+Hard-refresh DSH Web after installation. Restart DSH if the active profile has already cached its client bundle.
 
-For the current release, pin `#v0.3.0`:
+### Upgrade
 
 ```powershell
-dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation#v0.3.0
+dsh plugin --profile web remove dsh-whale-animation
+dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation#v0.4.0
 ```
 
 ### Uninstall
@@ -85,85 +92,114 @@ dsh plugin --profile web remove dsh-whale-animation
 
 | Property | Value |
 |---|---:|
-| Source canvas | 352 × 352 px (displayed at 84 × 84 CSS px) |
-| Animation frames | 60 |
-| Frame duration | 33 ms |
-| Loop duration | 1.980 s |
-| Encoding | Animated RIFF WebP |
-| Reduced-motion asset | PNG |
-| Runtime asset requests | None |
-
-`npm run check` verifies client registration and disposal, RIFF/WebP framing, 60 × 33 ms animation timing, embedded WebP/PNG data URLs, the 84 px layout rule, and the dark-theme CSS rule. It does not score artistic continuity or prove the source artwork is unique.
-
-`python scripts/check-readme-assets.py` independently verifies the generated 1200 × 380 hero, 1000 × 320 60-frame preview and 1.980 s timing, the three 900 × 520 screenshots, the preview size budget, local README links, and one Mermaid diagram per README.
-
-These are static bundle/asset checks. The release has not been installed and activated in a real DSH Web profile as part of this verification, so automatic mounting and live GUI rendering remain manifest/source-derived behavior rather than end-to-end evidence.
+| Animation states | 6 |
+| Automatic playlist states | 5 |
+| Source canvas | 352 × 352 px |
+| Frames per state | 48 |
+| Frame duration | 40 ms |
+| Loop duration | 1.920 s |
+| Playlist interval | 9 seconds |
+| CSS display sizes | 84 / 72 / 60 px |
+| Animated source total | 1,206,950 bytes |
+| Static source total | 54,957 bytes |
+| Prebuilt client | about 1.69 MB |
+| Runtime asset requests | 0 |
 
 ## How it works
 
 ```mermaid
 flowchart LR
-  A[Animated WebP + static PNG] --> B[scripts/build-client.mjs]
-  B --> C[Embedded data URLs]
-  C --> D[DSH Web client bundle]
-  D --> E[turn-status ::after]
-  F[dark-theme selectors] --> D
-  G[prefers-reduced-motion] --> D
+  A[6 WebPs + 6 PNGs] --> B[assets/manifest.json]
+  B --> C[scripts/build-client.mjs]
+  C --> D[Embedded data-URL client]
+  D --> E[role=status turn status ::after]
+  F[9-second playlist] --> D
+  G[English and Chinese overrides] --> D
+  H[Dark mode and reduced motion] --> D
 ```
 
-`lib/index.js` is an intentional no-op Host entry: all behavior runs in the browser through the package's `dsh.client` Web registration. Both assets are embedded as data URLs in `lib/client.js`, so activation does not depend on the repository checkout after installation.
+`lib/index.js` remains an intentional no-op Host entry. All behavior runs in the browser through `dsh.client`. A MutationObserver handles Harness subtree replacement, while a one-second timer performs only state selection; the browser's animated-WebP decoder handles frame playback.
 
-The client first removes an existing `style[data-plugin="dsh-whale-animation"]`, then adds one style through `ctx.effect()` and removes it on disposal. The CSS targets the current hashed turn-status class plus the `[class*="_turnStatus"]` fallback, clears that element's `::before` content, and paints a non-interactive 84 × 84 px `::after` 6 px to its right. This broad fallback and the two pseudo-elements can conflict with a future Shell refactor or another plugin that styles the same surface.
+The current target is:
 
-Dark-mode selectors invert the monochrome artwork; `prefers-reduced-motion` swaps in the PNG. There is no settings UI or runtime configuration—the size, offset, selectors, and assets are generated into `lib/client.js`.
+```css
+.Md3f7G_turnStatus[role="status"],
+[class*="_turnStatus"][role="status"]
+```
 
-## Development
+The client writes `data-dsh-whale-host` and `data-dsh-whale-state` to the status element, and CSS paints the selected asset through `::after`. Dark mode inverts the monochrome image. Reduced-motion mode selects the corresponding PNG and stays on the default or explicit keyword state instead of rotating.
 
-Requirements: **Node.js 20+**. Rebuilding README artwork additionally needs Python 3, Pillow, and NumPy:
+## Development and verification
+
+Requirements: **Node.js 20+**. Regenerating animation and documentation assets additionally requires Python 3 and Pillow:
 
 ```powershell
-python -m pip install Pillow numpy
+python -m pip install Pillow
+npm run build:assets
 npm run build
 npm run check
-python scripts/build-readme-assets.py
-python scripts/check-readme-assets.py
 ```
 
-`npm run check` validates only the client bundle; artwork/link validation is a separate Python command and should be run as shown before publishing docs. The artwork generator prefers the Windows Segoe UI font files when present and otherwise falls back to Pillow's default font, so byte-identical regenerated artwork is currently Windows-dependent.
+| Command | Purpose |
+|---|---|
+| `npm run build:assets` | Generate six WebPs, six PNGs, the manifest, hero, preview, and gallery |
+| `npm run build` | Embed every manifest asset into `lib/client.js` |
+| `npm run check` | Validate assets, bundle, director logic, lifecycle, and README artwork |
+| `npm run check:browser` | Mount the committed bundle in headless Chromium and capture light/dark smoke screenshots |
+| `npm run verify` | Rebuild the client and run the deterministic non-browser check suite |
 
-### Repository layout
+Checks cover:
+
+- format, size, and SHA-256 for all 12 state assets;
+- 48 frames, 40 ms frame duration, and a 1.92-second loop for each WebP;
+- exact agreement among source files, manifest entries, and embedded data URLs;
+- timed rotation, keyword overrides, error priority, and reduced-motion freezing;
+- style installation, MutationObserver, timer disposal, and host-attribute cleanup;
+- hero dimensions, the 50-frame README preview, gallery dimensions, and local links;
+- prebuilt-client reproducibility, real Chromium state mapping, light/dark screenshots, and `npm pack` in CI.
+
+The design rationale and future roadmap are documented in [`docs/ANIMATION_ROADMAP.zh-CN.md`](docs/ANIMATION_ROADMAP.zh-CN.md).
+
+## Repository layout
 
 ```text
 assets/
-  whale-dive.webp        Full animated asset
-  whale-static.png       Reduced-motion fallback
-docs/
-  hero.png               README hero artwork
-  preview.webp           Lightweight animated README preview
-  screenshots/           Breach, apex, and deep-dive frame gallery
+  manifest.json          State timing, sizes, and SHA-256 checksums
+  whale-*.webp           Six animated assets
+  whale-*.png            Six reduced-motion frames
+src/
+  client-runtime.js      Director and browser lifecycle source
 lib/
-  index.js               Intentional no-op Host entry
-  client.js              Prebuilt DSH browser client
+  index.js               No-op Host entry
+  client.js              Prebuilt DSH Web client with embedded assets
 scripts/
-  build-client.mjs       Embeds source assets into the client
-  build-readme-assets.py Rebuilds repository artwork from the real animation
-  check-readme-assets.py Validates artwork timing, size, and README links
-  check.mjs              Validates registration, lifecycle, and embedded assets
-cordis.patch.yml         Persistent DSH bundle composition patch
+  build-whale-assets.py  Generates animation and README visuals
+  build-client.mjs       Builds the browser client from the manifest
+  check.mjs              Validates assets, bundle, and runtime behavior
+  check-readme-assets.py Validates documentation visuals and links
+  browser-smoke.html     Browser fixture covering all six resolved states
+  check-browser.sh       Runs Chromium smoke checks and light/dark captures
+docs/
+  hero.png               README hero
+  preview.webp           Five-state animated preview
+  state-gallery.png      Six-state static gallery
+  ANIMATION_ROADMAP.zh-CN.md Design rationale and roadmap
 ```
 
-`lib/client.js` is committed intentionally: GitHub installs work without a package build or external asset fetch.
+`lib/client.js` is committed intentionally so GitHub installation requires neither a build step nor runtime asset downloads.
 
-## Compatibility
+## Compatibility and limitations
 
-- Targets the **DeepSeek Harness Web UI** only and requires a DSH version compatible with `@deepseek-ai/dsh-client-runtime ^0.1.0-rc.6`.
-- Uses the current hashed turn-status class and a `[class*="_turnStatus"]` fallback. A Shell DOM/class or pseudo-element redesign may require a selector update; plugins that also own that target's `::before` or `::after` can conflict.
-- Light, OS-dark, `html.dark`, and `html[data-theme="dark"]` modes are covered by CSS inversion; reduced motion receives the static PNG. The plugin does not offer runtime settings, and its 84 px size/right-side offset are build-time constants.
+- Targets the **DeepSeek Harness Web UI** and requires a DSH version compatible with `@deepseek-ai/dsh-client-runtime ^0.1.0-rc.6`.
+- A Shell change that removes both `_turnStatus` and `role="status"` will require a selector update.
+- The plugin still owns the target's `::after`; another plugin using the same pseudo-element may conflict.
+- Timed rotation is a compatibility strategy for the current fixed status label, not a claim about actual model phases. Stable DSH phase events should replace it when available.
+- Embedding assets avoids runtime networking at the cost of a roughly 1.69 MB client file.
 
 ## Attribution
 
-This project is independent and is not affiliated with or endorsed by DeepSeek. The animation is an original UI illustration designed to harmonize with DeepSeek Harness' whale-themed status experience. See [NOTICE.md](NOTICE.md) for visual-design and trademark details.
+This project is independent and is not affiliated with or endorsed by DeepSeek. The animations are original UI illustrations designed to complement the whale-themed DeepSeek Harness status experience. See [NOTICE.md](NOTICE.md) for visual-design and trademark notes.
 
 ## License
 
-Released under the [MIT License](LICENSE).
+Released under the [MIT License](LICENSE). See [CHANGELOG.md](CHANGELOG.md) for version history.

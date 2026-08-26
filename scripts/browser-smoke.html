@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>dsh-whale-animation browser smoke</title>
+<script>
+  if (new URLSearchParams(location.search).has('dark')) document.documentElement.dataset.theme = 'dark';
+</script>
+<style>
+  :root { font-family: Inter, "Segoe UI", sans-serif; color: #12223b; background: #eef6ff; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; padding: 42px; background: radial-gradient(circle at 85% 10%, #d7eaff, transparent 34%), linear-gradient(#f8fbff, #e9f4ff); }
+  main { max-width: 1100px; margin: auto; }
+  h1 { margin: 0 0 8px; font-size: 34px; }
+  p { color: #596d8a; margin: 0 0 30px; }
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 20px; }
+  .card { min-height: 126px; padding: 24px 122px 24px 26px; background: rgba(255,255,255,.92); border: 1px solid #dce9f7; border-radius: 22px; box-shadow: 0 16px 40px rgba(32,74,126,.10); overflow: visible; }
+  .tag { display: inline-block; margin-bottom: 18px; font-size: 11px; font-weight: 800; letter-spacing: .12em; color: #2d6cc4; }
+  .smoke_turnStatus { display: inline-flex; align-items: center; height: 26px; font-size: 15px; font-weight: 650; white-space: nowrap; color: #19375f; }
+  footer { margin-top: 24px; color: #6f829d; font-size: 13px; }
+  html[data-theme="dark"] { color: #e7f1ff; background: #091321; }
+  html[data-theme="dark"] body { background: radial-gradient(circle at 85% 10%, #17365f, transparent 34%), linear-gradient(#0d1a2d, #08111e); }
+  html[data-theme="dark"] .card { background: rgba(17,31,51,.94); border-color: #29425f; }
+  html[data-theme="dark"] p, html[data-theme="dark"] footer { color: #9fb2cc; }
+  html[data-theme="dark"] .smoke_turnStatus { color: #dbeaff; }
+</style>
+<script>
+  window.__ModuleLoader__ = { load(value) { window.__loadedWhaleModule = value; } };
+</script>
+<script src="../lib/client.js"></script>
+</head>
+<body>
+<main>
+  <h1>Reactive whale director — browser smoke</h1>
+  <p>The committed browser bundle is mounted through the semantic <code>role=status</code> selector.</p>
+  <section class="grid">
+    <article class="card"><span class="tag">DEFAULT PLAYLIST</span><br><div class="smoke_turnStatus" role="status">Deep diving...</div></article>
+    <article class="card"><span class="tag">SONAR</span><br><div class="smoke_turnStatus" role="status">Searching the web...</div></article>
+    <article class="card"><span class="tag">TOOL RUN</span><br><div class="smoke_turnStatus" role="status">Running command...</div></article>
+    <article class="card"><span class="tag">STREAM</span><br><div class="smoke_turnStatus" role="status">Generating response...</div></article>
+    <article class="card"><span class="tag">CALM</span><br><div class="smoke_turnStatus" role="status">Waiting in queue...</div></article>
+    <article class="card"><span class="tag">RETRY</span><br><div class="smoke_turnStatus" role="status">Retry after error...</div></article>
+  </section>
+  <footer id="result">Initializing…</footer>
+</main>
+<script>
+  const plugin = window.__loadedWhaleModule.factory(() => { throw new Error('No imports expected'); });
+  plugin.apply({ effect(start) { window.__disposeWhale = start(); } });
+  setTimeout(() => {
+    const states = [...document.querySelectorAll('[role="status"]')].map(element => element.dataset.dshWhaleState);
+    const value = states.join(',');
+    document.getElementById('result').textContent = `Detected states: ${states.join(' → ')}`;
+    document.documentElement.dataset.smoke = value;
+  }, 250);
+</script>
+</body>
+</html>

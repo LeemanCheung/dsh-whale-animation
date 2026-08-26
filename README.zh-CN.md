@@ -1,19 +1,19 @@
 <p align="center">
-  <img src="docs/hero.png" alt="dsh-whale-animation — DeepSeek Harness 无缝鲸鱼深潜状态动画" width="100%" />
+  <img src="docs/hero.png" alt="dsh-whale-animation 六状态鲸鱼动画系统" width="100%" />
 </p>
 
 <p align="center">
   <a href="https://awesome.re"><img src="https://awesome.re/badge.svg" alt="Awesome" /></a>
   <a href="https://awesome-dsh-plugin.com"><img src="https://awesome-dsh-plugin.com/badge.svg" alt="Awesome DSH Plugin" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-2563eb.svg" alt="MIT license" /></a>
-  <img src="https://img.shields.io/badge/DSH-Web-0f172a.svg" alt="DeepSeek Harness Web" />
-  <img src="https://img.shields.io/badge/runtime-offline-0f766e.svg" alt="运行时离线" />
+  <img src="https://img.shields.io/badge/version-v0.4.0-0f766e.svg" alt="v0.4.0" />
+  <img src="https://img.shields.io/badge/runtime-offline-0f172a.svg" alt="运行时离线" />
   <img src="https://img.shields.io/badge/motion-reduced--motion%20ready-7c3aed.svg" alt="支持减少动态效果" />
 </p>
 
 <p align="center">
-  <strong>在 DeepSeek Harness 状态文字旁显示持久化、随主题适配的单色鲸鱼深潜动画。</strong><br />
-  无缝闭环、运行时零网络请求，并为减少动态效果用户提供静态回退。
+  <strong>为 DeepSeek Harness Web 回合状态提供六套原创鲸鱼动画和一个轻量动画导演。</strong><br />
+  自动轮换、状态关键词覆盖、深色主题适配、运行时零网络请求，并为每套动画提供静态回退。
 </p>
 
 <p align="center">
@@ -23,56 +23,63 @@
 ## 动画预览
 
 <p align="center">
-  <img src="docs/preview.webp" alt="鲸鱼在 Deep diving 状态文字旁跃起和深潜的动画预览" width="900" />
+  <img src="docs/preview.webp" alt="Deep Dive、Sonar、Tool Run、Stream 和 Calm 五种鲸鱼动画依次播放" width="900" />
 </p>
 
-> 预览包含 60 帧、每帧 33 ms 的正式播放节奏；不会额外插入过渡帧。v0.3.0 使用紧凑头型、上扬吻部、眼睛、嘴部和短尾鳍，同时保持躯干与尾部逐帧弯曲。
+v0.4.0 不再只播放一段固定的下潜 WebP。当前 Harness 在运行回合中通常持续显示同一个 `Deep diving...` 文案，因此插件会每 **9 秒**按 `dive → sonar → work → compose → idle` 自动轮换；当未来版本或定制界面出现“搜索、执行工具、生成回答、等待、错误”等可识别文案时，关键词状态会立即覆盖定时播放列表。
 
-## 截图
+## 六种状态
 
-<table>
-  <tr>
-    <td width="33%"><img src="docs/screenshots/launch.png" alt="鲸鱼跃出水面的动作截图" /></td>
-    <td width="33%"><img src="docs/screenshots/apex.png" alt="鲸鱼在跃起顶点卷曲身体的动作截图" /></td>
-    <td width="33%"><img src="docs/screenshots/deep-dive.png" alt="鲸鱼重新潜入水下的动作截图" /></td>
-  </tr>
-  <tr>
-    <td align="center"><strong>01 — 破水跃起</strong></td>
-    <td align="center"><strong>02 — 跃起顶点</strong></td>
-    <td align="center"><strong>03 — 入水深潜</strong></td>
-  </tr>
-</table>
+<p align="center">
+  <img src="docs/state-gallery.png" alt="六种鲸鱼动画状态画廊" width="1000" />
+</p>
 
-所有截图均直接从仓库中的 `assets/whale-dive.webp` 渲染，因此展示的是用户实际安装后收到的动画帧，而不是单独绘制的概念图。头图、预览和截图在两份 README 中共用带英文文案的生成资产，以保证只有一套可复现的视觉产物；周边说明与替代文本已本地化。
+| 状态 | 动画表现 | 触发逻辑 |
+|---|---|---|
+| **Deep Dive** | 破水、翻滚、重新下潜 | 自动播放列表；思考、推理、分析、规划 |
+| **Sonar** | 从吻部向前传播的声呐波 | 自动播放列表；搜索、检索、浏览、调研 |
+| **Tool Run** | 高频摆尾、速度线和工作粒子 | 自动播放列表；工具、执行、命令、构建、测试 |
+| **Stream** | 类 Token 粒子连续流出 | 自动播放列表；生成、撰写、回答、流式输出 |
+| **Calm** | 低幅呼吸和气泡上浮 | 自动播放列表；等待、排队、暂停 |
+| **Retry** | 轻微摆动和注意提示 | 仅错误、失败、异常、重试关键词 |
 
-## 特性
+英文和中文关键词均已内置。普通 `Deep diving...` 文案故意不被识别为显式状态，以便当前版本仍能完整展示五状态播放列表。
+
+## 核心特性
 
 | | 特性 | 说明 |
 |---|---|---|
-| 🌊 | **传播式水面** | 破水和入水会产生传播、回弹并逐步衰减的波峰，水线不再静止。 |
-| 🐋 | **原创的关节化鲸鱼** | 紧凑头型、上扬吻部、眼睛、嘴部和短尾鳍保持清晰，躯干与尾部在循环中弯曲。 |
-| 🌗 | **随主题适配** | 浅色模式使用正常单色图形；`prefers-color-scheme: dark`、`html.dark` 和 `html[data-theme="dark"]` 下自动反色。 |
-| 📦 | **自包含 Bundle** | 动态 WebP 与静态 PNG 已嵌入客户端，无需运行时 URL 或原始帧目录。 |
-| ♿ | **支持减少动态效果** | 检测到 `prefers-reduced-motion` 时自动切换为静态 PNG。 |
-| ⚙️ | **零配置** | 尺寸、偏移、选择器和动画资源均在构建时固定；自定义需要重新构建 `lib/client.js`。 |
-| 🎯 | **严格的纯视觉范围** | 只装饰 Web 回合状态区域；没有设置项、模型工具、持久化存储、工作区访问、网络请求或用户内容处理。 |
-| ♻️ | **生命周期可清理且幂等** | 激活时先移除旧的插件样式，再由 Cordis Client fiber 挂载一个新样式；停止或卸载时完整移除。 |
-| 🔌 | **Web profile 挂载声明** | `dsh.bundle` manifest 与 `cordis.patch.yml` 声明浏览器客户端应在 DSH 加载 bundle 时自动挂载到 Web profile。 |
+| 🐋 | **六套原创逐帧动画** | 每套 352 × 352、48 帧、40 ms/帧，单循环 1.92 秒。 |
+| 🎬 | **双轨动画导演** | 当前固定文案使用定时播放列表；未来状态文案使用关键词即时覆盖。 |
+| ♿ | **逐状态减少动态效果** | `prefers-reduced-motion` 下停止轮换，并为当前状态使用对应 PNG 静态帧。 |
+| 🌗 | **主题和屏幕适配** | 系统深色、`html.dark`、`data-theme="dark"` 自动反色；尺寸按 84 / 72 / 60 px 响应式收缩。 |
+| 📦 | **完全自包含** | 6 个 WebP 和 6 个 PNG 由构建脚本嵌入 `lib/client.js`，安装后不访问外部 URL。 |
+| 🧩 | **更稳健的挂载点** | 组合使用 `role="status"` 和 `_turnStatus` 类名后备，不再只依赖单个哈希类名。 |
+| 🫧 | **降低样式侵入** | 只使用目标状态元素的 `::after`，不再清空 `::before`，不改状态文案和交互。 |
+| ♻️ | **幂等且可清理** | 重复激活会先清理旧实例；卸载时移除样式、定时器、观察器和插件属性。 |
+| 🔒 | **严格纯视觉范围** | 无设置账号、无模型工具、无持久化、无工作区读取、无用户内容处理。 |
 
 ## 安装
 
-从 GitHub 直接安装到 DSH Web profile：
+安装最新发布版到 DSH Web profile：
+
+```powershell
+dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation#v0.4.0
+```
+
+跟随主分支：
 
 ```powershell
 dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation
 ```
 
-安装后请硬刷新 DSH Web 页面。如果当前 profile 已缓存客户端 Bundle，请重启 DSH。
+安装后硬刷新 DSH Web 页面；若当前 profile 已缓存客户端 Bundle，请重启 DSH。
 
-如需固定当前版本，可使用 `#v0.3.0`：
+### 升级
 
 ```powershell
-dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation#v0.3.0
+dsh plugin --profile web remove dsh-whale-animation
+dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation#v0.4.0
 ```
 
 ### 卸载
@@ -85,80 +92,111 @@ dsh plugin --profile web remove dsh-whale-animation
 
 | 属性 | 数值 |
 |---|---:|
-| 源画布 | 352 × 352 px（CSS 显示为 84 × 84 px） |
-| 动画帧数 | 60 |
-| 单帧时长 | 33 ms |
-| 循环时长 | 1.980 秒 |
-| 编码 | 动画 RIFF WebP |
-| 减少动态效果资源 | PNG |
-| 运行时资源请求 | 无 |
-
-`npm run check` 会验证客户端注册与清理、RIFF/WebP 帧结构、60 × 33 ms 的动画时序、内嵌 WebP/PNG data URL、84 px 布局规则与深色主题 CSS 规则。它不对美术连续性打分，也不证明源素材画面唯一。
-
-`python scripts/check-readme-assets.py` 会独立验证 1200 × 380 头图、1000 × 320 且为 60 帧/1.980 秒的预览、三张 900 × 520 截图、预览文件大小预算、本地 README 链接，以及每份 README 恰有一个 Mermaid 图。
-
-这些属于静态 bundle/资源校验。本次验证未在真实 DSH Web profile 中完成安装和激活，因此自动挂载与 GUI 实际渲染目前是基于 manifest/源码的行为说明，而非端到端证据。
+| 动画状态 | 6 套 |
+| 自动播放状态 | 5 套 |
+| 源画布 | 352 × 352 px |
+| 每套帧数 | 48 |
+| 单帧时长 | 40 ms |
+| 单循环时长 | 1.920 秒 |
+| 播放列表间隔 | 9 秒 |
+| CSS 显示尺寸 | 84 / 72 / 60 px |
+| 动态资源合计 | 1,206,950 bytes |
+| 静态资源合计 | 54,957 bytes |
+| 预构建客户端 | 约 1.69 MB |
+| 运行时资源请求 | 0 |
 
 ## 工作原理
 
 ```mermaid
 flowchart LR
-  A[动画 WebP + 静态 PNG] --> B[scripts/build-client.mjs]
-  B --> C[嵌入式 data URL]
-  C --> D[DSH Web 客户端 Bundle]
-  D --> E[状态文字 ::after]
-  F[深色主题选择器] --> D
-  G[prefers-reduced-motion] --> D
+  A[6 WebP + 6 PNG] --> B[assets/manifest.json]
+  B --> C[scripts/build-client.mjs]
+  C --> D[内嵌 data URL 客户端]
+  D --> E[role=status 回合状态 ::after]
+  F[9 秒播放列表] --> D
+  G[中英文关键词覆盖] --> D
+  H[深色与 reduced-motion] --> D
 ```
 
-`lib/index.js` 是刻意保持为空的 Host 入口：全部行为都通过软件包的 `dsh.client` Web 注册在浏览器中运行。两个资源都以内嵌 data URL 形式写入 `lib/client.js`，因此安装后运行时不依赖仓库检出目录。
+`lib/index.js` 仍然是刻意保持为空的 Host 入口；全部行为通过 `dsh.client` 在浏览器中运行。客户端使用 MutationObserver 处理 Harness 的局部重绘，每秒只执行一次轻量状态判断，逐帧播放由浏览器的动画 WebP 解码器完成。
 
-客户端会先移除已有的 `style[data-plugin="dsh-whale-animation"]`，再通过 `ctx.effect()` 添加一个样式，并在 dispose 时移除。CSS 同时匹配当前哈希化状态类和 `[class*="_turnStatus"]` 后备选择器，清空该元素的 `::before` 内容，并在其右侧 6 px 绘制不可交互的 84 × 84 px `::after`。该宽泛后备选择器及两个伪元素，可能与未来 Shell 改版或同一表面上的其他插件样式发生冲突。
+当前目标节点是：
 
-深色主题选择器会反转单色素材；`prefers-reduced-motion` 会切换为 PNG。没有设置页或运行时配置——尺寸、偏移、选择器和素材都会生成到 `lib/client.js` 中。
+```css
+.Md3f7G_turnStatus[role="status"],
+[class*="_turnStatus"][role="status"]
+```
 
-## 开发
+插件会在目标元素上写入 `data-dsh-whale-host` 和 `data-dsh-whale-state`，再由 `::after` 显示对应动画。深色模式通过反色适配单色资产；减少动态效果模式使用相同状态的 PNG，并固定在默认状态或明确关键词状态。
 
-要求：**Node.js 20+**。只有重新生成 README 配图时才额外需要 Python 3、Pillow 和 NumPy：
+## 开发与验证
+
+要求：**Node.js 20+**。重新生成动画和文档资产需要 Python 3 与 Pillow：
 
 ```powershell
-python -m pip install Pillow numpy
+python -m pip install Pillow
+npm run build:assets
 npm run build
 npm run check
-python scripts/build-readme-assets.py
-python scripts/check-readme-assets.py
 ```
 
-`npm run check` 只验证客户端 Bundle；配图和链接验证是独立的 Python 命令，发布文档前应如上同时执行。配图生成器优先使用 Windows 上的 Segoe UI 字体文件，缺失时会回退到 Pillow 默认字体，因此当前无法在非 Windows 平台保证字节级一致的重新生成结果。
+常用命令：
 
-### 仓库结构
+| 命令 | 作用 |
+|---|---|
+| `npm run build:assets` | 生成 6 套 WebP、6 张 PNG、manifest、头图、预览和状态画廊 |
+| `npm run build` | 将 manifest 中的全部资源嵌入 `lib/client.js` |
+| `npm run check` | 校验动画结构、哈希、Bundle、状态导演、生命周期和 README 资产 |
+| `npm run check:browser` | 在无头 Chromium 中挂载已提交 Bundle，并生成浅色/深色烟测截图 |
+| `npm run verify` | 重建客户端并执行确定性的非浏览器检查 |
+
+验证范围包括：
+
+- 12 个资源文件的格式、大小和 SHA-256；
+- 每个 WebP 的 48 帧、40 ms 帧时长和 1.92 秒循环；
+- manifest 与客户端内嵌 data URL 完全一致；
+- 五状态轮换、关键词覆盖、错误优先级、reduced-motion 固定；
+- 样式安装、MutationObserver、定时器和 dispose 清理；
+- README 头图、50 帧预览、状态画廊尺寸与本地链接；
+- CI 中的预构建 Bundle 一致性、真实 Chromium 状态映射、浅色/深色截图和 `npm pack` 检查。
+
+更完整的设计取舍与后续路线见 [`docs/ANIMATION_ROADMAP.zh-CN.md`](docs/ANIMATION_ROADMAP.zh-CN.md)。
+
+## 仓库结构
 
 ```text
 assets/
-  whale-dive.webp        完整动画资源
-  whale-static.png       减少动态效果静态回退
+  manifest.json          动画清单、时序、文件大小与 SHA-256
+  whale-*.webp           六套动画资源
+  whale-*.png            六套 reduced-motion 静态帧
+src/
+  client-runtime.js      状态导演和浏览器生命周期源代码
+lib/
+  index.js               空 Host 入口
+  client.js              预构建、内嵌全部资产的 DSH Web 客户端
+scripts/
+  build-whale-assets.py  生成动画与 README 视觉资产
+  build-client.mjs       根据 manifest 构建浏览器客户端
+  check.mjs              验证资源、Bundle 和运行时行为
+  check-readme-assets.py 验证文档视觉资产和链接
+  browser-smoke.html     覆盖六种状态的浏览器测试页面
+  check-browser.sh       执行 Chromium 烟测并生成浅色/深色截图
 docs/
   hero.png               README 头图
-  preview.webp           README 轻量动画预览
-  screenshots/           破水、顶点与深潜动作截图
-lib/
-  index.js               刻意保持为空的 Host 入口
-  client.js              预构建 DSH 浏览器客户端
-scripts/
-  build-client.mjs       将源资源嵌入客户端
-  build-readme-assets.py 使用真实动画重新生成仓库配图
-  check-readme-assets.py 验证配图时序、尺寸与 README 链接
-  check.mjs              验证注册、生命周期与嵌入资源
-cordis.patch.yml         持久化 DSH Bundle 组合补丁
+  preview.webp           五状态动画预览
+  state-gallery.png      六状态静态画廊
+  ANIMATION_ROADMAP.zh-CN.md 设计与后续路线
 ```
 
-`lib/client.js` 会有意提交到仓库，确保 GitHub 安装无需执行构建或下载外部资源。
+`lib/client.js` 会提交到仓库，确保 GitHub 安装无需在用户机器上执行构建，也不需要运行时下载动画文件。
 
-## 兼容性
+## 兼容性与限制
 
-- 仅面向 **DeepSeek Harness Web UI**，并需要兼容 `@deepseek-ai/dsh-client-runtime ^0.1.0-rc.6` 的 DSH 版本。
-- 使用当前哈希化状态类与 `[class*="_turnStatus"]` 后备选择器。Shell 的 DOM、类名或伪元素若重构，可能需要更新选择器；也会与同样占用目标元素 `::before` 或 `::after` 的插件冲突。
-- 浅色、系统深色、`html.dark` 与 `html[data-theme="dark"]` 均通过 CSS 反色适配；减少动态效果使用静态 PNG。插件没有运行时设置，84 px 尺寸和右侧偏移为构建时常量。
+- 仅面向 **DeepSeek Harness Web UI**，要求兼容 `@deepseek-ai/dsh-client-runtime ^0.1.0-rc.6` 的 DSH 版本。
+- 当前 Shell 若重命名 `_turnStatus` 且移除 `role="status"`，需要更新选择器。
+- 插件仍需占用目标元素的 `::after`；其他同时使用该伪元素的插件可能发生样式冲突。
+- 定时播放列表是当前固定状态文案下的兼容方案，并不代表真实模型阶段。未来若 DSH 暴露稳定阶段事件，将优先改为事件驱动。
+- 资源以内嵌方式换取零网络请求，因此 `lib/client.js` 约 1.69 MB。
 
 ## 声明
 
@@ -166,4 +204,4 @@ cordis.patch.yml         持久化 DSH Bundle 组合补丁
 
 ## 许可证
 
-以 [MIT License](LICENSE) 发布。
+以 [MIT License](LICENSE) 发布。版本变化见 [CHANGELOG.md](CHANGELOG.md)。
