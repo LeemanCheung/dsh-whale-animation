@@ -1,7 +1,7 @@
 {
   "name": "dsh-whale-animation",
-  "version": "0.4.0",
-  "description": "Reactive six-state whale animation director for the DeepSeek Harness Web turn status.",
+  "version": "0.5.0",
+  "description": "Brand-aligned whale animation director with two preserved legacy loops and five spine-driven states for DeepSeek Harness Web.",
   "license": "MIT",
   "author": "LeemanCheung",
   "type": "module",
@@ -66,7 +66,7 @@
     "build:assets": "python scripts/build-whale-assets.py",
     "check": "node scripts/check.mjs && python scripts/check-readme-assets.py",
     "check:browser": "bash scripts/check-browser.sh",
-    "verify": "npm run build && npm run check"
+    "verify": "npm run build:assets && npm run build && npm run check"
   },
   "peerDependencies": {
     "@deepseek-ai/cordis": "^4.0.1",

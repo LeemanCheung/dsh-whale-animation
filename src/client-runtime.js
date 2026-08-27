@@ -15,6 +15,10 @@ const KEYWORD_GROUPS = [
     keywords: ['error', 'failed', 'failure', 'retry', 'retrying', 'exception', '错误', '失败', '重试', '异常'],
   },
   {
+    state: 'classic',
+    keywords: ['classic whale', 'legacy whale', 'original whale', '经典鲸鱼', '原版鲸鱼', '旧版鲸鱼'],
+  },
+  {
     state: 'sonar',
     keywords: ['search', 'searching', 'browse', 'browsing', 'research', 'lookup', 'web', '搜索', '检索', '浏览', '调研'],
   },
@@ -175,7 +179,7 @@ function apply(ctx) {
       tracked.clear();
       style.remove();
     };
-  }, `${PLUGIN_ID}: reactive whale director`);
+  }, `${PLUGIN_ID}: brand-aligned whale director`);
 }
 
 exports.apply = apply;
