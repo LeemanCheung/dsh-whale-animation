@@ -29,6 +29,9 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Materialize v0.5.0 source
+        run: python scripts/materialize-v050.py
+
       - name: Install validation dependencies
         run: python -m pip install --disable-pip-version-check Pillow
 
