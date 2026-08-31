@@ -1,9 +1,9 @@
 {
   "name": "dsh-whale-animation",
-  "version": "0.6.0",
-  "description": "Brand-aligned whale animation director with two preserved legacy loops, a 64-cel surface-spout state, and five semantic states for DeepSeek Harness Web.",
+  "version": "0.7.0",
+  "description": "Two byte-preserved original whale animation loops for DeepSeek Harness Web.",
   "license": "MIT",
-  "author": "LeemanCheung",
+  "author": "Leeman Cheung",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
@@ -14,38 +14,22 @@
   "files": [
     ".github/workflows",
     "assets",
-    "docs",
-    "!docs/imagegen-sources/**",
     "lib",
     "src",
     "scripts/browser-smoke.html",
-    "scripts/audit-motion.py",
-    "scripts/check-whale-style.py",
     "scripts/build-client.mjs",
-    "scripts/build-whale-assets.py",
-    "scripts/build-whale-spout.py",
+    "scripts/build-manifest.mjs",
     "scripts/check-browser.sh",
     "scripts/check-workflows.mjs",
-    "scripts/check-readme-assets.py",
     "scripts/check.mjs",
-    "scripts/whale_assets/*.py",
     "cordis.patch.yml",
     "CHANGELOG.md",
     "README.md",
     "README.zh-CN.md",
     "LICENSE",
-    "NOTICE.md",
-    "requirements.txt"
+    "NOTICE.md"
   ],
-  "keywords": [
-    "dsh",
-    "deepseek-harness",
-    "dsh-plugin",
-    "cordis",
-    "web-ui",
-    "animation",
-    "whale"
-  ],
+  "keywords": ["dsh", "deepseek-harness", "dsh-plugin", "animation", "whale"],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/LeemanCheung/dsh-whale-animation.git"
@@ -54,32 +38,20 @@
     "url": "https://github.com/LeemanCheung/dsh-whale-animation/issues"
   },
   "homepage": "https://github.com/LeemanCheung/dsh-whale-animation#readme",
-  "engines": {
-    "node": ">=20"
-  },
+  "engines": { "node": ">=20" },
   "dsh": {
-    "bundle": {
-      "patch": "./cordis.patch.yml"
-    },
+    "bundle": { "patch": "./cordis.patch.yml" },
     "client": {
-      "inject": [
-        "@deepseek-ai/dsh-client-runtime"
-      ],
+      "inject": ["@deepseek-ai/dsh-client-runtime"],
       "platform": "web"
     }
   },
   "scripts": {
+    "build:assets": "node scripts/build-manifest.mjs",
     "build": "node scripts/build-client.mjs",
-    "build:spout": "python scripts/build-whale-spout.py",
-    "build:assets": "npm run build:spout && python scripts/build-whale-assets.py",
-    "build:runtime-assets": "npm run build:spout && python scripts/build-whale-assets.py --skip-docs",
-    "build:motion-audit": "python scripts/audit-motion.py --write",
-    "build:style-audit": "python scripts/check-whale-style.py --write",
-    "audit:motion": "python scripts/audit-motion.py --check",
-    "audit:style": "python scripts/check-whale-style.py --check",
-    "check": "node scripts/check-workflows.mjs && node scripts/check.mjs && python scripts/check-readme-assets.py && npm run audit:motion && npm run audit:style",
+    "check": "node scripts/check-workflows.mjs && node scripts/check.mjs",
     "check:browser": "bash scripts/check-browser.sh",
-    "verify": "npm run build:assets && npm run build && npm run build:motion-audit && npm run build:style-audit && npm run check"
+    "verify": "npm run build:assets && npm run build && npm run check"
   },
   "peerDependencies": {
     "@deepseek-ai/cordis": "^4.0.1",

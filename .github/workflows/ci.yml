@@ -16,46 +16,17 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install validation dependencies
-        run: python -m pip install --disable-pip-version-check -r requirements.txt
-
-      - name: Regenerate animation and documentation assets
-        run: npm run build:runtime-assets
-
-      - name: Rebuild embedded browser client
-        run: npm run build
-
-      - name: Validate runtime, animation assets, and docs
-        run: npm run check
-
-      - name: Verify committed generated artifacts
-        shell: bash
-        run: |
-          git diff --exit-code -- assets artwork-sources/spout-imagegen-v1 lib/client.js
-          untracked="$(git ls-files --others --exclude-standard -- assets artwork-sources/spout-imagegen-v1 docs lib)"
-          if [ -n "$untracked" ]; then
-            echo "Generated untracked files are not part of the immutable source:" >&2
-            echo "$untracked" >&2
-            exit 1
-          fi
-
+      - name: Build and verify two preserved loops
+        run: npm run verify
+      - name: Verify committed build outputs
+        run: git diff --exit-code -- assets/manifest.json lib/client.js
       - name: Run Chromium browser smoke test
         run: bash scripts/check-browser.sh
-
-      - name: Upload browser smoke screenshots
+      - name: Upload browser screenshots
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -63,12 +34,10 @@ jobs:
           path: .artifacts/browser-smoke-*.png
           if-no-files-found: error
           include-hidden-files: true
-
       - name: Validate package contents
-        shell: bash
         run: |
           npm pack --dry-run 2>&1 | tee /tmp/npm-pack.txt
-          if grep -E '__pycache__|\.py[co]|artwork-sources|\.impeccable' /tmp/npm-pack.txt; then
-            echo "Source-only or cache files leaked into the package" >&2
+          if grep -E 'artwork-sources|docs/|whale-(spout|sonar|work|compose|idle|alert)' /tmp/npm-pack.txt; then
+            echo "Non-original animation content leaked into the package" >&2
             exit 1
           fi

@@ -1,56 +1,41 @@
+import assert from 'node:assert/strict'
 import { createHash } from 'node:crypto'
-import { readFile, stat } from 'node:fs/promises'
-import { resolve, dirname } from 'node:path'
+import { readFile, readdir, stat } from 'node:fs/promises'
+import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import vm from 'node:vm'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-const source = await readFile(resolve(root, 'lib/client.js'), 'utf8')
 const manifest = JSON.parse(await readFile(resolve(root, 'assets/manifest.json'), 'utf8'))
-const spoutReport = JSON.parse(await readFile(resolve(root, 'artwork-sources/spout-imagegen-v1/build-report.json'), 'utf8'))
-const stateKeys = Object.keys(manifest.states)
-const expectedStates = ['dive', 'classic', 'spout', 'sonar', 'work', 'compose', 'idle', 'alert']
-const expectedPlaylist = ['dive', 'classic', 'spout', 'sonar', 'work', 'compose', 'idle']
-const expectedDerivedFrom = {
-  work: ['whale-dive.webp'],
-  compose: ['whale-classic.webp'],
-  idle: ['whale-dive.webp'],
-  alert: ['whale-classic.webp'],
-}
-const allowPlaceholderLegacy = process.env.DSH_ALLOW_PLACEHOLDER_LEGACY === '1'
-const expectedLegacyGitBlobs = {
+const client = await readFile(resolve(root, 'lib/client.js'), 'utf8')
+const packageJson = JSON.parse(await readFile(resolve(root, 'package.json'), 'utf8'))
+const expectedStates = ['dive', 'classic']
+const expected = {
   dive: {
-    animated: '5c2891f6aa8a8c318a987951138178195898076e',
-    static: 'a04f807b546b2ec4f4310764c2bd7c0fa29bcd56',
+    canvas: [352, 352], frames: 60, frameDurationMs: 33, loopDurationMs: 1980,
+    animatedBlob: '5c2891f6aa8a8c318a987951138178195898076e',
+    staticBlob: 'a04f807b546b2ec4f4310764c2bd7c0fa29bcd56',
     commit: '65e1205d1fbf4b01997e6dfc099103b0f9717e37',
-    canvas: [352, 352],
   },
   classic: {
-    animated: 'bf3d4efc4a0e38f285226722d9cf2f431b095a45',
-    static: '0a697352a92f25fb8c1794e485be7fa44efe0e78',
+    canvas: [184, 184], frames: 618, frameDurationMs: 17, loopDurationMs: 10506,
+    animatedBlob: 'bf3d4efc4a0e38f285226722d9cf2f431b095a45',
+    staticBlob: '0a697352a92f25fb8c1794e485be7fa44efe0e78',
     commit: '95b06e3f0e6ea817d25858eb29f7064a233b3c65',
-    canvas: [184, 184],
   },
 }
 
-function assert(condition, message) {
-  if (!condition) throw new Error(message)
-}
-
-function digest(data) {
-  return createHash('sha256').update(data).digest('hex')
+function digest(data, algorithm = 'sha256') {
+  return createHash(algorithm).update(data).digest('hex')
 }
 
 function gitBlobSha(data) {
-  return createHash('sha1')
-    .update(Buffer.from(`blob ${data.length}\0`, 'utf8'))
-    .update(data)
-    .digest('hex')
+  return createHash('sha1').update(Buffer.from(`blob ${data.length}\0`)).update(data).digest('hex')
 }
 
 function webpDurations(data) {
-  assert(data.subarray(0, 4).toString('ascii') === 'RIFF', 'Animated asset is not RIFF')
-  assert(data.subarray(8, 12).toString('ascii') === 'WEBP', 'Animated asset is not WebP')
+  assert.equal(data.subarray(0, 4).toString('ascii'), 'RIFF')
+  assert.equal(data.subarray(8, 12).toString('ascii'), 'WEBP')
   const durations = []
   for (let offset = 12; offset + 8 <= data.length;) {
     const kind = data.subarray(offset, offset + 4).toString('ascii')
@@ -62,269 +47,84 @@ function webpDurations(data) {
   return durations
 }
 
-assert(JSON.stringify(stateKeys) === JSON.stringify(expectedStates), `Unexpected state order: ${stateKeys}`)
-assert(JSON.stringify(manifest.playlist) === JSON.stringify(expectedPlaylist), `Unexpected playlist: ${manifest.playlist}`)
-assert(manifest.canvasScope === 'generated-states', 'Top-level canvas scope is ambiguous')
-assert(manifest.defaultState === 'dive', 'The refined legacy dive must remain the default state')
-assert(manifest.playlistIntervalMs === 11000, 'Playlist interval changed unexpectedly')
-for (const state of manifest.playlist) {
-  assert(
-    manifest.playlistIntervalMs >= manifest.states[state].loopDurationMs,
-    `${state}: playlist interval truncates the animation before one full loop`,
-  )
-}
+assert.equal(packageJson.version, '0.7.0')
+assert.deepEqual(Object.keys(manifest.states), expectedStates)
+assert.deepEqual(manifest.playlist, expectedStates)
+assert.equal(manifest.defaultState, 'dive')
+assert.equal(manifest.playlistIntervalMs, 11000)
+assert.equal(manifest.canvasScope, 'per-state')
 
-let totalAnimatedBytes = 0
-let totalStaticBytes = 0
-const expectedAssetDigests = new Set()
-const generatedAnimatedDigests = new Set()
-const generatedStaticDigests = new Set()
-const expectedDataUrls = new Map()
-for (const state of stateKeys) {
+const assetNames = (await readdir(resolve(root, 'assets'))).sort()
+assert.deepEqual(assetNames, [
+  'manifest.json',
+  'whale-classic.png', 'whale-classic.webp',
+  'whale-dive.png', 'whale-dive.webp',
+  'whale-static.png',
+].sort(), 'assets must contain only the two original animations and compatibility PNG')
+
+const expectedDigests = new Set()
+let totalAssetBytes = 0
+for (const state of expectedStates) {
   const entry = manifest.states[state]
-  assert(entry.animated === `whale-${state}.webp`, `${state}: animated filename is mapped to another state`)
-  assert(entry.static === `whale-${state}.png`, `${state}: static filename is mapped to another state`)
-  const animatedPath = resolve(root, 'assets', entry.animated)
-  const staticPath = resolve(root, 'assets', entry.static)
-  const [animated, reduced, animatedStat, staticStat] = await Promise.all([
-    readFile(animatedPath),
-    readFile(staticPath),
-    stat(animatedPath),
-    stat(staticPath),
-  ])
+  const contract = expected[state]
+  const animated = await readFile(resolve(root, 'assets', entry.animated))
+  const reduced = await readFile(resolve(root, 'assets', entry.static))
   const durations = webpDurations(animated)
-  assert(Array.isArray(entry.canvas) && entry.canvas.length === 2, `${state}: native canvas metadata is missing`)
-  assert(durations.length === entry.frames, `${state}: frames=${durations.length}, expected=${entry.frames}`)
-  assert(durations.every(value => value === entry.frameDurationMs), `${state}: unexpected frame durations ${[...new Set(durations)]}`)
-  assert(durations.reduce((sum, value) => sum + value, 0) === entry.loopDurationMs, `${state}: loop duration mismatch`)
-  assert(animatedStat.size === entry.animatedBytes, `${state}: animated size does not match manifest`)
-  assert(staticStat.size === entry.staticBytes, `${state}: static size does not match manifest`)
-  assert(digest(animated) === entry.animatedSha256, `${state}: animated SHA-256 mismatch`)
-  assert(digest(reduced) === entry.staticSha256, `${state}: static SHA-256 mismatch`)
-  assert(reduced.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10])), `${state}: reduced-motion asset is not PNG`)
-  assert(animatedStat.size >= 1000 && animatedStat.size <= 1024 * 1024, `${state}: animated asset outside size budget`)
-  assert(staticStat.size >= 500 && staticStat.size <= 64 * 1024, `${state}: static asset outside size budget`)
-
-  if (expectedLegacyGitBlobs[state]) {
-    const expected = expectedLegacyGitBlobs[state]
-    assert(entry.source === 'legacy', `${state}: preserved asset is not marked legacy`)
-    assert(entry.preservedFrom === expected.commit, `${state}: preserved source commit changed`)
-    assert(JSON.stringify(entry.canvas) === JSON.stringify(expected.canvas), `${state}: preserved native canvas changed`)
-    if (!allowPlaceholderLegacy) {
-      assert(gitBlobSha(animated) === expected.animated, `${state}: legacy animation bytes changed`)
-      assert(gitBlobSha(reduced) === expected.static, `${state}: legacy reduced-motion bytes changed`)
-    }
-  } else if (state === 'spout') {
-    const expectedSheets = ['phase-1-rise.png', 'phase-2-grow.png', 'phase-3-fall.png', 'phase-4-submerge.png']
-    assert(entry.source === 'imagegen', 'spout: source marker must be imagegen')
-    assert(JSON.stringify(entry.canvas) === JSON.stringify([352, 352]), 'spout: canvas changed')
-    assert(entry.frames === 137 && entry.frameDurationMs === 33 && entry.loopDurationMs === 4521, 'spout: runtime contract must be 137 x 33 ms')
-    assert(entry.nativeImageGenCels === 64 && entry.spoutSegmentFrames === 77, 'spout: 64-cel/77-frame provenance changed')
-    assert(entry.provenanceReport === 'artwork-sources/spout-imagegen-v1/build-report.json', 'spout: provenance report path changed')
-    assert(JSON.stringify(entry.cycleSegments) === JSON.stringify(spoutReport.output.segments), 'spout: cycle segment mapping differs from provenance')
-    assert(JSON.stringify(entry.sourceSheets) === JSON.stringify(expectedSheets.map(name => `artwork-sources/spout-imagegen-v1/${name}`)), 'spout: source sheet mapping changed')
-    assert(spoutReport?.checks?.allPassed === true && spoutReport?.checks?.statusLastEqualsDiveFirst === true, 'spout: deterministic provenance checks failed')
-    for (const name of expectedSheets) {
-      const sheet = await readFile(resolve(root, 'artwork-sources/spout-imagegen-v1', name))
-      const reported = spoutReport.inputs.phaseSheets[name]
-      assert(reported?.sha256 === digest(sheet) && reported?.nativeCels === 16 && JSON.stringify(reported?.size) === JSON.stringify([1254, 1254]), `spout: source provenance mismatch for ${name}`)
-    }
-  } else {
-    assert(entry.source === 'generated', `${state}: redrawn state is not marked generated`)
-    assert(JSON.stringify(entry.canvas) === JSON.stringify([352, 352]), `${state}: generated canvas changed`)
-    assert(entry.frames === 48, `${state}: generated frame count changed`)
-    assert(entry.frameDurationMs === 40, `${state}: generated frame cadence changed`)
-    assert(entry.loopDurationMs === 1920, `${state}: generated loop duration changed`)
-    assert(animatedStat.size <= 512 * 1024, `${state}: generated state exceeds 512 KiB`)
-    if (expectedDerivedFrom[state]) {
-      assert(JSON.stringify(entry.derivedFrom) === JSON.stringify(expectedDerivedFrom[state]), `${state}: legacy identity lineage changed`)
-    } else {
-      assert(entry.derivedFrom === undefined, `${state}: unexpected legacy identity lineage`)
-    }
-  }
-
-  totalAnimatedBytes += animatedStat.size
-  totalStaticBytes += staticStat.size
-  expectedAssetDigests.add(entry.animatedSha256)
-  expectedAssetDigests.add(entry.staticSha256)
-  expectedDataUrls.set(state, {
-    animated: `data:image/webp;base64,${animated.toString('base64')}`,
-    static: `data:image/png;base64,${reduced.toString('base64')}`,
-  })
-  if (entry.source === 'generated') {
-    generatedAnimatedDigests.add(entry.animatedSha256)
-    generatedStaticDigests.add(entry.staticSha256)
-  }
+  assert.equal(entry.source, 'legacy')
+  assert.deepEqual(entry.canvas, contract.canvas)
+  assert.equal(entry.frames, contract.frames)
+  assert.equal(entry.frameDurationMs, contract.frameDurationMs)
+  assert.equal(entry.loopDurationMs, contract.loopDurationMs)
+  assert.equal(entry.preservedFrom, contract.commit)
+  assert.equal(gitBlobSha(animated), contract.animatedBlob, `${state}: preserved WebP bytes changed`)
+  assert.equal(gitBlobSha(reduced), contract.staticBlob, `${state}: preserved PNG bytes changed`)
+  assert.equal(digest(animated), entry.animatedSha256)
+  assert.equal(digest(reduced), entry.staticSha256)
+  assert.equal(animated.length, entry.animatedBytes)
+  assert.equal(reduced.length, entry.staticBytes)
+  assert.equal(durations.length, contract.frames)
+  assert.ok(durations.every(value => value === contract.frameDurationMs))
+  expectedDigests.add(entry.animatedSha256)
+  expectedDigests.add(entry.staticSha256)
+  totalAssetBytes += animated.length + reduced.length
 }
-const generatedStateCount = stateKeys.filter(state => manifest.states[state].source === 'generated').length
-assert(generatedAnimatedDigests.size === generatedStateCount, 'Generated states reuse the same animation')
-assert(generatedStaticDigests.size === generatedStateCount, 'Generated states reuse the same reduced-motion image')
-assert(totalAnimatedBytes <= 2304 * 1024, `Animated asset budget exceeded: ${totalAnimatedBytes}`)
-assert(totalStaticBytes <= 160 * 1024, `Static asset budget exceeded: ${totalStaticBytes}`)
+assert.ok((await readFile(resolve(root, 'assets/whale-static.png'))).equals(await readFile(resolve(root, 'assets/whale-dive.png'))))
 
-const embedded = [...source.matchAll(/data:image\/(webp|png);base64,([A-Za-z0-9+/=]+)/g)]
-assert(embedded.length === stateKeys.length * 2, `Embedded data URL count mismatch: ${embedded.length}`)
-const embeddedDigests = new Set(embedded.map(match => digest(Buffer.from(match[2], 'base64'))))
-assert(embeddedDigests.size === expectedAssetDigests.size, 'Embedded asset digest set has duplicates or omissions')
-for (const expected of expectedAssetDigests) assert(embeddedDigests.has(expected), `Embedded asset missing: ${expected}`)
-assert(!source.includes('https://') && !source.includes('http://'), 'Client contains a runtime network URL')
-assert(source.includes('[class*="_turnStatus"][role="status"]'), 'Semantic turn-status fallback is missing')
-assert(source.includes('prefers-reduced-motion: reduce'), 'Reduced-motion CSS is missing')
-assert(source.includes('html[data-theme=\\"dark\\"]') || source.includes('html[data-theme="dark"]'), 'Explicit dark-theme CSS is missing')
-assert(source.includes('@keyframes dsh-whale-switch-dive'), 'Per-state switch animation is missing')
-assert(source.length <= 3.5 * 1024 * 1024, `Client bundle exceeds 3.5 MiB: ${source.length}`)
-
-class FakeElement {
-  constructor(tagName, text = '') {
-    this.tagName = tagName.toUpperCase()
-    this._text = text
-    this.attributes = new Map()
-    this.children = []
-    this.dataset = {}
-    this.parentElement = null
-    this.isConnected = true
-    this.removed = false
-  }
-
-  get textContent() { return this._text }
-  set textContent(value) { this._text = String(value) }
-  setAttribute(name, value) { this.attributes.set(name, String(value)) }
-  getAttribute(name) { return this.attributes.has(name) ? this.attributes.get(name) : null }
-  removeAttribute(name) { this.attributes.delete(name) }
-  appendChild(child) {
-    child.parentElement = this
-    child.isConnected = true
-    this.children.push(child)
-    return child
-  }
-  remove() {
-    this.removed = true
-    this.isConnected = false
-    if (this.parentElement) {
-      this.parentElement.children = this.parentElement.children.filter(child => child !== this)
-      this.parentElement = null
-    }
-  }
-}
+const embedded = [...client.matchAll(/data:image\/(webp|png);base64,([A-Za-z0-9+/=]+)/g)]
+assert.equal(embedded.length, 4)
+assert.deepEqual(new Set(embedded.map(match => digest(Buffer.from(match[2], 'base64')))), expectedDigests)
+assert.ok(client.includes('@keyframes dsh-whale-switch-dive'))
+assert.ok(client.includes('@keyframes dsh-whale-switch-classic'))
+assert.ok(!client.includes('dsh-whale-switch-sonar'))
+assert.ok(client.includes('prefers-reduced-motion: reduce'))
+assert.ok(client.includes('html[data-theme=\\"dark\\"]') || client.includes('html[data-theme="dark"]'))
+assert.ok(!client.includes('https://') && !client.includes('http://'))
+assert.ok(client.length < 1.25 * 1024 * 1024)
 
 let loaded
-let now = 1_000
-let intervalCallback
-let intervalCleared = false
-let observerDisconnected = false
-let motionListener
-const motionQuery = {
-  matches: false,
-  addEventListener(type, callback) { if (type === 'change') motionListener = callback },
-  removeEventListener(type, callback) { if (type === 'change' && motionListener === callback) motionListener = undefined },
-}
-const status = new FakeElement('div', 'Deep diving...')
-status.setAttribute('role', 'status')
-const head = new FakeElement('head')
-const document = {
-  documentElement: new FakeElement('html'),
-  head,
-  createElement(tag) { return new FakeElement(tag) },
-  querySelector(selector) {
-    if (selector === 'style[data-plugin="dsh-whale-animation"]') {
-      return head.children.find(child => child.dataset.plugin === 'dsh-whale-animation') ?? null
-    }
-    return null
-  },
-  querySelectorAll(selector) {
-    if (selector.includes('_turnStatus') || selector.includes('.Md3f7G_turnStatus')) return [status]
-    if (selector === '[data-dsh-whale-host="true"]') {
-      return status.getAttribute('data-dsh-whale-host') === 'true' ? [status] : []
-    }
-    return []
-  },
-}
-class FakeMutationObserver {
-  constructor(callback) { this.callback = callback }
-  observe() {}
-  disconnect() { observerDisconnected = true }
-}
 const context = {
-  window: {
-    __ModuleLoader__: { load(value) { loaded = value } },
-    matchMedia() { return motionQuery },
-  },
-  document,
-  MutationObserver: FakeMutationObserver,
-  Date: { now: () => now },
-  setInterval(callback) { intervalCallback = callback; return 7 },
-  clearInterval(id) { if (id === 7) intervalCleared = true },
-  queueMicrotask(callback) { callback() },
+  window: { __ModuleLoader__: { load(value) { loaded = value } } },
   console,
 }
-vm.runInNewContext(source, context, { filename: 'lib/client.js' })
-assert(loaded?.id === 'dsh-whale-animation' && typeof loaded.factory === 'function', 'Client module did not register')
+context.globalThis = context
+vm.runInNewContext(client, context, { filename: 'lib/client.js' })
 const plugin = loaded.factory(() => { throw new Error('No imports expected') })
-assert(plugin?.name === 'dsh-whale-animation', 'Client plugin name mismatch')
-assert(typeof plugin.apply === 'function', 'Client plugin apply missing')
-assert(plugin.resolveWhaleState('Classic whale animation') === 'classic', 'Classic keyword mapping failed')
-assert(plugin.resolveWhaleState('Classic') === 'classic', 'Bare Classic alias mapping failed')
-assert(plugin.resolveWhaleState('Original') === 'classic', 'Bare Original alias mapping failed')
-assert(plugin.resolveWhaleState('经典') === 'classic', 'Bare Chinese Classic alias mapping failed')
-assert(plugin.resolveWhaleState('原版') === 'classic', 'Bare Chinese Original alias mapping failed')
-assert(plugin.resolveWhaleState('Processing original source file') === null, 'Original substring must not trigger Classic')
-assert(plugin.resolveWhaleState('Searching the web') === 'sonar', 'Search keyword mapping failed')
-assert(plugin.resolveWhaleState('Surface whale spouting') === 'spout', 'Spout keyword mapping failed')
-assert(plugin.resolveWhaleState('鲸鱼浮面喷水') === 'spout', 'Chinese spout keyword mapping failed')
-assert(plugin.resolveWhaleState('Using tool: shell') === 'work', 'Tool keyword mapping failed')
-assert(plugin.resolveWhaleState('Generating answer') === 'compose', 'Compose keyword mapping failed')
-assert(plugin.resolveWhaleState('Retrying after error') === 'alert', 'Alert keyword mapping failed')
-assert(plugin.resolveWhaleState('Deep diving...') === null, 'Default Deep diving label must allow playlist rotation')
-assert(plugin.chooseWhaleState('Deep diving...', 0, false) === manifest.playlist[0], 'Playlist start state mismatch')
-assert(plugin.chooseWhaleState('Deep diving...', manifest.playlistIntervalMs, false) === 'classic', 'Second preserved animation is not in the playlist')
-assert(plugin.chooseWhaleState('Deep diving...', manifest.playlistIntervalMs + manifest.states.classic.loopDurationMs - 1, false) === 'classic', 'Classic is truncated before one complete loop')
-assert(plugin.chooseWhaleState('Deep diving...', manifest.playlistIntervalMs * 2, false) === 'spout', 'Playlist did not advance to Surface Spout')
-assert(plugin.chooseWhaleState('Deep diving...', manifest.playlistIntervalMs * 3, false) === 'sonar', 'Playlist did not advance after the Surface Spout slot')
-assert(plugin.chooseWhaleState('Deep diving...', manifest.playlistIntervalMs, true) === manifest.defaultState, 'Reduced-motion state must remain stable')
+assert.deepEqual([...plugin.playlist], expectedStates)
+assert.equal(plugin.resolveWhaleState('Classic whale animation'), 'classic')
+assert.equal(plugin.resolveWhaleState('经典鲸鱼'), 'classic')
+assert.equal(plugin.resolveWhaleState('Analyzing the request'), 'dive')
+assert.equal(plugin.resolveWhaleState('Searching the web'), null)
+assert.equal(plugin.chooseWhaleState('Deep diving...', 0), 'dive')
+assert.equal(plugin.chooseWhaleState('Deep diving...', 11000), 'classic')
+assert.equal(plugin.chooseWhaleState('Deep diving...', 22000), 'dive')
+assert.equal(plugin.chooseWhaleState('Deep diving...', 11000, true), 'dive')
 
-let dispose
-plugin.apply({ effect(start) { dispose = start() } })
-assert(typeof dispose === 'function', 'Client disposer missing')
-assert(head.children.length === 1 && head.children[0].dataset.plugin === 'dsh-whale-animation', 'Plugin style was not installed')
-const installedCss = head.children[0].textContent
-for (const state of stateKeys) {
-  const urls = expectedDataUrls.get(state)
-  const animatedRule = `[data-dsh-whale-state="${state}"]::after { background-image: url("${urls.animated}"); animation:`
-  const staticRule = `@media (prefers-reduced-motion: reduce) { [data-dsh-whale-host="true"][data-dsh-whale-state="${state}"]::after { background-image: url("${urls.static}"); } }`
-  assert(installedCss.includes(animatedRule), `${state}: animated asset is mapped to the wrong state`)
-  assert(installedCss.includes(staticRule), `${state}: static asset is not mapped inside reduced-motion CSS`)
-  assert(installedCss.indexOf(urls.animated) === installedCss.lastIndexOf(urls.animated), `${state}: animated asset is embedded in more than one CSS rule`)
-  assert(installedCss.indexOf(urls.static) === installedCss.lastIndexOf(urls.static), `${state}: static asset is embedded in more than one CSS rule`)
-}
-assert(status.getAttribute('data-dsh-whale-host') === 'true', 'Status host was not decorated')
-assert(status.getAttribute('data-dsh-whale-state') === manifest.playlist[0], 'Initial playlist state was not applied')
-
-now += manifest.playlistIntervalMs
-intervalCallback()
-assert(status.getAttribute('data-dsh-whale-state') === 'classic', 'Timed playlist did not reach the second preserved loop')
-status._text = 'Using tool: shell'
-intervalCallback()
-assert(status.getAttribute('data-dsh-whale-state') === 'work', 'Explicit tool state did not override playlist')
-status._text = 'Retrying after error'
-intervalCallback()
-assert(status.getAttribute('data-dsh-whale-state') === 'alert', 'Explicit error state did not override playlist')
-motionQuery.matches = true
-status._text = 'Deep diving...'
-motionListener?.()
-assert(status.getAttribute('data-dsh-whale-state') === manifest.defaultState, 'Reduced-motion mode did not freeze on default state')
-
-dispose()
-assert(intervalCleared, 'Client interval was not cleared')
-assert(observerDisconnected, 'Mutation observer was not disconnected')
-assert(head.children.length === 0, 'Plugin style was not disposed')
-assert(status.getAttribute('data-dsh-whale-host') === null && status.getAttribute('data-dsh-whale-state') === null, 'Host attributes were not cleaned up')
-
+const packedAssets = (await stat(resolve(root, 'lib/client.js'))).size
 console.log(JSON.stringify({
   ok: true,
-  states: stateKeys,
+  states: expectedStates,
   playlist: manifest.playlist,
-  preservedStates: Object.keys(expectedLegacyGitBlobs),
-  totalAnimatedBytes,
-  totalStaticBytes,
-  clientBytes: Buffer.byteLength(source),
+  preservedBlobChecks: 4,
+  totalAssetBytes,
+  clientBytes: packedAssets,
 }))

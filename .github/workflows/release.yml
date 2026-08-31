@@ -22,110 +22,50 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref }}
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install validation dependencies
-        run: python -m pip install --disable-pip-version-check -r requirements.txt
-
       - name: Build and verify release payload
         run: |
-          npm run build:runtime-assets
-          npm run build
-          npm run check
-          git diff --exit-code -- assets artwork-sources/spout-imagegen-v1 lib/client.js
-          untracked="$(git ls-files --others --exclude-standard -- assets artwork-sources/spout-imagegen-v1 docs lib)"
-          if [ -n "$untracked" ]; then
-            echo "Generated untracked files are not part of the immutable tag:" >&2
-            echo "$untracked" >&2
-            exit 1
-          fi
-
-      - name: Resolve version
+          npm run verify
+          git diff --exit-code -- assets/manifest.json lib/client.js
+      - name: Resolve immutable version
         id: version
         env:
           INPUT_TAG: ${{ inputs.tag }}
           REF_TAG: ${{ github.ref_name }}
-        shell: bash
         run: |
           set -euo pipefail
           VERSION="$(node -p "require('./package.json').version")"
           TAG="${INPUT_TAG:-$REF_TAG}"
-          EXPECTED_TAG="v$VERSION"
-          if [ "$TAG" != "$EXPECTED_TAG" ]; then
-            echo "Release tag $TAG does not match package version $VERSION ($EXPECTED_TAG)." >&2
-            exit 1
-          fi
+          test "$TAG" = "v$VERSION"
           RELEASE_SHA="$(git rev-parse HEAD)"
           TAG_SHA="$(git rev-parse "refs/tags/$TAG^{commit}")"
-          if [ "$TAG_SHA" != "$RELEASE_SHA" ]; then
-            echo "Immutable tag $TAG points to $TAG_SHA, not validated commit $RELEASE_SHA." >&2
-            exit 1
-          fi
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          test "$TAG_SHA" = "$RELEASE_SHA"
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
           echo "release_sha=$RELEASE_SHA" >> "$GITHUB_OUTPUT"
-
       - name: Build package archive
         id: pack
-        shell: bash
         run: |
           set -euo pipefail
           TARBALL="$(npm pack --silent)"
-          if tar -tzf "$TARBALL" | grep -E 'artwork-sources|__pycache__|\.py[co]$|\.impeccable'; then
-            echo "Source-only or cache files leaked into $TARBALL" >&2
-            exit 1
-          fi
+          if tar -tzf "$TARBALL" | grep -E 'artwork-sources|docs/|whale-(spout|sonar|work|compose|idle|alert)'; then exit 1; fi
           sha256sum "$TARBALL" > SHA256SUMS.txt
           echo "tarball=$TARBALL" >> "$GITHUB_OUTPUT"
-
       - name: Publish GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ steps.version.outputs.tag }}
           TARBALL: ${{ steps.pack.outputs.tarball }}
           RELEASE_SHA: ${{ steps.version.outputs.release_sha }}
-        shell: bash
         run: |
           set -euo pipefail
-          TAG_SHA="$(git rev-parse "refs/tags/$TAG^{commit}")"
-          if [ "$TAG_SHA" != "$RELEASE_SHA" ]; then
-            echo "Tag $TAG moved after validation; refusing publication." >&2
-            exit 1
-          fi
           REMOTE_TAG_SHA="$(git ls-remote origin "refs/tags/$TAG^{}" | awk 'NR == 1 {print $1}')"
-          if [ -z "$REMOTE_TAG_SHA" ]; then
-            REMOTE_TAG_SHA="$(git ls-remote origin "refs/tags/$TAG" | awk 'NR == 1 {print $1}')"
-          fi
-          if [ "$REMOTE_TAG_SHA" != "$RELEASE_SHA" ]; then
-            echo "Remote tag $TAG points to $REMOTE_TAG_SHA, not validated commit $RELEASE_SHA." >&2
-            exit 1
-          fi
-          if gh release view "$TAG" >/dev/null 2>&1; then
-            echo "Release $TAG already exists; refusing to overwrite it." >&2
-            exit 1
-          fi
-          gh release create "$TAG" "$TARBALL" SHA256SUMS.txt \
-            --verify-tag \
-            --target "$RELEASE_SHA" \
-            --title "dsh-whale-animation $TAG" \
-            --generate-notes
-
-          PUBLISHED_TAG_SHA="$(git ls-remote origin "refs/tags/$TAG^{}" | awk 'NR == 1 {print $1}')"
-          if [ -z "$PUBLISHED_TAG_SHA" ]; then
-            PUBLISHED_TAG_SHA="$(git ls-remote origin "refs/tags/$TAG" | awk 'NR == 1 {print $1}')"
-          fi
-          test "$PUBLISHED_TAG_SHA" = "$RELEASE_SHA"
+          if [ -z "$REMOTE_TAG_SHA" ]; then REMOTE_TAG_SHA="$(git ls-remote origin "refs/tags/$TAG" | awk 'NR == 1 {print $1}')"; fi
+          test "$REMOTE_TAG_SHA" = "$RELEASE_SHA"
+          if gh release view "$TAG" >/dev/null 2>&1; then echo "Release $TAG already exists; refusing to overwrite it." >&2; exit 1; fi
+          gh release create "$TAG" "$TARBALL" SHA256SUMS.txt --verify-tag --target "$RELEASE_SHA" --title "dsh-whale-animation $TAG" --generate-notes

@@ -1,1 +1,0 @@
-"""Generated whale asset helpers."""

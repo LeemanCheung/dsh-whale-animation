@@ -18,32 +18,8 @@ const EXACT_STATE_ALIASES = new Map([
 
 const KEYWORD_GROUPS = [
   {
-    state: 'alert',
-    keywords: ['error', 'failed', 'failure', 'retry', 'retrying', 'exception', '错误', '失败', '重试', '异常'],
-  },
-  {
     state: 'classic',
     keywords: ['classic whale', 'legacy whale', 'original whale', '经典鲸鱼', '原版鲸鱼', '旧版鲸鱼'],
-  },
-  {
-    state: 'spout',
-    keywords: ['spout', 'spouting', 'surface whale', 'blowhole', '喷水', '浮面', '换气'],
-  },
-  {
-    state: 'sonar',
-    keywords: ['search', 'searching', 'browse', 'browsing', 'research', 'lookup', 'web', '搜索', '检索', '浏览', '调研'],
-  },
-  {
-    state: 'work',
-    keywords: ['tool', 'using tool', 'executing', 'running command', 'shell', 'terminal', 'build', 'test', '工具', '执行', '命令', '构建', '测试'],
-  },
-  {
-    state: 'compose',
-    keywords: ['writing', 'generating', 'responding', 'streaming', 'composing', 'drafting', '撰写', '生成', '回答', '输出', '流式'],
-  },
-  {
-    state: 'idle',
-    keywords: ['waiting', 'queued', 'queueing', 'paused', 'pending', '等待', '排队', '暂停'],
   },
   {
     state: 'dive',
@@ -192,7 +168,7 @@ function apply(ctx) {
       tracked.clear();
       style.remove();
     };
-  }, `${PLUGIN_ID}: brand-aligned whale director`);
+  }, `${PLUGIN_ID}: preserved two-loop whale director`);
 }
 
 exports.apply = apply;
