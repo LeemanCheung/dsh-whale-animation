@@ -45,7 +45,7 @@ COMMON_FLAGS=(
 )
 
 timeout 45s "$CHROME" "${COMMON_FLAGS[@]}" --dump-dom "$HTML_URL" > "$DOM"
-grep -q 'data-smoke="dive,classic,sonar,work,compose,idle,alert"' "$DOM"
+grep -q 'data-smoke="dive,classic,spout,sonar,work,compose,idle,alert"' "$DOM"
 
 timeout 45s "$CHROME" "${COMMON_FLAGS[@]}" \
   --hide-scrollbars \
@@ -61,4 +61,4 @@ timeout 45s "$CHROME" "${COMMON_FLAGS[@]}" \
 
 test -s "$SCREENSHOT"
 test -s "$DARK_SCREENSHOT"
-printf '{"ok":true,"chrome":"%s","states":["dive","classic","sonar","work","compose","idle","alert"],"screenshots":["%s","%s"]}\n' "$CHROME" "$SCREENSHOT" "$DARK_SCREENSHOT"
+printf '{"ok":true,"chrome":"%s","states":["dive","classic","spout","sonar","work","compose","idle","alert"],"screenshots":["%s","%s"]}\n' "$CHROME" "$SCREENSHOT" "$DARK_SCREENSHOT"

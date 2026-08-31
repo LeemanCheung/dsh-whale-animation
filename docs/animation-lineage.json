@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "identityRule": "Only the preserved Refined Dive and Classic black-and-white animations define the character and motion language for Work, Compose, Idle, and Alert. Sonar is retained. The blue static-logo direction is explicitly excluded.",
+  "identityRule": "The preserved Refined Dive and Classic black-and-white animations define the character and motion language for Work, Compose, Idle, and Alert. Sonar is retained. Surface Spout is a separate Image Gen state grounded in Dive frame 1 and frozen four-sheet provenance. The blue static-logo direction is explicitly excluded.",
   "identityReferences": [
     {
       "file": "assets/whale-dive.webp",
@@ -135,6 +135,22 @@
         ]
       }
     ]
+  },
+  "spoutImageGeneration": {
+    "state": "spout",
+    "mode": "built-in image_gen",
+    "runtimeUse": "All 64 native poses from the four frozen source sheets are normalized and retained in the 77-frame spout segment; the complete runtime state prepends the preserved 60-frame Dive loop.",
+    "prompt": "artwork-sources/spout-imagegen-v1/prompts.md",
+    "contactSheet": "artwork-sources/spout-imagegen-v1/native-contact.png",
+    "provenanceReport": "artwork-sources/spout-imagegen-v1/build-report.json",
+    "sourceSheets": [
+      {"file": "artwork-sources/spout-imagegen-v1/phase-1-rise.png", "sha256": "4ee0ca4e5bc80264cd56c5ddc42ad55a0fdf8cf1de76c48bae0de0cdb9e75951", "nativeCels": 16},
+      {"file": "artwork-sources/spout-imagegen-v1/phase-2-grow.png", "sha256": "5678b5c8f70761e26b8445dcde78002af4c98e2b129133f58250bee6d3efa47e", "nativeCels": 16},
+      {"file": "artwork-sources/spout-imagegen-v1/phase-3-fall.png", "sha256": "2595a1b62f0c23280f54e7ce33494fa3f34754065b9a0f25155d860548f7bfd3", "nativeCels": 16},
+      {"file": "artwork-sources/spout-imagegen-v1/phase-4-submerge.png", "sha256": "24da04237333e57b96aeb1829cf543ee69e97fe743c9e60d895410c00fa6156e", "nativeCels": 16}
+    ],
+    "runtimeContract": {"frames": 137, "frameDurationMs": 33, "loopDurationMs": 4521, "diveFrames": 60, "spoutSegmentFrames": 77, "lastFrameEqualsDiveFrame1": true},
+    "packageBoundary": "artwork-sources is repository provenance and is excluded from the npm runtime package"
   },
   "rejectedDirections": [
     {

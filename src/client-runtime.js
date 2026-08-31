@@ -26,6 +26,10 @@ const KEYWORD_GROUPS = [
     keywords: ['classic whale', 'legacy whale', 'original whale', '经典鲸鱼', '原版鲸鱼', '旧版鲸鱼'],
   },
   {
+    state: 'spout',
+    keywords: ['spout', 'spouting', 'surface whale', 'blowhole', '喷水', '浮面', '换气'],
+  },
+  {
     state: 'sonar',
     keywords: ['search', 'searching', 'browse', 'browsing', 'research', 'lookup', 'web', '搜索', '检索', '浏览', '调研'],
   },

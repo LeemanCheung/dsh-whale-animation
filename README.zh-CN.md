@@ -6,14 +6,14 @@
   <a href="https://awesome.re"><img src="https://awesome.re/badge.svg" alt="Awesome" /></a>
   <a href="https://awesome-dsh-plugin.com"><img src="https://awesome-dsh-plugin.com/badge.svg" alt="Awesome DSH Plugin" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-2563eb.svg" alt="MIT license" /></a>
-  <img src="https://img.shields.io/badge/version-v0.5.0-0f766e.svg" alt="v0.5.0" />
+  <img src="https://img.shields.io/badge/version-v0.6.0-0f766e.svg" alt="v0.6.0" />
   <img src="https://img.shields.io/badge/历史动画-原样保留%202%20套-1d4ed8.svg" alt="原样保留两套历史动画" />
   <img src="https://img.shields.io/badge/runtime-offline-0f172a.svg" alt="运行时离线" />
   <img src="https://img.shields.io/badge/motion-reduced--motion%20ready-7c3aed.svg" alt="支持减少动态效果" />
 </p>
 
 <p align="center">
-  <strong>两套用户原始鲸鱼动画逐字节保留；Work、Stream、Calm、Retry 按前两套动画的黑白水墨鲸鱼语言重新制作。</strong><br />
+  <strong>两套用户原始鲸鱼动画逐字节保留；新增由 64 张 Image Gen 原生姿态组成的独立浮面喷水状态。</strong><br />
   支持定时轮播、关键词覆盖、深色模式、零运行时网络请求，以及每个状态独立的静态降级图。
 </p>
 
@@ -24,10 +24,10 @@
 ## 动态预览
 
 <p align="center">
-  <img src="docs/preview.webp" alt="两套保留动画与五套重绘动画依次轮播" width="900" />
+  <img src="docs/preview.webp" alt="两套保留动画、一套 Image Gen 喷水动画与五套语义状态依次轮播" width="900" />
 </p>
 
-v0.5.0 纠正了 v0.4.0 的视觉方向。Sonar 保持现状，后四态不再沿用蓝色静态图标或通用鱼类轮廓；角色身体直接取自 Refined Dive 与 Classic 的不可变 alpha 轮廓。构建器重定时并重组真实的跃水、尾先 S 弧、水线悬浮、spy-hop、浪花和回弹帧，速度线、输出墨滴和提示线只作为独立语义层。
+v0.6.0 保留 v0.5.0 的视觉纠偏成果，并新增独立的 **Surface Spout / 浮面喷水** 状态。运行时 WebP 是完整的 137 帧无缝循环：前 60 帧为未改动的 Refined Dive，后 77 帧由四张冻结的 4×4 Image Gen 精灵表确定性组装。Sonar、Work、Stream、Calm、Retry 的运行时资源保持不变。
 
 两套 v0.4 以前的用户动画保持原样：
 
@@ -36,16 +36,17 @@ v0.5.0 纠正了 v0.4.0 的视觉方向。Sonar 保持现状，后四态不再�
 
 CI 会重新计算这四个历史文件的 Git Blob SHA-1；任意一个字节发生变化，验证都会失败。
 
-## 七种状态
+## 八种状态
 
 <p align="center">
-  <img src="docs/state-gallery.png" alt="两套保留状态和五套重绘状态画廊" width="1000" />
+  <img src="docs/state-gallery.png" alt="两套保留状态、一套 Image Gen 喷水状态和五套语义状态画廊" width="1000" />
 </p>
 
 | 状态 | 来源 | 动作语言 | 触发逻辑 |
 |---|---|---|---|
 | **Refined Dive** | 原样保留 | v0.3 的优化跃出与下潜闭环，不重新编码 | 默认状态；轮播；思考、推理、分析、规划 |
 | **Classic** | 原样保留 | 项目首发版本的鲸鱼动画，不重新编码 | 轮播；经典、原版等显式关键词 |
+| **Surface Spout** | Image Gen | 完整 Dive 后衔接 77 帧关节化浮面喷水动作 | 轮播；spout、surface、blowhole、喷水、浮面、换气 |
 | **Sonar** | 重新绘制 | 缓慢游动，躯干波动与声呐环同步扩散 | 轮播；搜索、浏览、检索、调研 |
 | **Tool Run** | 重新绘制 | 纯黑推进、全身行波与水墨速度线 | 轮播；工具、执行、命令、构建、测试 |
 | **Stream** | 重新绘制 | 黑色鲸鱼上扬与克制墨滴弧线 | 轮播；撰写、生成、回答、输出、流式 |
@@ -56,7 +57,7 @@ CI 会重新计算这四个历史文件的 Git Blob SHA-1；任意一个字节�
 
 `dive → classic → sonar → work → compose → idle`
 
-一旦界面出现可识别的中英文状态文案，关键词映射会立即覆盖轮播。
+轮播顺序为 `dive → classic → spout → sonar → work → compose → idle`。一旦界面出现可识别的中英文状态文案，关键词映射会立即覆盖轮播。
 
 ## 视觉规范
 
@@ -76,6 +77,7 @@ Work、Stream、Calm、Retry 直接使用 Dive/Classic 真实帧遮罩生成，�
 | | 特性 | 说明 |
 |---|---|---|
 | 🐋 | **两套原动画完整保留** | 历史 WebP 与 PNG 使用稳定路径恢复，并在 CI 中逐字节验证。 |
+| 💦 | **可审计的 Image Gen 喷水** | 四张冻结源图提供 64 个原生姿态；6 张表间衔接与 7 张幕间交接组成 77 帧喷水段，并接入完整 137 帧循环。 |
 | 🌊 | **四套历史轮廓重做** | Tool Run、Calm 派生自 Dive；Stream、Retry 派生自 Classic；Sonar 保持不变。 |
 | 🎬 | **双轨动画导演** | 当前固定状态文案走定时轮播；未来或定制文案走关键词即时覆盖。 |
 | ♿ | **逐状态减少动态效果** | 开启 `prefers-reduced-motion` 后停止轮播，并使用对应 PNG。 |
@@ -88,10 +90,10 @@ Work、Stream、Calm、Retry 直接使用 Dive/Classic 真实帧遮罩生成，�
 
 ## 安装
 
-安装 v0.5.0：
+安装 v0.6.0：
 
 ```powershell
-dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation#v0.5.0
+dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation#v0.6.0
 ```
 
 跟随 `main` 分支：
@@ -106,7 +108,7 @@ dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation
 
 ```powershell
 dsh plugin --profile web remove dsh-whale-animation
-dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation#v0.5.0
+dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation#v0.6.0
 ```
 
 ### 卸载
@@ -119,10 +121,12 @@ dsh plugin --profile web remove dsh-whale-animation
 
 | 项目 | 数值 |
 |---|---:|
-| 总状态数 | 7 |
+| 总状态数 | 8 |
 | 原样保留状态 | 2 |
 | 重新生成状态 | 5 |
-| 自动轮播状态 | 6 |
+| Image Gen 状态 | 1 |
+| 自动轮播状态 | 7 |
+| 浮面喷水运行时 | 137 × 33 ms = 4.521 秒；Dive 60 + 喷水 77 |
 | 生成状态画布 | 352 × 352 px |
 | 历史状态原生画布 | Refined Dive 352 × 352；Classic 184 × 184 |
 | 重绘状态帧率 | 48 帧 × 40 ms |
@@ -137,7 +141,9 @@ dsh plugin --profile web remove dsh-whale-animation
 ```mermaid
 flowchart LR
   A[2 套原样保留动画] --> C[assets/manifest.json]
-  B[5 套确定性重绘动画] --> C
+  B[5 套确定性语义状态] --> C
+  J[4 张冻结 Image Gen 精灵表] --> K[137 帧浮面喷水]
+  K --> C
   C --> D[scripts/build-client.mjs]
   D --> E[内嵌 Data URL 的客户端]
   E --> F[role=status 状态元素 ::after]
@@ -169,7 +175,8 @@ npm run check:browser
 
 | 命令 | 作用 |
 |---|---|
-| `npm run build:assets` | 保持两套历史资源不变，生成五套 WebP、五套 PNG、manifest、头图、预览和画廊 |
+| `npm run build:spout` | 从四张冻结源精灵表重建 137 帧喷水状态与来源报告 |
+| `npm run build:assets` | 保持两套历史资源不变，重建喷水、五套语义状态、manifest、头图、预览和画廊 |
 | `npm run build:runtime-assets` | 仅重建运行时动画与 manifest；不依赖系统字体，供 CI/Release 使用 |
 | `npm run build` | 根据 manifest 把全部资源内嵌到 `lib/client.js` |
 | `npm run build:motion-audit` | 写入确定性的 12 帧接触表与运动证据报告 |
@@ -177,7 +184,7 @@ npm run check:browser
 | `npm run audit:motion` | 重新计算可见帧多样性与连续性，并拒绝过期或不合格证据 |
 | `npm run audit:style` | 拒绝蓝色/彩色像素、非透明背景、复杂内部纹理和不可辨认轮廓 |
 | `npm run check` | 验证历史 Git Blob、生成时序、Bundle、动画导演、生命周期和文档资源 |
-| `npm run check:browser` | 在无头 Chromium 中挂载七种状态，并生成浅色/深色截图 |
+| `npm run check:browser` | 在无头 Chromium 中挂载八种状态，并生成浅色/深色截图 |
 | `npm run verify` | 重建资产和客户端，再执行确定性非浏览器测试 |
 
 验证范围包括：
@@ -221,6 +228,7 @@ npm run check:browser
 assets/
   whale-dive.webp/.png      从 v0.3 原样保留的优化动画
   whale-classic.webp/.png   从首发提交原样保留的经典动画
+  whale-spout.webp/.png     137 帧 Image Gen 喷水循环与静态代表帧
   whale-sonar.webp/.png     重绘生成状态
   whale-work.webp/.png      重绘生成状态
   whale-compose.webp/.png   重绘生成状态
@@ -228,6 +236,11 @@ assets/
   whale-alert.webp/.png     重绘生成状态
   whale-static.png          兼容 v0.4 以前消费者的静态别名
   manifest.json             来源、时序、体积、提交和 SHA-256
+artwork-sources/spout-imagegen-v1/
+  phase-*.png               四张冻结的 4×4 源精灵表，不进入 npm runtime
+  prompts.md                原始生成说明
+  native-contact.png        77 帧喷水段接触表
+  build-report.json         精灵表哈希、帧映射与运动来源
 src/
   client-runtime.js         动画导演和浏览器生命周期源码
 lib/
@@ -242,12 +255,12 @@ scripts/
   check-readme-assets.py    验证文档视觉、链接和历史 Blob
   check-whale-style.py      验证纯黑水墨色彩与 60/84 px 身份证据
   audit-motion.py           验证可见帧多样性与循环连续性
-  browser-smoke.html        覆盖七种状态的浏览器测试页面
+  browser-smoke.html        覆盖八种状态的浏览器测试页面
   check-browser.sh          执行 Chromium 烟测和浅色/深色截图
 docs/
   hero.png                  README 头图
-  preview.webp              六状态轮播预览
-  state-gallery.png         七状态静态画廊
+  preview.webp              七状态轮播预览
+  state-gallery.png         八状态静态画廊
   rebuilt-states-real-speed.webp  后四态真实 40 ms 帧速预览
   rebuilt-states-real-speed.json  预览哈希与四个当前源动画哈希
   motion-contact-sheet.png  每种状态 12 个抽样帧

@@ -46,8 +46,8 @@ jobs:
           npm run build:runtime-assets
           npm run build
           npm run check
-          git diff --exit-code -- assets lib/client.js
-          untracked="$(git ls-files --others --exclude-standard -- assets docs lib)"
+          git diff --exit-code -- assets artwork-sources/spout-imagegen-v1 lib/client.js
+          untracked="$(git ls-files --others --exclude-standard -- assets artwork-sources/spout-imagegen-v1 docs lib)"
           if [ -n "$untracked" ]; then
             echo "Generated untracked files are not part of the immutable tag:" >&2
             echo "$untracked" >&2
@@ -85,6 +85,10 @@ jobs:
         run: |
           set -euo pipefail
           TARBALL="$(npm pack --silent)"
+          if tar -tzf "$TARBALL" | grep -E 'artwork-sources|__pycache__|\.py[co]$|\.impeccable'; then
+            echo "Source-only or cache files leaked into $TARBALL" >&2
+            exit 1
+          fi
           sha256sum "$TARBALL" > SHA256SUMS.txt
           echo "tarball=$TARBALL" >> "$GITHUB_OUTPUT"
 

@@ -24,6 +24,7 @@ from whale_assets.visuals import (
 
 PLAYLIST_INTERVAL_MS = 11_000
 REQUIRED_PILLOW = "12.1.1"
+SPOUT_REPORT = Path(__file__).resolve().parents[1] / "artwork-sources" / "spout-imagegen-v1" / "build-report.json"
 
 
 def load_animation(path: Path) -> tuple[list[Image.Image], list[int]]:
@@ -99,10 +100,10 @@ def main() -> None:
     for spec in specs:
         animated_path = ASSETS / f"whale-{spec.key}.webp"
         static_path = ASSETS / f"whale-{spec.key}.png"
-        if spec.source == "legacy":
+        if spec.source in {"legacy", "imagegen"}:
             if not animated_path.is_file() or not static_path.is_file():
                 raise RuntimeError(
-                    f"Missing preserved legacy assets for {spec.key}: "
+                    f"Missing prebuilt assets for {spec.key}: "
                     f"{animated_path.name}, {static_path.name}"
                 )
             frames, durations = load_animation(animated_path)
@@ -134,6 +135,18 @@ def main() -> None:
             frames=frames,
             durations=durations,
         )
+        if spec.key == "spout":
+            report = json.loads(SPOUT_REPORT.read_text(encoding="utf-8"))
+            manifest_states[spec.key].update({
+                "provenanceReport": "artwork-sources/spout-imagegen-v1/build-report.json",
+                "sourceSheets": [
+                    f"artwork-sources/spout-imagegen-v1/{name}"
+                    for name in report["inputs"]["phaseSheets"]
+                ],
+                "nativeImageGenCels": report["inputs"]["nativeImageGenCels"],
+                "spoutSegmentFrames": report["output"]["spoutFramesSecond"],
+                "cycleSegments": report["output"]["segments"],
+            })
 
     manifest = {
         "schemaVersion": 1,

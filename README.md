@@ -6,14 +6,14 @@
   <a href="https://awesome.re"><img src="https://awesome.re/badge.svg" alt="Awesome" /></a>
   <a href="https://awesome-dsh-plugin.com"><img src="https://awesome-dsh-plugin.com/badge.svg" alt="Awesome DSH Plugin" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-2563eb.svg" alt="MIT license" /></a>
-  <img src="https://img.shields.io/badge/version-v0.5.0-0f766e.svg" alt="v0.5.0" />
+  <img src="https://img.shields.io/badge/version-v0.6.0-0f766e.svg" alt="v0.6.0" />
   <img src="https://img.shields.io/badge/legacy%20loops-2%20preserved-1d4ed8.svg" alt="Two legacy loops preserved" />
   <img src="https://img.shields.io/badge/runtime-offline-0f172a.svg" alt="Offline at runtime" />
   <img src="https://img.shields.io/badge/motion-reduced--motion%20ready-7c3aed.svg" alt="Reduced-motion ready" />
 </p>
 
 <p align="center">
-  <strong>Two original whale loops preserved byte-for-byte; Work, Stream, Calm, and Retry rebuilt as pure-black ink whales from their motion language.</strong><br />
+  <strong>Two original whale loops remain byte-for-byte intact; a 64-cel Image Gen surface spout now joins the five semantic states.</strong><br />
   Timed rotation, keyword overrides, dark-theme support, zero runtime requests, and a static fallback for every state.
 </p>
 
@@ -24,10 +24,10 @@
 ## Preview
 
 <p align="center">
-  <img src="docs/preview.webp" alt="Two preserved whale loops and five brand-aligned states rotating in sequence" width="900" />
+  <img src="docs/preview.webp" alt="Two preserved whale loops, one Image Gen spout, and five semantic states rotating in sequence" width="900" />
 </p>
 
-v0.5.0 corrects the visual direction introduced in v0.4.0. Sonar is retained, while the four later states no longer reuse a blue static-logo treatment or a generic fish-like body. Their body identity now comes directly from the immutable alpha silhouettes in Refined Dive and Classic. The build retimes and recombines real breach, tail-first S-curve, waterline hover, spy-hop, splash, and recoil frames; semantic speed/output/attention accents remain separate layers.
+v0.6.0 preserves the v0.5 visual correction and adds **Surface Spout** as a separate state. Its runtime WebP is the complete 137-frame seamless cycle: the untouched 60-frame Refined Dive followed by a 77-frame spout segment assembled from four frozen 4×4 Image Gen sheets. The existing Sonar, Work, Stream, Calm, and Retry assets remain unchanged.
 
 The two pre-v0.4 loops remain intact:
 
@@ -36,23 +36,24 @@ The two pre-v0.4 loops remain intact:
 
 CI recomputes the Git blob SHA-1 for those four legacy files and fails if even one byte changes.
 
-## Seven states
+## Eight states
 
 <p align="center">
-  <img src="docs/state-gallery.png" alt="Gallery of two preserved and five redrawn whale animation states" width="1000" />
+  <img src="docs/state-gallery.png" alt="Gallery of two preserved loops, one Image Gen spout, and five semantic whale states" width="1000" />
 </p>
 
 | State | Source | Motion language | Trigger logic |
 |---|---|---|---|
 | **Refined Dive** | Preserved | The v0.3 refined breach-and-dive loop, unchanged | Default; playlist; thinking, reasoning, analysis, planning |
 | **Classic** | Preserved | The first published whale loop, unchanged | Playlist; explicit classic/original keywords |
+| **Surface Spout** | Image Gen | Complete Dive followed by a 77-frame articulated surface-spout act | Playlist; spout, surface, blowhole, 喷水, 浮面, 换气 |
 | **Sonar** | Redrawn | Slow spine-driven cruise with expanding discovery rings | Playlist; search, browse, lookup, research |
 | **Tool Run** | Redrawn | Pure-black surge, full-body travelling wave, ink speed strokes | Playlist; tool, execute, shell, build, test |
 | **Stream** | Redrawn | Upward black-ink sweep with a restrained droplet arc | Playlist; writing, generating, responding, streaming |
 | **Calm** | Redrawn | Under-waterline hover, long-tail drift, bubbles, restrained blink | Playlist; waiting, queued, paused |
 | **Retry** | Redrawn | Compact black-ink C-curve recoil and three attention strokes | Error, failure, exception, retry keywords only |
 
-English and Chinese keywords are included. The ordinary `Deep diving...` label deliberately remains neutral, allowing the current Harness UI to rotate through `dive → classic → sonar → work → compose → idle` every **11 seconds**. The slot is long enough for the 10.506-second preserved Classic loop to finish once. Recognizable status text overrides the playlist immediately.
+English and Chinese keywords are included. The ordinary `Deep diving...` label deliberately remains neutral, allowing the current Harness UI to rotate through `dive → classic → spout → sonar → work → compose → idle` every **11 seconds**. The slot is long enough for the 10.506-second preserved Classic loop and the 4.521-second spout cycle to finish. Recognizable status text overrides the playlist immediately.
 
 ## Visual design contract
 
@@ -73,6 +74,7 @@ The preserved states are not regenerated or visually normalized. Their exact ori
 |---|---|---|
 | 🐋 | **Two originals preserved** | Historical WebP and PNG blobs are restored under stable asset paths and verified byte-for-byte in CI. |
 | 🌊 | **Four legacy-silhouette rebuilds** | Tool Run and Calm derive from Dive; Stream and Retry derive from Classic. Sonar remains intact. |
+| 💦 | **Auditable Image Gen spout** | Four frozen source sheets contribute 64 native poses; six sheet bridges and seven handoff frames produce a 77-frame act inside the 137-frame cycle. |
 | 🎬 | **Dual-track animation director** | The current fixed label uses timed rotation; future or customized status labels use immediate keyword overrides. |
 | ♿ | **Per-state reduced motion** | `prefers-reduced-motion` freezes rotation and uses the matching PNG frame. |
 | 🌗 | **Theme and viewport aware** | System dark mode, `html.dark`, and `data-theme="dark"` invert the monochrome artwork; sizing steps down through 84 / 72 / 60 px. |
@@ -84,10 +86,10 @@ The preserved states are not regenerated or visually normalized. Their exact ori
 
 ## Install
 
-Install the v0.5.0 release into the DSH Web profile:
+Install the v0.6.0 release into the DSH Web profile:
 
 ```powershell
-dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation#v0.5.0
+dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation#v0.6.0
 ```
 
 Follow the main branch:
@@ -102,7 +104,7 @@ Hard-refresh DSH Web after installation. Restart DSH if the active profile has a
 
 ```powershell
 dsh plugin --profile web remove dsh-whale-animation
-dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation#v0.5.0
+dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation#v0.6.0
 ```
 
 ### Uninstall
@@ -115,10 +117,12 @@ dsh plugin --profile web remove dsh-whale-animation
 
 | Property | Value |
 |---|---:|
-| Total states | 7 |
+| Total states | 8 |
 | Preserved legacy states | 2 |
 | Redrawn generated states | 5 |
-| Automatic playlist states | 6 |
+| Image Gen states | 1 |
+| Automatic playlist states | 7 |
+| Surface Spout runtime | 137 × 33 ms = 4.521 s; Dive 60 + spout 77 |
 | Generated-state canvas | 352 × 352 px |
 | Preserved native canvases | Refined Dive 352 × 352; Classic 184 × 184 |
 | Generated-state cadence | 48 frames × 40 ms |
@@ -133,7 +137,9 @@ dsh plugin --profile web remove dsh-whale-animation
 ```mermaid
 flowchart LR
   A[2 preserved loops] --> C[assets/manifest.json]
-  B[5 deterministic redraws] --> C
+  B[5 deterministic semantic states] --> C
+  J[4 frozen Image Gen sheets] --> K[137-frame Surface Spout]
+  K --> C
   C --> D[scripts/build-client.mjs]
   D --> E[Embedded data-URL client]
   E --> F[role=status turn status ::after]
@@ -165,7 +171,8 @@ npm run check:browser
 
 | Command | Purpose |
 |---|---|
-| `npm run build:assets` | Keep both legacy assets untouched; generate five WebPs, five PNGs, manifest, hero, preview, and gallery |
+| `npm run build:spout` | Rebuild the 137-frame Surface Spout and provenance from four frozen source sheets |
+| `npm run build:assets` | Keep both legacy assets untouched; rebuild the spout, five semantic states, manifest, hero, preview, and gallery |
 | `npm run build:runtime-assets` | Rebuild only runtime animation assets and manifest; CI-safe with no system-font rendering |
 | `npm run build` | Embed every manifest asset into `lib/client.js` |
 | `npm run build:motion-audit` | Write the deterministic 12-sample contact sheet and motion evidence report |
@@ -173,7 +180,7 @@ npm run check:browser
 | `npm run audit:motion` | Recompute visible-frame diversity and continuity, then reject stale or failing evidence |
 | `npm run audit:style` | Reject blue/chromatic pixels, opaque backgrounds, complex interior detail, and illegible silhouettes |
 | `npm run check` | Validate preserved Git blobs, generated timing, bundle, director logic, lifecycle, and README artwork |
-| `npm run check:browser` | Mount all seven resolved states in headless Chromium and capture light/dark screenshots |
+| `npm run check:browser` | Mount all eight resolved states in headless Chromium and capture light/dark screenshots |
 | `npm run verify` | Rebuild assets and client, then run the deterministic non-browser suite |
 
 Checks cover:
@@ -218,6 +225,7 @@ The design rationale and future roadmap are documented in [`docs/ANIMATION_ROADM
 assets/
   whale-dive.webp/.png      Preserved refined loop from v0.3
   whale-classic.webp/.png   Preserved first published loop
+  whale-spout.webp/.png     137-frame Image Gen spout cycle and static representative
   whale-sonar.webp/.png     Redrawn generated state
   whale-work.webp/.png      Redrawn generated state
   whale-compose.webp/.png   Redrawn generated state
@@ -225,12 +233,18 @@ assets/
   whale-alert.webp/.png     Redrawn generated state
   whale-static.png          Compatibility alias for pre-v0.4 consumers
   manifest.json             Source, timing, sizes, commits, and SHA-256 checksums
+artwork-sources/spout-imagegen-v1/
+  phase-*.png               Four frozen 4×4 source sheets; excluded from npm runtime
+  prompts.md                Exact source-generation brief
+  native-contact.png        77-frame segment contact sheet
+  build-report.json         Sheet hashes, frame mapping, and motion provenance
 src/
   client-runtime.js         Director and browser lifecycle source
 lib/
   index.js                  No-op Host entry
   client.js                 Prebuilt DSH Web client with embedded assets
 scripts/
+  build-whale-spout.py      Deterministic 64-cel spout assembler and provenance gate
   whale_assets/model.py     Sonar model plus shared image/build primitives
   whale_assets/states.py    Preserved metadata and legacy-frame-derived state renderers
   build-whale-assets.py     Generates redrawn assets and README visuals
@@ -239,12 +253,12 @@ scripts/
   check-readme-assets.py    Validates documentation visuals, links, and legacy blobs
   check-whale-style.py      Gates black-ink palette and 60/84 px identity evidence
   audit-motion.py           Verifies visible frame diversity and loop continuity
-  browser-smoke.html        Browser fixture covering all seven resolved states
+  browser-smoke.html        Browser fixture covering all eight resolved states
   check-browser.sh          Runs Chromium smoke checks and light/dark captures
 docs/
   hero.png                  README hero
-  preview.webp              Six-state playlist preview
-  state-gallery.png         Seven-state static gallery
+  preview.webp              Seven-state playlist preview
+  state-gallery.png         Eight-state static gallery
   rebuilt-states-real-speed.webp  Four rebuilt states at the real 40 ms cadence
   rebuilt-states-real-speed.json  Preview hash and four current source-animation hashes
   motion-contact-sheet.png  Twelve sampled frames per state

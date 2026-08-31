@@ -220,6 +220,15 @@ def state_specs() -> list[StateSpec]:
             preserved_from=LEGACY_CLASSIC_COMMIT,
         ),
         StateSpec(
+            "spout",
+            "SURFACE SPOUT",
+            "Complete Refined Dive followed by a 77-frame Image Gen surface-spout act",
+            None,
+            preview_frame=101,
+            source="imagegen",
+            derived_from=("whale-dive.webp", "artwork-sources/spout-imagegen-v1"),
+        ),
+        StateSpec(
             "sonar",
             "SONAR",
             "Spine-driven cruise with expanding discovery rings",

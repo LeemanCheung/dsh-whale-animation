@@ -1,9 +1,10 @@
 {
   "schemaVersion": 1,
-  "assetManifestSha256": "6eca25e1d4443fc7f02e553bd6283f09870db3a6f86da99100d1026dad318bd8",
+  "assetManifestSha256": "717f8f633259bdf64cf4e0f38ffb8a683c3962aaaae010920155004c8f34b122",
   "stateOrder": [
     "dive",
     "classic",
+    "spout",
     "sonar",
     "work",
     "compose",
@@ -137,6 +138,65 @@
       "medianAppearanceCentroidStepPx": 1.516,
       "maxAppearanceCentroidStepPx": 4.721,
       "loopAppearanceCentroidStepPx": 3.838
+    },
+    "spout": {
+      "source": "imagegen",
+      "derivedFrom": [
+        "whale-dive.webp",
+        "artwork-sources/spout-imagegen-v1"
+      ],
+      "canvas": [
+        352,
+        352
+      ],
+      "frames": 137,
+      "visibleUniqueFrames": 136,
+      "visibleMotionSha256": "126b756a60be91a12292f7c54d65955b024c5491cb191aba8d0339dddc84c3bc",
+      "sampleIndices": [
+        0,
+        12,
+        25,
+        37,
+        49,
+        62,
+        74,
+        87,
+        99,
+        111,
+        124,
+        136
+      ],
+      "sampleVisibleSha256": [
+        "2c2eeaa55f3c545dcd90624b515168de59a48c7e46f1ef7631f6101873eadd62",
+        "1d1b6784a81f0a99cf1740ce29ae7c61d27b3b5d7118c4185c65adaf4fba044a",
+        "3f953d5448dc005a6c226a261f9e3befc12f0740859bd3b9ee67a5ceaf9acc23",
+        "7730cab8a02d6a1a8008f874a2daaadabc422d4db21a62587317d097fd5229a2",
+        "711ab7072501c63700029244abd52e760037bcf4c1a188a1006fb77f1fca294c",
+        "423e5061dc14ce7c1611d9f0108a4f17766da636e6ba973ea3424863b7327ae3",
+        "da29462c82a7c2720232f4b7cdc86106cb7ccb6112e9b9e661fb10b90563d019",
+        "6855c91af205313d03c54543cd8ace0d6a375895a04fad439e6d517aeb2e732b",
+        "42d29bf69df23cde5ff1408f15ca29a7f583a9e1b229f1f3e46b938d364e4cef",
+        "a5db88a26f5a64358f6ba326680ce047e4ff113229dab7294022dc259298cae8",
+        "a40b04aa8f08795a308f3fc4ec6ebc0fabba278cbc7e9fd42215580895b62856",
+        "2c2eeaa55f3c545dcd90624b515168de59a48c7e46f1ef7631f6101873eadd62"
+      ],
+      "zeroStepRatio": 0.0,
+      "medianStep": 0.004571,
+      "maxStep": 0.00996,
+      "maxStepRatio": 2.179,
+      "loopStep": 0.0,
+      "loopSeamRatio": 0.0,
+      "maxForegroundStep": 0.154757,
+      "loopForegroundStep": 0.0,
+      "minimumForegroundCoverage": 0.307,
+      "medianForegroundCoverage": 0.525,
+      "loopForegroundCoverage": 0.0,
+      "medianCentroidStepPx": 4.442,
+      "maxCentroidStepPx": 40.366,
+      "loopCentroidStepPx": 0.0,
+      "medianAppearanceCentroidStepPx": 4.442,
+      "maxAppearanceCentroidStepPx": 40.366,
+      "loopAppearanceCentroidStepPx": 0.0
     },
     "sonar": {
       "source": "generated",
@@ -431,8 +491,8 @@
     "file": "motion-contact-sheet.png",
     "size": [
       1334,
-      826
+      930
     ],
-    "sha256": "b8fd07cd78f1294579b2eb2e9ad58d68c0483aa1813543d186d1c39281b7f27a"
+    "sha256": "3e333a9acd93ecddd9dfcab7231bf7070e20f2d7acb73483ae2171fe3bab1669"
   }
 }

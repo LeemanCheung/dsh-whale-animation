@@ -12,8 +12,8 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[1]
 ASSETS = ROOT / "assets"
 DOCS = ROOT / "docs"
-EXPECTED_STATES = ("dive", "classic", "sonar", "work", "compose", "idle", "alert")
-EXPECTED_PLAYLIST = ["dive", "classic", "sonar", "work", "compose", "idle"]
+EXPECTED_STATES = ("dive", "classic", "spout", "sonar", "work", "compose", "idle", "alert")
+EXPECTED_PLAYLIST = ["dive", "classic", "spout", "sonar", "work", "compose", "idle"]
 EXPECTED_DERIVED_FROM = {
     "work": ["whale-dive.webp"],
     "compose": ["whale-classic.webp"],
@@ -71,6 +71,15 @@ def image_profile(path: Path) -> tuple[tuple[int, int], int, list[int]]:
     return image.size, frame_count, durations
 
 
+def rgba_frames(path: Path) -> list[bytes]:
+    image = Image.open(path)
+    frames: list[bytes] = []
+    for index in range(int(getattr(image, "n_frames", 1))):
+        image.seek(index)
+        frames.append(image.convert("RGBA").tobytes())
+    return frames
+
+
 def local_references(markdown: str) -> set[str]:
     refs: set[str] = set()
     patterns = (
@@ -86,7 +95,8 @@ def local_references(markdown: str) -> set[str]:
 def validate_readme(path: Path) -> dict[str, object]:
     text = path.read_text(encoding="utf-8")
     require(text.count("```mermaid") == 1, f"{path.name} must contain exactly one Mermaid diagram")
-    require("v0.5.0" in text, f"{path.name} does not document v0.5.0")
+    require("v0.6.0" in text, f"{path.name} does not document v0.6.0")
+    require("spout" in text.lower() or "喷水" in text, f"{path.name} does not document the spout state")
     require("docs/preview.webp" in text, f"{path.name} does not reference the animated preview")
     require("docs/state-gallery.png" in text, f"{path.name} does not reference the state gallery")
     require("preserv" in text.lower() or "保留" in text, f"{path.name} does not explain legacy preservation")
@@ -139,6 +149,25 @@ def main() -> None:
             if not allow_placeholder:
                 require(git_blob_sha(animated_path) == LEGACY_GIT_BLOBS[state]["animated"], f"{state}: legacy WebP bytes changed")
                 require(git_blob_sha(static_path) == LEGACY_GIT_BLOBS[state]["static"], f"{state}: legacy PNG bytes changed")
+        elif state == "spout":
+            report_path = ROOT / spec["provenanceReport"]
+            report = json.loads(report_path.read_text(encoding="utf-8"))
+            source_sheets = sorted((ROOT / "artwork-sources" / "spout-imagegen-v1").glob("phase-*.png"))
+            require(spec["source"] == "imagegen", "spout: source marker missing")
+            require(size == (352, 352), "spout: canvas changed")
+            require(spec["frames"] == 137 and spec["frameDurationMs"] == 33 and spec["loopDurationMs"] == 4521, "spout: runtime contract changed")
+            require(spec.get("nativeImageGenCels") == 64 and spec.get("spoutSegmentFrames") == 77, "spout: provenance counts changed")
+            require(spec.get("cycleSegments") == report["output"]["segments"], "spout: segment mapping changed")
+            require(len(source_sheets) == 4, "spout: expected four Image Gen source sheets")
+            for sheet in source_sheets:
+                provenance = report["inputs"]["phaseSheets"][sheet.name]
+                require(list(Image.open(sheet).size) == provenance["size"] == [1254, 1254], f"spout: source size mismatch for {sheet.name}")
+                require(hashlib.sha256(sheet.read_bytes()).hexdigest() == provenance["sha256"], f"spout: source hash mismatch for {sheet.name}")
+            dive_frames = rgba_frames(ASSETS / "whale-dive.webp")
+            spout_frames = rgba_frames(animated_path)
+            require(spout_frames[:60] == dive_frames, "spout: first 60 frames are not the preserved Dive loop")
+            require(spout_frames[-1] == dive_frames[0], "spout: final frame does not close on Dive frame 1")
+            require(report.get("checks", {}).get("allPassed") is True, "spout: deterministic build report failed")
         else:
             require(spec["source"] == "generated", f"{state}: generated source marker missing")
             require(size == (352, 352), f"{state}: generated canvas changed")
@@ -164,7 +193,7 @@ def main() -> None:
     require(hero_size == (1200, 420) and hero_frames == 1, f"Unexpected hero profile: {hero_size}, {hero_frames}")
     require(gallery_size == (1200, 760) and gallery_frames == 1, f"Unexpected gallery profile: {gallery_size}, {gallery_frames}")
     require(preview_size == (1000, 360), f"Unexpected preview dimensions: {preview_size}")
-    require(preview_frames == 48, f"Unexpected preview frame count: {preview_frames}")
+    require(preview_frames == 56, f"Unexpected preview frame count: {preview_frames}")
     require(set(preview_durations) == {60}, f"Unexpected preview timing: {sorted(set(preview_durations))}")
     require((DOCS / "preview.webp").stat().st_size <= 1024 * 1024, "README preview exceeds 1 MiB budget")
     require(real_speed_size == (1000, 300), f"Unexpected real-speed preview dimensions: {real_speed_size}")
@@ -192,11 +221,12 @@ def main() -> None:
     )
 
     package = json.loads((ROOT / "package.json").read_text(encoding="utf-8"))
-    require(package.get("version") == "0.5.0", "package.json version is not 0.5.0")
-    require((ROOT / "requirements.txt").read_text(encoding="utf-8").strip() == "Pillow==12.1.1", "Pillow version lock changed")
+    require(package.get("version") == "0.6.0", "package.json version is not 0.6.0")
+    require((ROOT / "requirements.txt").read_text(encoding="utf-8").splitlines() == ["Pillow==12.1.1", "numpy==2.3.3"], "Image dependency locks changed")
     require("requirements.txt" in package.get("files", []), "Pillow lock is missing from package files")
     require("scripts/check-whale-style.py" in package.get("files", []), "Style identity gate is missing from package files")
     require(package.get("scripts", {}).get("check") == "node scripts/check-workflows.mjs && node scripts/check.mjs && python scripts/check-readme-assets.py && npm run audit:motion && npm run audit:style", "Package check script is incomplete")
+    require(package.get("scripts", {}).get("build:spout") == "python scripts/build-whale-spout.py", "Spout build script is not wired")
     require(package.get("scripts", {}).get("verify") == "npm run build:assets && npm run build && npm run build:motion-audit && npm run build:style-audit && npm run check", "Package verify script is incomplete")
 
     readmes = [validate_readme(ROOT / "README.md"), validate_readme(ROOT / "README.zh-CN.md")]

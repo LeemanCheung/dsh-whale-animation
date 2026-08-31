@@ -7,9 +7,10 @@ import vm from 'node:vm'
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const source = await readFile(resolve(root, 'lib/client.js'), 'utf8')
 const manifest = JSON.parse(await readFile(resolve(root, 'assets/manifest.json'), 'utf8'))
+const spoutReport = JSON.parse(await readFile(resolve(root, 'artwork-sources/spout-imagegen-v1/build-report.json'), 'utf8'))
 const stateKeys = Object.keys(manifest.states)
-const expectedStates = ['dive', 'classic', 'sonar', 'work', 'compose', 'idle', 'alert']
-const expectedPlaylist = ['dive', 'classic', 'sonar', 'work', 'compose', 'idle']
+const expectedStates = ['dive', 'classic', 'spout', 'sonar', 'work', 'compose', 'idle', 'alert']
+const expectedPlaylist = ['dive', 'classic', 'spout', 'sonar', 'work', 'compose', 'idle']
 const expectedDerivedFrom = {
   work: ['whale-dive.webp'],
   compose: ['whale-classic.webp'],
@@ -112,6 +113,21 @@ for (const state of stateKeys) {
     if (!allowPlaceholderLegacy) {
       assert(gitBlobSha(animated) === expected.animated, `${state}: legacy animation bytes changed`)
       assert(gitBlobSha(reduced) === expected.static, `${state}: legacy reduced-motion bytes changed`)
+    }
+  } else if (state === 'spout') {
+    const expectedSheets = ['phase-1-rise.png', 'phase-2-grow.png', 'phase-3-fall.png', 'phase-4-submerge.png']
+    assert(entry.source === 'imagegen', 'spout: source marker must be imagegen')
+    assert(JSON.stringify(entry.canvas) === JSON.stringify([352, 352]), 'spout: canvas changed')
+    assert(entry.frames === 137 && entry.frameDurationMs === 33 && entry.loopDurationMs === 4521, 'spout: runtime contract must be 137 x 33 ms')
+    assert(entry.nativeImageGenCels === 64 && entry.spoutSegmentFrames === 77, 'spout: 64-cel/77-frame provenance changed')
+    assert(entry.provenanceReport === 'artwork-sources/spout-imagegen-v1/build-report.json', 'spout: provenance report path changed')
+    assert(JSON.stringify(entry.cycleSegments) === JSON.stringify(spoutReport.output.segments), 'spout: cycle segment mapping differs from provenance')
+    assert(JSON.stringify(entry.sourceSheets) === JSON.stringify(expectedSheets.map(name => `artwork-sources/spout-imagegen-v1/${name}`)), 'spout: source sheet mapping changed')
+    assert(spoutReport?.checks?.allPassed === true && spoutReport?.checks?.statusLastEqualsDiveFirst === true, 'spout: deterministic provenance checks failed')
+    for (const name of expectedSheets) {
+      const sheet = await readFile(resolve(root, 'artwork-sources/spout-imagegen-v1', name))
+      const reported = spoutReport.inputs.phaseSheets[name]
+      assert(reported?.sha256 === digest(sheet) && reported?.nativeCels === 16 && JSON.stringify(reported?.size) === JSON.stringify([1254, 1254]), `spout: source provenance mismatch for ${name}`)
     }
   } else {
     assert(entry.source === 'generated', `${state}: redrawn state is not marked generated`)
@@ -253,6 +269,8 @@ assert(plugin.resolveWhaleState('经典') === 'classic', 'Bare Chinese Classic a
 assert(plugin.resolveWhaleState('原版') === 'classic', 'Bare Chinese Original alias mapping failed')
 assert(plugin.resolveWhaleState('Processing original source file') === null, 'Original substring must not trigger Classic')
 assert(plugin.resolveWhaleState('Searching the web') === 'sonar', 'Search keyword mapping failed')
+assert(plugin.resolveWhaleState('Surface whale spouting') === 'spout', 'Spout keyword mapping failed')
+assert(plugin.resolveWhaleState('鲸鱼浮面喷水') === 'spout', 'Chinese spout keyword mapping failed')
 assert(plugin.resolveWhaleState('Using tool: shell') === 'work', 'Tool keyword mapping failed')
 assert(plugin.resolveWhaleState('Generating answer') === 'compose', 'Compose keyword mapping failed')
 assert(plugin.resolveWhaleState('Retrying after error') === 'alert', 'Alert keyword mapping failed')
@@ -260,7 +278,8 @@ assert(plugin.resolveWhaleState('Deep diving...') === null, 'Default Deep diving
 assert(plugin.chooseWhaleState('Deep diving...', 0, false) === manifest.playlist[0], 'Playlist start state mismatch')
 assert(plugin.chooseWhaleState('Deep diving...', manifest.playlistIntervalMs, false) === 'classic', 'Second preserved animation is not in the playlist')
 assert(plugin.chooseWhaleState('Deep diving...', manifest.playlistIntervalMs + manifest.states.classic.loopDurationMs - 1, false) === 'classic', 'Classic is truncated before one complete loop')
-assert(plugin.chooseWhaleState('Deep diving...', manifest.playlistIntervalMs * 2, false) === 'sonar', 'Playlist did not advance after the full Classic slot')
+assert(plugin.chooseWhaleState('Deep diving...', manifest.playlistIntervalMs * 2, false) === 'spout', 'Playlist did not advance to Surface Spout')
+assert(plugin.chooseWhaleState('Deep diving...', manifest.playlistIntervalMs * 3, false) === 'sonar', 'Playlist did not advance after the Surface Spout slot')
 assert(plugin.chooseWhaleState('Deep diving...', manifest.playlistIntervalMs, true) === manifest.defaultState, 'Reduced-motion state must remain stable')
 
 let dispose

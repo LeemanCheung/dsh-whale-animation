@@ -93,16 +93,16 @@ def build_hero(frames_by_state: dict[str, list[Image.Image]], specs: Sequence[St
     decorate_background(canvas)
     draw = ImageDraw.Draw(canvas, "RGBA")
     draw.rounded_rectangle((64, 43, 270, 80), radius=18, fill=(225, 237, 255, 245))
-    draw.text((83, 54), "DSH WHALE MOTION · v0.5", font=font(FONT_MEDIUM_CANDIDATES, 15), fill=(27, 83, 165, 255))
+    draw.text((83, 54), "DSH WHALE MOTION · v0.6", font=font(FONT_MEDIUM_CANDIDATES, 15), fill=(27, 83, 165, 255))
     draw.text((64, 110), "Brand-shaped.", font=font(FONT_BOLD_CANDIDATES, 56), fill=(10, 27, 50, 255))
     draw.text((64, 174), "Spine-driven.", font=font(FONT_BOLD_CANDIDATES, 56), fill=(10, 27, 50, 255))
     draw.text((67, 250), "Two original loops are preserved byte-for-byte.", font=font(FONT_REGULAR_CANDIDATES, 21), fill=(65, 82, 109, 255))
-    draw.text((67, 280), "Every new state now shares one living whale silhouette.", font=font(FONT_REGULAR_CANDIDATES, 21), fill=(65, 82, 109, 255))
+    draw.text((67, 280), "Image Gen spout and semantic states share one living whale silhouette.", font=font(FONT_REGULAR_CANDIDATES, 21), fill=(65, 82, 109, 255))
     draw.rounded_rectangle((64, 338, 505, 376), radius=18, fill=(8, 24, 46, 228))
     draw.text((88, 349), "LEGACY SAFE  ·  NO NETWORK  ·  REDUCED MOTION", font=font(FONT_MEDIUM_CANDIDATES, 14), fill=WHITE)
 
     by_key = {spec.key: spec for spec in specs}
-    hero_specs = [by_key[key] for key in ("dive", "classic", "sonar", "work")]
+    hero_specs = [by_key[key] for key in ("dive", "classic", "spout", "work")]
     positions = [(690, 48), (872, 48), (690, 218), (872, 218)]
     for (x, y), spec in zip(positions, hero_specs):
         card = card_shadow((156, 136), 24, (255, 255, 255, 244))
@@ -128,7 +128,7 @@ def preview_base() -> Image.Image:
     draw.text((112, 146), "Deep diving...", font=font(FONT_MEDIUM_CANDIDATES, 30), fill=(15, 31, 55, 255))
     draw.text((113, 193), "Original loops and brand-aligned states share one director.", font=font(FONT_REGULAR_CANDIDATES, 17), fill=(78, 96, 122, 255))
     draw.rounded_rectangle((210, 309, 790, 338), radius=14, fill=(234, 243, 255, 232))
-    draw.text((244, 317), "2 preserved loops  ·  5 redrawn states  ·  keyword overrides  ·  static fallbacks", font=font(FONT_MEDIUM_CANDIDATES, 12), fill=(40, 78, 132, 255))
+    draw.text((220, 317), "2 preserved loops  ·  1 Image Gen spout  ·  5 semantic states  ·  static fallbacks", font=font(FONT_MEDIUM_CANDIDATES, 12), fill=(40, 78, 132, 255))
     return canvas
 
 
@@ -220,7 +220,7 @@ def build_gallery(frames_by_state: dict[str, list[Image.Image]], specs: Sequence
     decorate_background(canvas, 1.4)
     draw = ImageDraw.Draw(canvas, "RGBA")
     draw.text((54, 42), "Brand-aligned animation gallery", font=font(FONT_BOLD_CANDIDATES, 40), fill=(8, 24, 46, 255))
-    draw.text((56, 95), "Two untouched originals, five redrawn states, one shared DeepSeek-style silhouette.", font=font(FONT_REGULAR_CANDIDATES, 19), fill=(73, 92, 120, 255))
+    draw.text((56, 95), "Two untouched originals, one Image Gen spout, five semantic states, one shared silhouette.", font=font(FONT_REGULAR_CANDIDATES, 19), fill=(73, 92, 120, 255))
 
     card_width = 258
     card_height = 240
@@ -236,7 +236,7 @@ def build_gallery(frames_by_state: dict[str, list[Image.Image]], specs: Sequence
         canvas.alpha_composite(whale, (x + 63, y + 4))
         badge_fill = (226, 238, 255, 255) if spec.source == "legacy" else (235, 244, 255, 255)
         draw.rounded_rectangle((x + 18, y + 142, x + card_width - 18, y + 221), radius=18, fill=badge_fill)
-        source_label = "PRESERVED" if spec.source == "legacy" else "REDRAWN"
+        source_label = "PRESERVED" if spec.source == "legacy" else ("IMAGE GEN" if spec.source == "imagegen" else "REDRAWN")
         draw.rounded_rectangle((x + 32, y + 154, x + 101, y + 174), radius=10, fill=(8, 24, 46, 228))
         source_font = font(FONT_MEDIUM_CANDIDATES, 9)
         source_box = draw.textbbox((0, 0), source_label, font=source_font)

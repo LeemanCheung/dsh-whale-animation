@@ -4,6 +4,16 @@ All notable changes to this project are documented here.
 
 ## Unreleased
 
+### Added
+
+- Added Surface Spout as an eighth independent runtime state and seventh playlist state: a complete 137-frame, 4.521-second loop composed as preserved Dive 60 + articulated spout 77.
+- Added four frozen 4×4 Image Gen source sheets, 64 native poses, prompt lineage, a 77-frame native contact sheet, SHA-256 provenance, and exact segment mapping under `artwork-sources/spout-imagegen-v1`.
+- Added English/Chinese spout keyword resolution, browser coverage, manifest metadata, motion-audit evidence, and reduced-motion static mapping.
+
+### Changed
+
+- Bumped the package and documentation contract to v0.6.0 while keeping Dive, Classic, Sonar, Work, Stream, Calm, and Retry runtime asset bytes unchanged.
+
 ### Fixed
 
 - Materialized the readable v0.5 source that had remained inside the temporary CI payload and removed the self-deleting payload path.
@@ -12,7 +22,7 @@ All notable changes to this project are documented here.
 - Rebuilt Work, Stream, Calm, and Retry as pure-black long-tail ink whales derived from the preserved Dive/Classic motion language; Sonar remains unchanged.
 - Tightened build/runtime mapping checks so every state must resolve to its matching animated WebP and reduced-motion PNG.
 
-### Added
+### Added in the v0.5 recovery
 
 - Added a visible-frame motion audit, deterministic 12-frame contact sheet, and JSON evidence report that reject abrupt seams and low-diversity frame padding.
 - Added an 84/60 px style and identity gate that rejects blue/chromatic pixels, false transparency, complex interior detail, and fragmented or undersized silhouettes.
