@@ -29,20 +29,28 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Materialize v0.5.0 source
-        run: python scripts/materialize-v050.py
-
       - name: Install validation dependencies
-        run: python -m pip install --disable-pip-version-check Pillow
+        run: python -m pip install --disable-pip-version-check -r requirements.txt
 
       - name: Regenerate animation and documentation assets
-        run: npm run build:assets
+        run: npm run build:runtime-assets
 
       - name: Rebuild embedded browser client
         run: npm run build
 
       - name: Validate runtime, animation assets, and docs
         run: npm run check
+
+      - name: Verify committed generated artifacts
+        shell: bash
+        run: |
+          git diff --exit-code -- assets lib/client.js
+          untracked="$(git ls-files --others --exclude-standard -- assets docs lib)"
+          if [ -n "$untracked" ]; then
+            echo "Generated untracked files are not part of the immutable source:" >&2
+            echo "$untracked" >&2
+            exit 1
+          fi
 
       - name: Run Chromium browser smoke test
         run: bash scripts/check-browser.sh

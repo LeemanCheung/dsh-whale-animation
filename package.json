@@ -12,14 +12,19 @@
     "./package.json": "./package.json"
   },
   "files": [
+    ".github/workflows",
     "assets",
     "docs",
+    "!docs/imagegen-sources/**",
     "lib",
     "src",
     "scripts/browser-smoke.html",
+    "scripts/audit-motion.py",
+    "scripts/check-whale-style.py",
     "scripts/build-client.mjs",
     "scripts/build-whale-assets.py",
     "scripts/check-browser.sh",
+    "scripts/check-workflows.mjs",
     "scripts/check-readme-assets.py",
     "scripts/check.mjs",
     "scripts/whale_assets/*.py",
@@ -28,7 +33,8 @@
     "README.md",
     "README.zh-CN.md",
     "LICENSE",
-    "NOTICE.md"
+    "NOTICE.md",
+    "requirements.txt"
   ],
   "keywords": [
     "dsh",
@@ -64,9 +70,14 @@
   "scripts": {
     "build": "node scripts/build-client.mjs",
     "build:assets": "python scripts/build-whale-assets.py",
-    "check": "node scripts/check.mjs && python scripts/check-readme-assets.py",
+    "build:runtime-assets": "python scripts/build-whale-assets.py --skip-docs",
+    "build:motion-audit": "python scripts/audit-motion.py --write",
+    "build:style-audit": "python scripts/check-whale-style.py --write",
+    "audit:motion": "python scripts/audit-motion.py --check",
+    "audit:style": "python scripts/check-whale-style.py --check",
+    "check": "node scripts/check-workflows.mjs && node scripts/check.mjs && python scripts/check-readme-assets.py && npm run audit:motion && npm run audit:style",
     "check:browser": "bash scripts/check-browser.sh",
-    "verify": "npm run build:assets && npm run build && npm run check"
+    "verify": "npm run build:assets && npm run build && npm run build:motion-audit && npm run build:style-audit && npm run check"
   },
   "peerDependencies": {
     "@deepseek-ai/cordis": "^4.0.1",

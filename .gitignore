@@ -4,5 +4,8 @@ node_modules/
 Thumbs.db
 
 .artifacts/
+.playwright-cli/
+output/
 __pycache__/
 *.pyc
+docs/imagegen-sources/

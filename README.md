@@ -1,18 +1,19 @@
 <p align="center">
-  <img src="docs/hero.png" alt="dsh-whale-animation six-state whale animation system" width="100%" />
+  <img src="docs/hero.png" alt="dsh-whale-animation brand-aligned whale motion system" width="100%" />
 </p>
 
 <p align="center">
   <a href="https://awesome.re"><img src="https://awesome.re/badge.svg" alt="Awesome" /></a>
   <a href="https://awesome-dsh-plugin.com"><img src="https://awesome-dsh-plugin.com/badge.svg" alt="Awesome DSH Plugin" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-2563eb.svg" alt="MIT license" /></a>
-  <img src="https://img.shields.io/badge/version-v0.4.0-0f766e.svg" alt="v0.4.0" />
+  <img src="https://img.shields.io/badge/version-v0.5.0-0f766e.svg" alt="v0.5.0" />
+  <img src="https://img.shields.io/badge/legacy%20loops-2%20preserved-1d4ed8.svg" alt="Two legacy loops preserved" />
   <img src="https://img.shields.io/badge/runtime-offline-0f172a.svg" alt="Offline at runtime" />
   <img src="https://img.shields.io/badge/motion-reduced--motion%20ready-7c3aed.svg" alt="Reduced-motion ready" />
 </p>
 
 <p align="center">
-  <strong>Six original whale loops and a lightweight animation director for the DeepSeek Harness Web turn status.</strong><br />
+  <strong>Two original whale loops preserved byte-for-byte; Work, Stream, Calm, and Retry rebuilt as pure-black ink whales from their motion language.</strong><br />
   Timed rotation, keyword overrides, dark-theme support, zero runtime requests, and a static fallback for every state.
 </p>
 
@@ -23,48 +24,70 @@
 ## Preview
 
 <p align="center">
-  <img src="docs/preview.webp" alt="Deep Dive, Sonar, Tool Run, Stream, and Calm whale animations rotating in sequence" width="900" />
+  <img src="docs/preview.webp" alt="Two preserved whale loops and five brand-aligned states rotating in sequence" width="900" />
 </p>
 
-v0.4.0 replaces the single permanent dive clip with a multi-state system. The current Harness turn surface normally keeps the same `Deep diving...` label throughout a running turn, so the plugin rotates through `dive → sonar → work → compose → idle` every **9 seconds**. If a future or customized UI exposes recognizable search, tool, writing, waiting, or error text, keyword detection overrides the timed playlist immediately.
+v0.5.0 corrects the visual direction introduced in v0.4.0. Sonar is retained, while the four later states no longer reuse a blue static-logo treatment or a generic fish-like body. Their body identity now comes directly from the immutable alpha silhouettes in Refined Dive and Classic. The build retimes and recombines real breach, tail-first S-curve, waterline hover, spy-hop, splash, and recoil frames; semantic speed/output/attention accents remain separate layers.
 
-## Six states
+The two pre-v0.4 loops remain intact:
+
+- **Refined Dive** is restored directly from commit `65e1205d1fbf4b01997e6dfc099103b0f9717e37` and remains the default state.
+- **Classic** is restored directly from the first published commit `95b06e3f0e6ea817d25858eb29f7064a233b3c65`.
+
+CI recomputes the Git blob SHA-1 for those four legacy files and fails if even one byte changes.
+
+## Seven states
 
 <p align="center">
-  <img src="docs/state-gallery.png" alt="Gallery of the six whale animation states" width="1000" />
+  <img src="docs/state-gallery.png" alt="Gallery of two preserved and five redrawn whale animation states" width="1000" />
 </p>
 
-| State | Motion language | Trigger logic |
-|---|---|---|
-| **Deep Dive** | Breach, roll, and return below the surface | Playlist; thinking, reasoning, analysis, planning |
-| **Sonar** | Echolocation rings propagating from the snout | Playlist; search, browse, lookup, research |
-| **Tool Run** | Fast tail cadence, speed trails, and work particles | Playlist; tool, execute, shell, build, test |
-| **Stream** | Token-like particles flowing forward | Playlist; writing, generating, responding, streaming |
-| **Calm** | Low-amplitude breathing and rising bubbles | Playlist; waiting, queued, paused |
-| **Retry** | Restrained body wobble and attention pulse | Error, failure, exception, and retry keywords only |
+| State | Source | Motion language | Trigger logic |
+|---|---|---|---|
+| **Refined Dive** | Preserved | The v0.3 refined breach-and-dive loop, unchanged | Default; playlist; thinking, reasoning, analysis, planning |
+| **Classic** | Preserved | The first published whale loop, unchanged | Playlist; explicit classic/original keywords |
+| **Sonar** | Redrawn | Slow spine-driven cruise with expanding discovery rings | Playlist; search, browse, lookup, research |
+| **Tool Run** | Redrawn | Pure-black surge, full-body travelling wave, ink speed strokes | Playlist; tool, execute, shell, build, test |
+| **Stream** | Redrawn | Upward black-ink sweep with a restrained droplet arc | Playlist; writing, generating, responding, streaming |
+| **Calm** | Redrawn | Under-waterline hover, long-tail drift, bubbles, restrained blink | Playlist; waiting, queued, paused |
+| **Retry** | Redrawn | Compact black-ink C-curve recoil and three attention strokes | Error, failure, exception, retry keywords only |
 
-English and Chinese keywords are included. The ordinary `Deep diving...` label is deliberately not treated as an explicit state, allowing the current UI to show the complete five-state playlist.
+English and Chinese keywords are included. The ordinary `Deep diving...` label deliberately remains neutral, allowing the current Harness UI to rotate through `dive → classic → sonar → work → compose → idle` every **11 seconds**. The slot is long enough for the 10.506-second preserved Classic loop to finish once. Recognizable status text overrides the playlist immediately.
+
+## Visual design contract
+
+Work, Stream, Calm, and Retry are generated from the real Dive/Classic frame masks rather than a replacement logo body. Sonar keeps its existing generated treatment. The four rebuilt states enforce:
+
+- pure black/white visible pixels on a genuinely transparent RGBA canvas, with no blue artwork;
+- no dorsal fin or shark-like profile;
+- the exact compact head, tapered torso, long curved tail stock, broad flukes, and negative-space details already present in the preserved frames;
+- real whole-body breach, flip, dive, hover, S-curve, spy-hop, splash, and recoil poses instead of moving a horizontal capsule;
+- cosine retiming for forward/reverse subsequences so reversal velocity reaches zero without a hard cut;
+- state effects kept secondary to the silhouette.
+
+The preserved states are not regenerated or visually normalized. Their exact original files remain available in the runtime playlist and release package.
 
 ## Highlights
 
 | | Feature | What it means |
 |---|---|---|
-| 🐋 | **Six original frame animations** | Every state uses a 352 × 352 canvas, 48 frames, 40 ms per frame, and a 1.92-second loop. |
-| 🎬 | **Dual-track animation director** | The current fixed label uses timed rotation; future status labels use immediate keyword overrides. |
-| ♿ | **Per-state reduced motion** | `prefers-reduced-motion` stops playlist rotation and uses the matching PNG frame. |
+| 🐋 | **Two originals preserved** | Historical WebP and PNG blobs are restored under stable asset paths and verified byte-for-byte in CI. |
+| 🌊 | **Four legacy-silhouette rebuilds** | Tool Run and Calm derive from Dive; Stream and Retry derive from Classic. Sonar remains intact. |
+| 🎬 | **Dual-track animation director** | The current fixed label uses timed rotation; future or customized status labels use immediate keyword overrides. |
+| ♿ | **Per-state reduced motion** | `prefers-reduced-motion` freezes rotation and uses the matching PNG frame. |
 | 🌗 | **Theme and viewport aware** | System dark mode, `html.dark`, and `data-theme="dark"` invert the monochrome artwork; sizing steps down through 84 / 72 / 60 px. |
-| 📦 | **Completely self-contained** | Six WebPs and six PNGs are embedded in `lib/client.js`; activation makes no external request. |
-| 🧩 | **Stronger mount selector** | Combines semantic `role="status"` targeting with the `_turnStatus` class fallback. |
-| 🫧 | **Lower style intrusion** | Owns only the status element's `::after`; it no longer clears `::before` or changes the label. |
-| ♻️ | **Idempotent and lifecycle-clean** | Re-activation removes stale ownership; disposal removes styles, timer, observer, and data attributes. |
-| 🔒 | **Strictly visual scope** | No accounts, model tools, storage, workspace reads, networking, or user-content processing. |
+| 📦 | **Completely self-contained** | All WebPs and PNGs are embedded in `lib/client.js`; activation makes no external request. |
+| 🧩 | **Resilient mount selector** | Combines semantic `role="status"` targeting with the `_turnStatus` class fallback. |
+| 🫧 | **Low style intrusion** | Owns only the status element's `::after`; it does not alter the status label or clear `::before`. |
+| ♻️ | **Lifecycle-clean** | Re-activation removes stale ownership; disposal removes styles, timer, observer, listeners, and data attributes. |
+| 🔒 | **Strictly visual scope** | No accounts, tools, storage, workspace reads, networking, or user-content processing. |
 
 ## Install
 
-Install the latest release into the DSH Web profile:
+Install the v0.5.0 release into the DSH Web profile:
 
 ```powershell
-dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation#v0.4.0
+dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation#v0.5.0
 ```
 
 Follow the main branch:
@@ -79,7 +102,7 @@ Hard-refresh DSH Web after installation. Restart DSH if the active profile has a
 
 ```powershell
 dsh plugin --profile web remove dsh-whale-animation
-dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation#v0.4.0
+dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation#v0.5.0
 ```
 
 ### Uninstall
@@ -92,71 +115,100 @@ dsh plugin --profile web remove dsh-whale-animation
 
 | Property | Value |
 |---|---:|
-| Animation states | 6 |
-| Automatic playlist states | 5 |
-| Source canvas | 352 × 352 px |
-| Frames per state | 48 |
-| Frame duration | 40 ms |
-| Loop duration | 1.920 s |
-| Playlist interval | 9 seconds |
+| Total states | 7 |
+| Preserved legacy states | 2 |
+| Redrawn generated states | 5 |
+| Automatic playlist states | 6 |
+| Generated-state canvas | 352 × 352 px |
+| Preserved native canvases | Refined Dive 352 × 352; Classic 184 × 184 |
+| Generated-state cadence | 48 frames × 40 ms |
+| Generated-state loop | 1.920 s |
+| Legacy cadence | Retained from the original files |
+| Playlist interval | 11 seconds |
 | CSS display sizes | 84 / 72 / 60 px |
-| Animated source total | 1,206,950 bytes |
-| Static source total | 54,957 bytes |
-| Prebuilt client | about 1.69 MB |
 | Runtime asset requests | 0 |
 
 ## How it works
 
 ```mermaid
 flowchart LR
-  A[6 WebPs + 6 PNGs] --> B[assets/manifest.json]
-  B --> C[scripts/build-client.mjs]
-  C --> D[Embedded data-URL client]
-  D --> E[role=status turn status ::after]
-  F[9-second playlist] --> D
-  G[English and Chinese overrides] --> D
-  H[Dark mode and reduced motion] --> D
+  A[2 preserved loops] --> C[assets/manifest.json]
+  B[5 deterministic redraws] --> C
+  C --> D[scripts/build-client.mjs]
+  D --> E[Embedded data-URL client]
+  E --> F[role=status turn status ::after]
+  G[11-second playlist] --> E
+  H[English and Chinese overrides] --> E
+  I[Dark mode and reduced motion] --> E
 ```
 
-`lib/index.js` remains an intentional no-op Host entry. All behavior runs in the browser through `dsh.client`. A MutationObserver handles Harness subtree replacement, while a one-second timer performs only state selection; the browser's animated-WebP decoder handles frame playback.
+`lib/index.js` remains an intentional no-op Host entry. All behavior runs in the browser through `dsh.client`. A `MutationObserver` handles Harness subtree replacement, while a one-second timer performs state selection; animated-WebP decoding remains browser-native.
 
-The current target is:
+The target selector is:
 
 ```css
 .Md3f7G_turnStatus[role="status"],
 [class*="_turnStatus"][role="status"]
 ```
 
-The client writes `data-dsh-whale-host` and `data-dsh-whale-state` to the status element, and CSS paints the selected asset through `::after`. Dark mode inverts the monochrome image. Reduced-motion mode selects the corresponding PNG and stays on the default or explicit keyword state instead of rotating.
+The client writes `data-dsh-whale-host` and `data-dsh-whale-state` to the status element, and CSS paints the selected asset through `::after`. Reduced-motion mode selects the corresponding PNG and stays on the default or explicit keyword state instead of rotating.
 
 ## Development and verification
 
-Requirements: **Node.js 20+**. Regenerating animation and documentation assets additionally requires Python 3 and Pillow:
+Requirements: **Node.js 20+**, Python 3, and Pillow:
 
 ```powershell
-python -m pip install Pillow
-npm run build:assets
-npm run build
-npm run check
+python -m pip install -r requirements.txt
+npm run verify
+npm run check:browser
 ```
 
 | Command | Purpose |
 |---|---|
-| `npm run build:assets` | Generate six WebPs, six PNGs, the manifest, hero, preview, and gallery |
+| `npm run build:assets` | Keep both legacy assets untouched; generate five WebPs, five PNGs, manifest, hero, preview, and gallery |
+| `npm run build:runtime-assets` | Rebuild only runtime animation assets and manifest; CI-safe with no system-font rendering |
 | `npm run build` | Embed every manifest asset into `lib/client.js` |
-| `npm run check` | Validate assets, bundle, director logic, lifecycle, and README artwork |
-| `npm run check:browser` | Mount the committed bundle in headless Chromium and capture light/dark smoke screenshots |
-| `npm run verify` | Rebuild the client and run the deterministic non-browser check suite |
+| `npm run build:motion-audit` | Write the deterministic 12-sample contact sheet and motion evidence report |
+| `npm run build:style-audit` | Write the true-size 84/60 px Dive/Classic identity comparison and palette evidence |
+| `npm run audit:motion` | Recompute visible-frame diversity and continuity, then reject stale or failing evidence |
+| `npm run audit:style` | Reject blue/chromatic pixels, opaque backgrounds, complex interior detail, and illegible silhouettes |
+| `npm run check` | Validate preserved Git blobs, generated timing, bundle, director logic, lifecycle, and README artwork |
+| `npm run check:browser` | Mount all seven resolved states in headless Chromium and capture light/dark screenshots |
+| `npm run verify` | Rebuild assets and client, then run the deterministic non-browser suite |
 
 Checks cover:
 
-- format, size, and SHA-256 for all 12 state assets;
-- 48 frames, 40 ms frame duration, and a 1.92-second loop for each WebP;
-- exact agreement among source files, manifest entries, and embedded data URLs;
-- timed rotation, keyword overrides, error priority, and reduced-motion freezing;
-- style installation, MutationObserver, timer disposal, and host-attribute cleanup;
-- hero dimensions, the 50-frame README preview, gallery dimensions, and local links;
-- prebuilt-client reproducibility, real Chromium state mapping, light/dark screenshots, and `npm pack` in CI.
+- exact Git blob SHA-1 for both historical WebPs and both historical PNGs;
+- 48 frames, 40 ms cadence, and 1.92-second loops for every redrawn state;
+- true RGBA transparency, pure-black visible pixels, simple interior detail, and 60/84 px silhouette legibility for the four rebuilt states;
+- file sizes, SHA-256 digests, manifest metadata, and embedded data-URL agreement;
+- timed rotation through both preserved states and all ordinary redrawn states;
+- English/Chinese keyword overrides, error priority, and reduced-motion freezing;
+- style installation, `MutationObserver`, timer disposal, and host-attribute cleanup;
+- hero, preview, gallery dimensions and local documentation links;
+- Chromium state mapping, light/dark captures, and `npm pack --dry-run` in CI.
+
+### Motion continuity evidence
+
+<p align="center">
+  <img src="docs/rebuilt-states-real-speed.webp" alt="Work, Stream, Calm, and Retry playing together at the real 40 millisecond frame cadence" width="1000" />
+</p>
+
+The four rebuilt states above play at the exact runtime cadence: 48 frames × 40 ms, a 1.92-second seamless loop. It is separate from the accelerated multi-state README playlist preview. [`docs/rebuilt-states-real-speed.json`](docs/rebuilt-states-real-speed.json) locks the preview SHA-256 and the four source animation hashes so CI rejects stale artwork.
+
+<p align="center">
+  <img src="docs/motion-contact-sheet.png" alt="Twelve sampled frames and loop-seam metrics for every whale state" width="1200" />
+</p>
+
+[`docs/motion-audit.json`](docs/motion-audit.json) records visible-frame diversity after alpha normalization, frozen-step ratio, absolute and foreground-normalized change, moving-foreground coverage, both alpha-shape and premultiplied-RGBA appearance centroids, sampled-frame hashes, and the loop seam. Ordinary generated artwork keeps a 4 px centroid cap. The four explicitly `derivedFrom` states retain the original loops' intentional whole-body travel and therefore use a separately reported 24 px cap while keeping the same step-ratio, absolute-change, foreground-change, coverage, and seam gates. Calm and Retry intentionally retrace their pose sequence (25/48 and 26/48 unique visible frames), but both have a zero frozen-adjacent-frame ratio, 0.67–0.68 median moving-foreground coverage, and loop seams below 0.20× the ordinary step.
+
+### 60/84 px identity evidence
+
+<p align="center">
+  <img src="docs/style-identity-contact-sheet.png" alt="True-size Dive and Classic identity comparison for Work, Stream, Calm, and Retry at 84 and 60 pixels" width="1018" />
+</p>
+
+[`docs/style-identity-audit.json`](docs/style-identity-audit.json) checks every animated and reduced-motion frame pair for true transparency, zero blue/chromatic visible pixels, limited light interior detail, matching static-frame mapping, and a substantial connected whale silhouette at both sizes. The contact sheet renders the actual runtime sizes rather than enlarged crops. Image-generation pose studies and rejected directions are recorded in [`docs/animation-lineage.json`](docs/animation-lineage.json); provider RGB white-ground studies are action inspiration only and never the accepted body identity.
 
 The design rationale and future roadmap are documented in [`docs/ANIMATION_ROADMAP.zh-CN.md`](docs/ANIMATION_ROADMAP.zh-CN.md).
 
@@ -164,41 +216,58 @@ The design rationale and future roadmap are documented in [`docs/ANIMATION_ROADM
 
 ```text
 assets/
-  manifest.json          State timing, sizes, and SHA-256 checksums
-  whale-*.webp           Six animated assets
-  whale-*.png            Six reduced-motion frames
+  whale-dive.webp/.png      Preserved refined loop from v0.3
+  whale-classic.webp/.png   Preserved first published loop
+  whale-sonar.webp/.png     Redrawn generated state
+  whale-work.webp/.png      Redrawn generated state
+  whale-compose.webp/.png   Redrawn generated state
+  whale-idle.webp/.png      Redrawn generated state
+  whale-alert.webp/.png     Redrawn generated state
+  whale-static.png          Compatibility alias for pre-v0.4 consumers
+  manifest.json             Source, timing, sizes, commits, and SHA-256 checksums
 src/
-  client-runtime.js      Director and browser lifecycle source
+  client-runtime.js         Director and browser lifecycle source
 lib/
-  index.js               No-op Host entry
-  client.js              Prebuilt DSH Web client with embedded assets
+  index.js                  No-op Host entry
+  client.js                 Prebuilt DSH Web client with embedded assets
 scripts/
-  build-whale-assets.py  Generates animation and README visuals
-  build-client.mjs       Builds the browser client from the manifest
-  check.mjs              Validates assets, bundle, and runtime behavior
-  check-readme-assets.py Validates documentation visuals and links
-  browser-smoke.html     Browser fixture covering all six resolved states
-  check-browser.sh       Runs Chromium smoke checks and light/dark captures
+  whale_assets/model.py     Sonar model plus shared image/build primitives
+  whale_assets/states.py    Preserved metadata and legacy-frame-derived state renderers
+  build-whale-assets.py     Generates redrawn assets and README visuals
+  build-client.mjs          Builds the browser client from the manifest
+  check.mjs                 Validates assets, bundle, and runtime behavior
+  check-readme-assets.py    Validates documentation visuals, links, and legacy blobs
+  check-whale-style.py      Gates black-ink palette and 60/84 px identity evidence
+  audit-motion.py           Verifies visible frame diversity and loop continuity
+  browser-smoke.html        Browser fixture covering all seven resolved states
+  check-browser.sh          Runs Chromium smoke checks and light/dark captures
 docs/
-  hero.png               README hero
-  preview.webp           Five-state animated preview
-  state-gallery.png      Six-state static gallery
+  hero.png                  README hero
+  preview.webp              Six-state playlist preview
+  state-gallery.png         Seven-state static gallery
+  rebuilt-states-real-speed.webp  Four rebuilt states at the real 40 ms cadence
+  rebuilt-states-real-speed.json  Preview hash and four current source-animation hashes
+  motion-contact-sheet.png  Twelve sampled frames per state
+  motion-audit.json         Machine-readable continuity evidence
+  style-identity-contact-sheet.png  True-size Dive/Classic identity comparison
+  style-identity-audit.json Machine-readable palette and silhouette evidence
+  animation-lineage.json    Image-generation prompts, hashes, alpha facts, and rejections
   ANIMATION_ROADMAP.zh-CN.md Design rationale and roadmap
 ```
 
-`lib/client.js` is committed intentionally so GitHub installation requires neither a build step nor runtime asset downloads.
+`lib/client.js` is committed intentionally so GitHub installation requires neither a local build step nor runtime asset downloads.
 
 ## Compatibility and limitations
 
 - Targets the **DeepSeek Harness Web UI** and requires a DSH version compatible with `@deepseek-ai/dsh-client-runtime ^0.1.0-rc.6`.
 - A Shell change that removes both `_turnStatus` and `role="status"` will require a selector update.
-- The plugin still owns the target's `::after`; another plugin using the same pseudo-element may conflict.
-- Timed rotation is a compatibility strategy for the current fixed status label, not a claim about actual model phases. Stable DSH phase events should replace it when available.
-- Embedding assets avoids runtime networking at the cost of a roughly 1.69 MB client file.
+- The plugin owns the target's `::after`; another plugin using the same pseudo-element may conflict.
+- Timed rotation is a compatibility strategy for the current fixed status label, not a claim about actual model phases.
+- Preserving the large first-generation animation increases the embedded client size, but guarantees that both user-created originals remain available without runtime networking.
 
 ## Attribution
 
-This project is independent and is not affiliated with or endorsed by DeepSeek. The animations are original UI illustrations designed to complement the whale-themed DeepSeek Harness status experience. See [NOTICE.md](NOTICE.md) for visual-design and trademark notes.
+This project is independent and is not affiliated with or endorsed by DeepSeek. The redrawn animations are original UI illustrations intended to align with the recognizable whale-oriented visual language without reproducing official artwork. See [NOTICE.md](NOTICE.md) for visual-design and trademark notes.
 
 ## License
 

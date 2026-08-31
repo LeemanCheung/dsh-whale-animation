@@ -1,129 +1,262 @@
 from __future__ import annotations
 
 import math
+from collections import deque
+from functools import lru_cache
 
 from PIL import Image, ImageDraw
 
 from .model import (
-    FRAMES, INK, SUPERSAMPLE, StateSpec, blank, draw_bubbles, draw_splash,
-    draw_water, draw_whale, finish, transform,
+    ASSETS,
+    CANVAS,
+    INK,
+    INK_BLACK,
+    SUPERSAMPLE,
+    StateSpec,
+    blank,
+    draw_whale,
+    finish,
 )
 
-def render_idle(t: float) -> Image.Image:
-    image = blank()
-    phase = math.tau * t
-    center = (176 + 5 * math.sin(phase), 180 + 8 * math.sin(phase - 0.35))
-    draw_whale(image, center=center, scale=0.82, angle=2.8 * math.sin(phase), tail_phase=phase * 2, fin_phase=phase, eye_open=0.65 + 0.35 * (0.5 + 0.5 * math.sin(phase - 0.5)))
-    bubbles = []
-    for index in range(4):
-        progress = (t + index * 0.23) % 1
-        bubbles.append((238 + 7 * math.sin(progress * math.tau + index), 176 - 105 * progress, 2.3 + index * 0.7, 180 * (1 - progress)))
-    draw_bubbles(image, bubbles)
-    return finish(image)
+
+LEGACY_REFINED_COMMIT = "65e1205d1fbf4b01997e6dfc099103b0f9717e37"
+LEGACY_CLASSIC_COMMIT = "95b06e3f0e6ea817d25858eb29f7064a233b3c65"
 
 
-def render_dive(t: float) -> Image.Image:
-    image = blank()
-    phase = math.tau * t
-    water_y = 210
-    # Clockwise closed loop: submerged cruise -> breach -> inverted apex -> dive.
-    cx = 176 + 76 * math.sin(phase)
-    cy = 190 + 86 * math.cos(phase)
-    dx = 76 * math.cos(phase)
-    dy = -86 * math.sin(phase)
-    angle = math.degrees(math.atan2(dy, dx))
-    draw_water(image, water_y, phase * 1.8, 0.65)
-    # Entry/exit splashes sit behind the body so facial details stay legible.
-    for crossing in (0.20, 0.80):
-        delta = min(abs(t - crossing), 1 - abs(t - crossing))
-        intensity = max(0.0, 1 - delta / 0.075)
-        draw_splash(image, cx, water_y + 2, intensity, -1 if crossing < 0.5 else 1)
-    draw_whale(image, center=(cx, cy), scale=0.72, angle=angle, tail_phase=phase * 3.1, fin_phase=phase * 1.4)
-    return finish(image)
+@lru_cache(maxsize=2)
+def _legacy_ink_frames(state: str) -> tuple[Image.Image, ...]:
+    """Load immutable Dive/Classic frames as pure-black RGBA identity masters."""
+    source = Image.open(ASSETS / f"whale-{state}.webp")
+    frames: list[Image.Image] = []
+    for index in range(int(getattr(source, "n_frames", 1))):
+        source.seek(index)
+        frame = source.convert("RGBA").copy()
+        if frame.size != (CANVAS, CANVAS):
+            frame = frame.resize((CANVAS, CANVAS), Image.Resampling.LANCZOS)
+        ink = Image.new("RGBA", frame.size, INK_BLACK)
+        ink.putalpha(frame.getchannel("A"))
+        frames.append(ink)
+    return tuple(frames)
+
+
+def _sample_legacy(state: str, position: float) -> Image.Image:
+    frames = _legacy_ink_frames(state)
+    wrapped = position % len(frames)
+    left_index = math.floor(wrapped)
+    right_index = (left_index + 1) % len(frames)
+    mix = wrapped - left_index
+    if mix <= 1e-9:
+        return frames[left_index].copy()
+    return Image.blend(frames[left_index], frames[right_index], mix)
+
+
+def _subject_bbox(image: Image.Image) -> tuple[int, int, int, int]:
+    """Find the whale while ignoring the long, nearly horizontal waterline."""
+    alpha = image.getchannel("A")
+    pixels = alpha.load()
+    width, height = alpha.size
+    row_counts = [sum(pixels[x, y] >= 32 for x in range(width)) for y in range(height)]
+    waterline_y = max(range(height), key=row_counts.__getitem__)
+    visited: set[tuple[int, int]] = set()
+    components: list[list[tuple[int, int]]] = []
+    for y in range(height):
+        if abs(y - waterline_y) <= 6:
+            continue
+        for x in range(width):
+            if pixels[x, y] < 32 or (x, y) in visited:
+                continue
+            queue = deque([(x, y)])
+            visited.add((x, y))
+            component: list[tuple[int, int]] = []
+            while queue:
+                px, py = queue.popleft()
+                component.append((px, py))
+                for nx, ny in ((px - 1, py), (px + 1, py), (px, py - 1), (px, py + 1)):
+                    if (
+                        0 <= nx < width
+                        and 0 <= ny < height
+                        and abs(ny - waterline_y) > 6
+                        and pixels[nx, ny] >= 32
+                        and (nx, ny) not in visited
+                    ):
+                        visited.add((nx, ny))
+                        queue.append((nx, ny))
+            components.append(component)
+    if not components:
+        return (72, 150, 220, 240)
+    subject = max(components, key=len)
+    xs = [point[0] for point in subject]
+    ys = [point[1] for point in subject]
+    return min(xs), min(ys), max(xs) + 1, max(ys) + 1
 
 
 def render_sonar(t: float) -> Image.Image:
     image = blank()
     phase = math.tau * t
-    center = (148 + 6 * math.sin(phase), 178 + 7 * math.sin(phase * 1.5))
-    snout = draw_whale(image, center=center, scale=0.78, angle=-3 + 3 * math.sin(phase), tail_phase=phase * 1.8, fin_phase=phase * 0.8)
+    center = (145 + 5 * math.sin(phase), 178 + 5 * math.sin(phase - 0.4))
+    snout = draw_whale(
+        image,
+        center=center,
+        scale=0.82,
+        angle=-2.2 + 2.0 * math.sin(phase),
+        body_phase=phase,
+        tail_phase=phase * 2.0,
+        fin_phase=phase,
+        wave=10.5,
+        bend=4.0 * math.sin(phase - 0.4),
+        breathing=0.025 * math.sin(phase),
+    )
     draw = ImageDraw.Draw(image, "RGBA")
     for index in range(4):
-        progress = (t * 1.25 + index * 0.24) % 1
-        radius = 18 + progress * 93
-        alpha = round(210 * (1 - progress) ** 1.6)
-        box = ((snout[0] - radius * 0.25) * SUPERSAMPLE, (snout[1] - radius) * SUPERSAMPLE, (snout[0] + radius * 1.75) * SUPERSAMPLE, (snout[1] + radius) * SUPERSAMPLE)
-        draw.arc(box, start=-48, end=48, fill=(INK[0], INK[1], INK[2], alpha), width=max(2, round((2.5 - progress) * SUPERSAMPLE)))
+        progress = (t + index * 0.245) % 1
+        radius = 15 + progress * 92
+        alpha = round(205 * (1 - progress) ** 1.55)
+        box = (
+            (snout[0] - radius * 0.25) * SUPERSAMPLE,
+            (snout[1] - radius) * SUPERSAMPLE,
+            (snout[0] + radius * 1.78) * SUPERSAMPLE,
+            (snout[1] + radius) * SUPERSAMPLE,
+        )
+        draw.arc(
+            box,
+            start=-43,
+            end=43,
+            fill=(INK[0], INK[1], INK[2], alpha),
+            width=max(2, round((2.35 - progress * 0.75) * SUPERSAMPLE)),
+        )
     return finish(image)
 
 
 def render_work(t: float) -> Image.Image:
-    image = blank()
+    # One complete Refined Dive cycle, retimed from 60 to 48 frames.  The whale,
+    # waterline, breach, long-tail flip and re-entry all come from the real loop.
+    image = _sample_legacy("dive", t * len(_legacy_ink_frames("dive")))
     phase = math.tau * t
-    center = (184 + 10 * math.sin(phase), 180 + 4 * math.sin(phase * 2))
     draw = ImageDraw.Draw(image, "RGBA")
-    for index in range(7):
-        progress = (t * 1.9 + index / 7) % 1
-        x1 = 122 - progress * 92
-        y = 128 + index * 18 + 5 * math.sin(phase + index)
-        length = 18 + 34 * (1 - progress)
-        alpha = round(170 * (1 - progress))
-        draw.line(((x1 - length) * SUPERSAMPLE, y * SUPERSAMPLE, x1 * SUPERSAMPLE, y * SUPERSAMPLE), fill=(INK[0], INK[1], INK[2], alpha), width=max(2, round(1.6 * SUPERSAMPLE)))
-    draw_whale(image, center=center, scale=0.80, angle=1.5 * math.sin(phase * 2), tail_phase=phase * 4.2, fin_phase=phase * 2.5)
-    # Orbiting work particles read as gears without tiny detailed iconography.
-    for index in range(3):
-        a = phase * 1.6 + index * math.tau / 3
-        x = 265 + math.cos(a) * (17 + index * 2)
-        y = 167 + math.sin(a) * (17 + index * 2)
-        r = 2.8 + index * 0.7
-        draw.regular_polygon((x * SUPERSAMPLE, y * SUPERSAMPLE, r * SUPERSAMPLE), n_sides=6, rotation=math.degrees(a), fill=(INK[0], INK[1], INK[2], 150))
-    return finish(image)
+    # A separate speed-stroke layer identifies tool activity without redrawing the body.
+    left, top, _, bottom = _subject_bbox(image)
+    center_y = (top + bottom) / 2
+    for index, offset in enumerate((-9, 0, 9)):
+        pulse = 0.5 + 0.5 * math.sin(phase * 2 + index * 1.4)
+        x2 = max(24, left - 5 - index * 3)
+        y = center_y + offset
+        length = 24 + 18 * pulse
+        draw.line(
+            ((x2 - length, y), (x2, y + math.sin(phase + index) * 2)),
+            fill=(0, 0, 0, round(130 + 95 * pulse)),
+            width=3,
+        )
+    return image
 
 
 def render_compose(t: float) -> Image.Image:
-    image = blank()
+    # Ping-pong through Classic's underwater tail-first arc (frames 240..360).
+    # Cosine timing reaches each end with zero velocity and returns without a cut.
     phase = math.tau * t
-    center = (157 + 5 * math.sin(phase), 181 + 7 * math.sin(phase * 1.2))
-    snout = draw_whale(image, center=center, scale=0.78, angle=-2.5 + 2 * math.sin(phase), tail_phase=phase * 2.2, fin_phase=phase)
+    position = 300.0 - 60.0 * math.cos(phase)
+    image = _sample_legacy("classic", position)
     draw = ImageDraw.Draw(image, "RGBA")
-    shapes = ("circle", "square", "circle", "diamond", "square")
-    for index, shape in enumerate(shapes):
-        progress = (t * 0.95 + index * 0.19) % 1
-        x = snout[0] + 16 + 112 * progress
-        y = snout[1] - 14 - 25 * math.sin(progress * math.pi) + 5 * math.sin(index + phase)
-        size = 4.8 - progress * 1.8
-        alpha = round(210 * (1 - progress) ** 0.7)
-        bounds = ((x - size) * SUPERSAMPLE, (y - size) * SUPERSAMPLE, (x + size) * SUPERSAMPLE, (y + size) * SUPERSAMPLE)
-        if shape == "circle":
-            draw.ellipse(bounds, fill=(INK[0], INK[1], INK[2], alpha))
-        elif shape == "square":
-            draw.rounded_rectangle(bounds, radius=max(1, round(size * 0.5 * SUPERSAMPLE)), fill=(INK[0], INK[1], INK[2], alpha))
-        else:
-            draw.polygon(transform([(0, -size), (size, 0), (0, size), (-size, 0)], x, y, 1, 0), fill=(INK[0], INK[1], INK[2], alpha))
-    return finish(image)
+    for index in range(4):
+        progress = (t + index * 0.22) % 1
+        x = 260 + 54 * progress
+        y = 118 - 24 * math.sin(progress * math.pi) + 3 * math.sin(phase + index)
+        radius = 1.4 + (1 - progress) * 1.5
+        draw.ellipse(
+            (x - radius, y - radius, x + radius, y + radius),
+            fill=(0, 0, 0, round(165 * (1 - progress))),
+        )
+    return image
+
+
+def render_idle(t: float) -> Image.Image:
+    # A gentle pass across Dive frames 45..65 (wrapping through the original
+    # seam) preserves its waterline and long-tail underwater turn.
+    phase = math.tau * t
+    position = 55.0 - 10.0 * math.cos(phase)
+    return _sample_legacy("dive", position)
 
 
 def render_alert(t: float) -> Image.Image:
-    image = blank()
+    # Classic frames 88..170 contain a real surface curl into a sudden spy-hop.
+    # The return leg reuses the same full-body silhouettes in reverse for recoil.
     phase = math.tau * t
-    pulse = 0.5 + 0.5 * math.sin(phase * 2)
-    center = (169 + 5 * math.sin(phase * 2), 185 + 3 * math.cos(phase * 2))
-    draw_whale(image, center=center, scale=0.78, angle=7 * math.sin(phase * 2), tail_phase=phase * 3.1, fin_phase=phase * 2, eye_open=1)
+    pulse = 0.5 - 0.5 * math.cos(phase)
+    position = 129.0 - 41.0 * math.cos(phase)
+    image = _sample_legacy("classic", position)
     draw = ImageDraw.Draw(image, "RGBA")
-    bubble_center = (263, 109)
-    radius = 27 + 7 * pulse
-    draw.ellipse(((bubble_center[0] - radius) * SUPERSAMPLE, (bubble_center[1] - radius) * SUPERSAMPLE, (bubble_center[0] + radius) * SUPERSAMPLE, (bubble_center[1] + radius) * SUPERSAMPLE), outline=(INK[0], INK[1], INK[2], round(100 + 120 * pulse)), width=max(3, round(2.5 * SUPERSAMPLE)))
-    draw.rounded_rectangle(((bubble_center[0] - 3.2) * SUPERSAMPLE, (bubble_center[1] - 13) * SUPERSAMPLE, (bubble_center[0] + 3.2) * SUPERSAMPLE, (bubble_center[1] + 6) * SUPERSAMPLE), radius=2 * SUPERSAMPLE, fill=INK)
-    draw.ellipse(((bubble_center[0] - 3.4) * SUPERSAMPLE, (bubble_center[1] + 12) * SUPERSAMPLE, (bubble_center[0] + 3.4) * SUPERSAMPLE, (bubble_center[1] + 18.8) * SUPERSAMPLE), fill=INK)
-    return finish(image)
+    for index, angle in enumerate((-38, -8, 22)):
+        radians = math.radians(angle)
+        inner = 16 + index * 2
+        outer = inner + 5 + 10 * pulse
+        anchor = (253, 113)
+        start = (anchor[0] + math.cos(radians) * inner, anchor[1] + math.sin(radians) * inner)
+        end = (anchor[0] + math.cos(radians) * outer, anchor[1] + math.sin(radians) * outer)
+        draw.line(
+            (start, end),
+            fill=(0, 0, 0, round(35 + 190 * pulse)),
+            width=2,
+        )
+    return image
 
 
 def state_specs() -> list[StateSpec]:
     return [
-        StateSpec("dive", "DEEP DIVE", "Breach, roll and return below the surface", render_dive, preview_frame=28),
-        StateSpec("sonar", "SONAR", "Expanding echolocation rings for discovery", render_sonar, preview_frame=22),
-        StateSpec("work", "TOOL RUN", "Fast tail cadence, speed trails and work particles", render_work, preview_frame=17),
-        StateSpec("compose", "STREAM", "Token-like particles flow from the whale's path", render_compose, preview_frame=23),
-        StateSpec("idle", "CALM", "Low-motion breathing loop for waiting periods", render_idle, preview_frame=13),
-        StateSpec("alert", "RETRY", "A restrained attention pulse for errors or retries", render_alert, playlist=False, preview_frame=16),
+        StateSpec(
+            "dive",
+            "REFINED DIVE",
+            "The v0.3 refined loop, retained byte-for-byte",
+            None,
+            preview_frame=28,
+            source="legacy",
+            preserved_from=LEGACY_REFINED_COMMIT,
+        ),
+        StateSpec(
+            "classic",
+            "CLASSIC",
+            "The first published loop, retained byte-for-byte",
+            None,
+            preview_frame=20,
+            source="legacy",
+            preserved_from=LEGACY_CLASSIC_COMMIT,
+        ),
+        StateSpec(
+            "sonar",
+            "SONAR",
+            "Spine-driven cruise with expanding discovery rings",
+            render_sonar,
+            preview_frame=22,
+        ),
+        StateSpec(
+            "work",
+            "TOOL RUN",
+            "Retimed Refined Dive breach, long-tail flip and re-entry with speed strokes",
+            render_work,
+            preview_frame=18,
+            derived_from=("whale-dive.webp",),
+        ),
+        StateSpec(
+            "compose",
+            "STREAM",
+            "Classic tail-first underwater S-curve with a restrained output-droplet arc",
+            render_compose,
+            preview_frame=12,
+            derived_from=("whale-classic.webp",),
+        ),
+        StateSpec(
+            "idle",
+            "CALM",
+            "Refined Dive waterline hover with a gentle long-tail turn",
+            render_idle,
+            preview_frame=12,
+            derived_from=("whale-dive.webp",),
+        ),
+        StateSpec(
+            "alert",
+            "RETRY",
+            "Classic surface curl into a sudden spy-hop and full-body recoil",
+            render_alert,
+            playlist=False,
+            preview_frame=24,
+            derived_from=("whale-classic.webp",),
+        ),
     ]

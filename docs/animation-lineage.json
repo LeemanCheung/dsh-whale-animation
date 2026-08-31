@@ -1,0 +1,178 @@
+{
+  "schemaVersion": 1,
+  "identityRule": "Only the preserved Refined Dive and Classic black-and-white animations define the character and motion language for Work, Compose, Idle, and Alert. Sonar is retained. The blue static-logo direction is explicitly excluded.",
+  "identityReferences": [
+    {
+      "file": "assets/whale-dive.webp",
+      "role": "immutable visual and motion anchor",
+      "sourceCommit": "65e1205d1fbf4b01997e6dfc099103b0f9717e37",
+      "sha256": "85e3d1109e2e18c8212d0c9f44ef7e76da42cbe67257fd05529bf3469a0da9a0"
+    },
+    {
+      "file": "assets/whale-classic.webp",
+      "role": "immutable visual and motion anchor",
+      "sourceCommit": "95b06e3f0e6ea817d25858eb29f7064a233b3c65",
+      "sha256": "8af06383ee40b3dea678091f4953444235e1b27f52f70e887ead98cd0c04e6c4"
+    },
+    {
+      "file": "docs/motion-contact-sheet.png",
+      "role": "primary image-generation reference; only the Dive and Classic rows are identity anchors"
+    }
+  ],
+  "imageGeneration": {
+    "mode": "built-in image_gen",
+    "useCase": "stylized-concept and identity-preserve pose studies",
+    "runtimeUse": "The studies are composition references only. No provider pixels are copied into runtime assets.",
+    "transparencyFact": "Every accepted pose study is an RGB image on a white background with no alpha channel. Provider transparency is not claimed. Runtime WebP and PNG assets are independently redrawn by the deterministic Pillow RGBA pipeline.",
+    "studies": [
+      {
+        "round": 1,
+        "state": "work",
+        "file": "artwork-sources/imagegen-v2/work-key-pose-v1.png",
+        "sha256": "884b64d33d51a60f0341bd5ce249d0be669bb6af52aa96d363440cc561c4c73d",
+        "bytes": 998763,
+        "pixelProfile": {"mode": "RGB", "size": [1536, 1024], "alphaChannel": false},
+        "disposition": "retained as forward-surge action inspiration only; not accepted as body identity",
+        "prompt": [
+          "Use case: stylized-concept",
+          "Asset type: animation key-pose reference for a 60–84 px UI companion",
+          "Input images: Image 1 is a motion contact sheet. Use ONLY the first two rows, REFINED DIVE and CLASSIC, as the character identity and visual-language reference. Ignore the blue fish-like rows below them.",
+          "Primary request: create one clean WORK action key pose of the same tiny black whale character from those first two rows, shown in full-body side view driving forward with a strong living C-curve through the torso and a long flexible tail stock.",
+          "Scene/backdrop: flat pure white background, no transparency checkerboard.",
+          "Subject: small black ink whale silhouette with a blunt rounded whale head, tapered torso, very long narrow caudal peduncle, two broad horizontal flukes, one small swept pectoral fin, tiny white eye; include one restrained waterline/splash or ink-speed accent like the first two animations.",
+          "Style/medium: minimal hand-inked black-and-white silhouette, slightly organic edges, faithful to the first two rows; not a polished corporate logo.",
+          "Composition/framing: one whale only, centered with generous white margin, whole body visible, facing right.",
+          "Color palette: pure black and white only.",
+          "Constraints: must read as the same character as the first two rows at thumbnail size; dynamic whole-body bend; no text, no labels, no watermark.",
+          "Avoid: any blue or navy; DeepSeek official blue static icon; generic fish, tuna, shark, humpback realism, dorsal fin, short forked fish tail, thick oval mascot body, complex fin texture, gradients, gray, 3D, multiple frames, sprite sheet."
+        ]
+      },
+      {
+        "round": 1,
+        "state": "compose",
+        "file": "artwork-sources/imagegen-v2/compose-key-pose-v1.png",
+        "sha256": "6dbf690f6191afdb5ce225cb73c51ad08854ca0d1e4bf3ec3bcfb09df02018c8",
+        "bytes": 730693,
+        "pixelProfile": {"mode": "RGB", "size": [1254, 1254], "alphaChannel": false},
+        "disposition": "retained as upward-curve action inspiration only; not accepted as body identity",
+        "prompt": [
+          "Use case: stylized-concept",
+          "Asset type: animation key-pose reference for a 60–84 px UI companion",
+          "Input images: Image 1 is a motion contact sheet. Use ONLY the first two rows, REFINED DIVE and CLASSIC, as the character identity and visual-language reference. Ignore all blue fish-like rows below.",
+          "Primary request: create one clean COMPOSE action key pose of the same tiny black whale character, the whale curling upward as if surfacing while a restrained arc of four black ink droplets flows from its motion.",
+          "Scene/backdrop: flat pure white background, no transparency checkerboard.",
+          "Subject: small black ink whale silhouette with a blunt rounded head, tapered flexible torso, long narrow caudal peduncle, two broad horizontal flukes, one small pectoral fin, tiny white eye; strong visible whole-body S-curve.",
+          "Style/medium: minimal hand-inked black-and-white silhouette with the organic splash language of the first two rows, not a polished corporate logo.",
+          "Composition/framing: one whale only, whole body visible, centered with generous white margin, facing right/upward.",
+          "Color palette: pure black and white only.",
+          "Constraints: must read as the same character as the first two rows at thumbnail size; no text, no labels, no watermark.",
+          "Avoid: any blue or navy; DeepSeek official blue static icon; generic fish, tuna, shark, humpback realism, dorsal fin, short forked fish tail, thick oval mascot body, complex fin texture, gradients, gray, 3D, multiple frames, sprite sheet."
+        ]
+      },
+      {
+        "round": 1,
+        "state": "idle",
+        "file": "artwork-sources/imagegen-v2/idle-key-pose-v1.png",
+        "sha256": "cd4907cc8c76cd2cf311e7e0b2f06b3b1ce02554687894fd93e1f8b052901e49",
+        "bytes": 741622,
+        "pixelProfile": {"mode": "RGB", "size": [1254, 1254], "alphaChannel": false},
+        "disposition": "retained as hover action inspiration only; not accepted as body identity",
+        "prompt": [
+          "Use case: stylized-concept",
+          "Asset type: animation key-pose reference for a 60–84 px UI companion",
+          "Input images: Image 1 is a motion contact sheet. Use ONLY the first two rows, REFINED DIVE and CLASSIC, as the character identity and visual-language reference. Ignore all blue fish-like rows below.",
+          "Primary request: create one clean IDLE key pose of the same tiny black whale character, floating just under a thin hand-inked waterline with its whole body relaxed in a gentle S-curve and its long tail slowly hanging and turning.",
+          "Scene/backdrop: flat pure white background, no transparency checkerboard.",
+          "Subject: small black ink whale silhouette with a blunt rounded whale head, tapered flexible torso, very long narrow caudal peduncle, two broad horizontal flukes, one small swept pectoral fin, tiny white eye; add at most two tiny bubbles.",
+          "Style/medium: minimal hand-inked black-and-white silhouette with organic line edges and waterline language matching the first two rows; not a polished corporate logo.",
+          "Composition/framing: one whale only, centered with generous white margin, whole body visible, facing right.",
+          "Color palette: pure black and white only.",
+          "Constraints: must read as the same character as the first two rows at thumbnail size; calm but visibly living body posture; no text, no labels, no watermark.",
+          "Avoid: any blue or navy; DeepSeek official blue static icon; generic fish, tuna, shark, humpback realism, dorsal fin, short forked fish tail, thick oval mascot body, complex fin texture, gradients, gray, 3D, multiple frames, sprite sheet."
+        ]
+      },
+      {
+        "round": 1,
+        "state": "alert",
+        "file": "artwork-sources/imagegen-v2/alert-key-pose-v1.png",
+        "sha256": "415d36e324729a6b06334f7c617d7f01443f9e91c4a19515b601377e970b2c9e",
+        "bytes": 737555,
+        "pixelProfile": {"mode": "RGB", "size": [1254, 1254], "alphaChannel": false},
+        "disposition": "retained as recoil action inspiration only; not accepted as body identity",
+        "prompt": [
+          "Use case: stylized-concept",
+          "Asset type: animation key-pose reference for a 60–84 px UI companion",
+          "Input images: Image 1 is a motion contact sheet. Use ONLY the first two rows, REFINED DIVE and CLASSIC, as the character identity and visual-language reference. Ignore all blue fish-like rows below.",
+          "Primary request: create one clean ALERT/RETRY action key pose of the same tiny black whale character, recoiling into a compact C-curve with the tail sweeping forward and a restrained splash/three short ink attention strokes near the head.",
+          "Scene/backdrop: flat pure white background, no transparency checkerboard.",
+          "Subject: small black ink whale silhouette with a blunt rounded whale head, tapered flexible torso, very long narrow caudal peduncle, two broad horizontal flukes, one small swept pectoral fin, tiny white eye; the whole body must visibly curl.",
+          "Style/medium: minimal hand-inked black-and-white silhouette with organic splash language matching the first two rows, not a polished corporate logo.",
+          "Composition/framing: one whale only, centered with generous white margin, whole body visible.",
+          "Color palette: pure black and white only.",
+          "Constraints: must read as the same character as the first two rows at thumbnail size; compact but legible full-body recoil; no text, no labels, no watermark.",
+          "Avoid: any blue or navy; DeepSeek official blue static icon; generic fish, tuna, shark, humpback realism, dorsal fin, short forked fish tail, thick oval mascot body, complex fin texture, gradients, gray, 3D, multiple frames, sprite sheet."
+        ]
+      },
+      {
+        "round": 2,
+        "state": "work",
+        "file": "artwork-sources/imagegen-v2/work-key-pose-v2.png",
+        "sha256": "956c007f1b285875bc1c2a4487d21749ba085822e02d26bd85dd5b97185ff978",
+        "bytes": 965800,
+        "pixelProfile": {"mode": "RGB", "size": [1536, 1024], "alphaChannel": false},
+        "disposition": "retained as a second-round proportion study only; visual review still rejected it as a horizontal fish/capsule body at 60 px",
+        "prompt": [
+          "Use case: identity-preserve",
+          "Asset type: second-round animation key-pose reference for a 60–84 px UI companion",
+          "Input images: Image 1 is the updated motion contact sheet; Image 2 is the first-round WORK pose study. In Image 1, REFINED DIVE and CLASSIC are the immutable identity/style anchors; WORK is the current draft to improve. Image 2 is only a pose/proportion study.",
+          "Primary request: refine one WORK action key pose so it reads much closer to the tiny black whale in REFINED DIVE and CLASSIC, while keeping the same forward-surging action.",
+          "Change only: make the head and eye less mascot-like, narrow the midsection, emphasize the very long flexible tail stock and broad horizontal flukes, and add a restrained hand-inked water/speed accent.",
+          "Keep: one full-body whale, facing right, strong living C-curve, pure black-and-white, generous white margin.",
+          "Scene/backdrop: flat pure white background; no transparency checkerboard.",
+          "Style/medium: sparse hand-inked animation silhouette, slightly imperfect organic edges, like the first two rows rather than a polished corporate logo.",
+          "Constraints: legible at 60 px; no text, labels, extra animals, watermark.",
+          "Avoid: blue or navy; official blue static icon; giant white eye; smiley mouth; generic fish/tuna/shark; dorsal fin; short forked tail; thick oval mascot; photoreal humpback; complex fin texture; gray; gradients; 3D; multiple frames; sprite sheet."
+        ]
+      }
+    ]
+  },
+  "rejectedDirections": [
+    {
+      "direction": "pure-black procedural replacement body",
+      "reason": "Although palette and alpha gates passed, independent 60 px review still read Work, Idle, and Alert as an ordinary horizontal fish or tadpole; Compose lacked the preserved loops' full flip and water interaction.",
+      "repositoryDisposition": "removed from accepted runtime identity; final states derive their body pixels from the real Dive/Classic alpha frames"
+    },
+    {
+      "direction": "blue official/static icon",
+      "reason": "Explicitly rejected by the user; it does not match Dive/Classic black-and-white motion language.",
+      "repositoryDisposition": "not referenced, not packaged, not included in this repository lineage"
+    },
+    {
+      "direction": "photorealistic humpback studies",
+      "reason": "Wrong character identity and too much realistic fin/body texture for a 60–84 px UI companion.",
+      "repositoryDisposition": "rejected before integration; no trial image retained in the repository"
+    },
+    {
+      "direction": "provider transparent outputs with fully opaque alpha or baked checkerboard",
+      "reason": "Not genuine transparency and unsafe for runtime compositing.",
+      "repositoryDisposition": "rejected before integration; no failed transparent image retained in the repository"
+    }
+  ],
+  "runtimeAssets": {
+    "states": ["work", "compose", "idle", "alert"],
+    "animatedFormat": "lossless animated WebP",
+    "reducedMotionFormat": "PNG",
+    "framesPerState": 48,
+    "frameDurationMs": 40,
+    "canvas": [352, 352],
+    "generator": ["scripts/whale_assets/states.py:_legacy_ink_frames", "scripts/whale_assets/states.py:_sample_legacy"],
+    "derivedFrom": {
+      "work": ["assets/whale-dive.webp"],
+      "compose": ["assets/whale-classic.webp"],
+      "idle": ["assets/whale-dive.webp"],
+      "alert": ["assets/whale-classic.webp"]
+    },
+    "alphaAndIdentityEvidence": ["docs/style-identity-audit.json", "docs/style-identity-contact-sheet.png"],
+    "motionEvidence": ["docs/motion-audit.json", "docs/motion-contact-sheet.png", "docs/rebuilt-states-real-speed.webp", "docs/rebuilt-states-real-speed.json"]
+  }
+}

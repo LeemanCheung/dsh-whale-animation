@@ -14,14 +14,30 @@ if (!manifest.states || typeof manifest.states !== 'object') throw new Error('An
 if (!manifest.states[manifest.defaultState]) throw new Error(`Default state does not exist: ${manifest.defaultState}`)
 
 const stateKeys = Object.keys(manifest.states)
+const animatedNames = new Set()
+const staticNames = new Set()
 const assets = {}
 let sourceAssetBytes = 0
 for (const state of stateKeys) {
   const entry = manifest.states[state]
+  const expectedAnimated = `whale-${state}.webp`
+  const expectedStatic = `whale-${state}.png`
+  if (entry.animated !== expectedAnimated) throw new Error(`${state}: animated mapping must be ${expectedAnimated}, got ${entry.animated}`)
+  if (entry.static !== expectedStatic) throw new Error(`${state}: static mapping must be ${expectedStatic}, got ${entry.static}`)
+  if (animatedNames.has(entry.animated)) throw new Error(`${state}: animated asset is mapped more than once`)
+  if (staticNames.has(entry.static)) throw new Error(`${state}: static asset is mapped more than once`)
+  animatedNames.add(entry.animated)
+  staticNames.add(entry.static)
   const animatedPath = resolve(root, 'assets', entry.animated)
   const staticPath = resolve(root, 'assets', entry.static)
   const animated = await readFile(animatedPath)
   const reduced = await readFile(staticPath)
+  if (animated.subarray(0, 4).toString('ascii') !== 'RIFF' || animated.subarray(8, 12).toString('ascii') !== 'WEBP') {
+    throw new Error(`${state}: animated mapping is not a WebP payload`)
+  }
+  if (!reduced.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]))) {
+    throw new Error(`${state}: static mapping is not a PNG payload`)
+  }
   sourceAssetBytes += animated.byteLength + reduced.byteLength
   const animatedMime = extname(animatedPath) === '.webp' ? 'image/webp' : 'application/octet-stream'
   const staticMime = extname(staticPath) === '.png' ? 'image/png' : 'application/octet-stream'
@@ -29,6 +45,9 @@ for (const state of stateKeys) {
     animated: `data:${animatedMime};base64,${animated.toString('base64')}`,
     static: `data:${staticMime};base64,${reduced.toString('base64')}`,
   }
+}
+for (const state of manifest.playlist) {
+  if (!assets[state]) throw new Error(`Playlist references an unmapped state: ${state}`)
 }
 
 const hostSelector = '[data-dsh-whale-host="true"]'
@@ -71,7 +90,7 @@ for (const [placeholder, value] of replacements) {
 }
 if (/__WHALE_[A-Z0-9_]+__/.test(body)) throw new Error('Unresolved runtime placeholder remains')
 
-const client = `window.__ModuleLoader__.load({\n  id: "dsh-whale-animation",\n  factory: (require) => {\n    var module = { exports: {} };\n    var exports = module.exports;\n${body.split('\n').map(line => `    ${line}`).join('\n')}\n    return module.exports;\n  }\n});\n`
+const client = `window.__ModuleLoader__.load({\n  id: "dsh-whale-animation",\n  factory: (require) => {\n    var module = { exports: {} };\n    var exports = module.exports;\n${body.split('\n').map(line => line === '' ? '' : `    ${line}`).join('\n')}\n    return module.exports;\n  }\n});\n`
 
 await mkdir(resolve(root, 'lib'), { recursive: true })
 await writeFile(resolve(root, 'lib/client.js'), client, 'utf8')

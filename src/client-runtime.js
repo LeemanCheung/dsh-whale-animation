@@ -9,6 +9,13 @@ const DEFAULT_STATE = __WHALE_DEFAULT_STATE__;
 const PLAYLIST_INTERVAL_MS = __WHALE_PLAYLIST_INTERVAL_MS__;
 const css = __WHALE_CSS__;
 
+const EXACT_STATE_ALIASES = new Map([
+  ['classic', 'classic'],
+  ['original', 'classic'],
+  ['经典', 'classic'],
+  ['原版', 'classic'],
+]);
+
 const KEYWORD_GROUPS = [
   {
     state: 'alert',
@@ -47,6 +54,8 @@ function normalizeText(value) {
 function resolveWhaleState(text) {
   const normalized = normalizeText(text);
   if (normalized === '') return null;
+  const exact = EXACT_STATE_ALIASES.get(normalized);
+  if (exact && STATE_KEYS.includes(exact)) return exact;
   for (const group of KEYWORD_GROUPS) {
     if (!STATE_KEYS.includes(group.state)) continue;
     if (group.keywords.some(keyword => normalized.includes(keyword))) return group.state;

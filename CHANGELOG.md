@@ -2,6 +2,22 @@
 
 All notable changes to this project are documented here.
 
+## Unreleased
+
+### Fixed
+
+- Materialized the readable v0.5 source that had remained inside the temporary CI payload and removed the self-deleting payload path.
+- Restored the intended seven-state contract across the manifest, playlist, prebuilt client, documentation, and browser fixture while retaining native 352×352 and 184×184 canvases for the two byte-preserved loops.
+- Made every generated-state phase periodic, reducing loop-seam jumps from as high as 4.49× ordinary motion to 1.07–1.46×.
+- Rebuilt Work, Stream, Calm, and Retry as pure-black long-tail ink whales derived from the preserved Dive/Classic motion language; Sonar remains unchanged.
+- Tightened build/runtime mapping checks so every state must resolve to its matching animated WebP and reduced-motion PNG.
+
+### Added
+
+- Added a visible-frame motion audit, deterministic 12-frame contact sheet, and JSON evidence report that reject abrupt seams and low-diversity frame padding.
+- Added an 84/60 px style and identity gate that rejects blue/chromatic pixels, false transparency, complex interior detail, and fragmented or undersized silhouettes.
+- Added a true-cadence four-state preview plus built-in ImageGen prompt, source hash, alpha fact, and rejected-direction lineage.
+
 ## [0.5.0] - 2026-08-27
 
 ### Added

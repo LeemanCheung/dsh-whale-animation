@@ -1,0 +1,288 @@
+{
+  "schemaVersion": 1,
+  "identityAnchors": [
+    "dive",
+    "classic"
+  ],
+  "targetStates": [
+    "work",
+    "compose",
+    "idle",
+    "alert"
+  ],
+  "displayFrames": {
+    "dive": 22,
+    "classic": 112,
+    "work": 18,
+    "compose": 12,
+    "idle": 12,
+    "alert": 24
+  },
+  "displaySizes": [
+    84,
+    60
+  ],
+  "thresholds": {
+    "visibleAlpha": 32,
+    "maximumChromaticVisibleRatio": 0.0,
+    "maximumBlueDominantVisibleRatio": 0.0,
+    "maximumLightDetailVisibleRatio": 0.012,
+    "minimumTransparentRatio": 0.45,
+    "minimumMainComponentRatio": 0.52,
+    "maximumMainComponentHoles": 4,
+    "minimumMainComponentWidth": {
+      "84": 20,
+      "60": 14
+    }
+  },
+  "states": {
+    "work": {
+      "framesChecked": 48,
+      "staticMatchesAnimatedFrame": 18,
+      "palette": {
+        "alphaExtrema": [
+          [
+            0,
+            255
+          ]
+        ],
+        "transparentRatio": 0.953755,
+        "chromaticVisibleRatio": 0.0,
+        "blueDominantVisibleRatio": 0.0,
+        "lightDetailVisibleRatio": 0.0
+      },
+      "staticPalette": {
+        "alphaExtrema": [
+          [
+            0,
+            255
+          ]
+        ],
+        "transparentRatio": 0.950978,
+        "chromaticVisibleRatio": 0.0,
+        "blueDominantVisibleRatio": 0.0,
+        "lightDetailVisibleRatio": 0.0
+      },
+      "display": {
+        "84": {
+          "visiblePixels": 416,
+          "componentCount": 4,
+          "mainComponentPixels": 246,
+          "mainComponentRatio": 0.591346,
+          "mainComponentBounds": [
+            29,
+            11,
+            59,
+            32
+          ],
+          "mainComponentWidth": 30,
+          "mainComponentHeight": 21,
+          "mainComponentHoles": 0
+        },
+        "60": {
+          "visiblePixels": 239,
+          "componentCount": 4,
+          "mainComponentPixels": 128,
+          "mainComponentRatio": 0.535565,
+          "mainComponentBounds": [
+            21,
+            8,
+            42,
+            23
+          ],
+          "mainComponentWidth": 21,
+          "mainComponentHeight": 15,
+          "mainComponentHoles": 0
+        }
+      }
+    },
+    "compose": {
+      "framesChecked": 48,
+      "staticMatchesAnimatedFrame": 12,
+      "palette": {
+        "alphaExtrema": [
+          [
+            0,
+            255
+          ]
+        ],
+        "transparentRatio": 0.911848,
+        "chromaticVisibleRatio": 0.0,
+        "blueDominantVisibleRatio": 0.0,
+        "lightDetailVisibleRatio": 0.0
+      },
+      "staticPalette": {
+        "alphaExtrema": [
+          [
+            0,
+            255
+          ]
+        ],
+        "transparentRatio": 0.909551,
+        "chromaticVisibleRatio": 0.0,
+        "blueDominantVisibleRatio": 0.0,
+        "lightDetailVisibleRatio": 0.0
+      },
+      "display": {
+        "84": {
+          "visiblePixels": 580,
+          "componentCount": 7,
+          "mainComponentPixels": 368,
+          "mainComponentRatio": 0.634483,
+          "mainComponentBounds": [
+            14,
+            54,
+            56,
+            78
+          ],
+          "mainComponentWidth": 42,
+          "mainComponentHeight": 24,
+          "mainComponentHoles": 2
+        },
+        "60": {
+          "visiblePixels": 319,
+          "componentCount": 5,
+          "mainComponentPixels": 203,
+          "mainComponentRatio": 0.636364,
+          "mainComponentBounds": [
+            10,
+            37,
+            40,
+            56
+          ],
+          "mainComponentWidth": 30,
+          "mainComponentHeight": 19,
+          "mainComponentHoles": 1
+        }
+      }
+    },
+    "idle": {
+      "framesChecked": 48,
+      "staticMatchesAnimatedFrame": 12,
+      "palette": {
+        "alphaExtrema": [
+          [
+            0,
+            255
+          ]
+        ],
+        "transparentRatio": 0.954205,
+        "chromaticVisibleRatio": 0.0,
+        "blueDominantVisibleRatio": 0.0,
+        "lightDetailVisibleRatio": 0.0
+      },
+      "staticPalette": {
+        "alphaExtrema": [
+          [
+            0,
+            255
+          ]
+        ],
+        "transparentRatio": 0.962955,
+        "chromaticVisibleRatio": 0.0,
+        "blueDominantVisibleRatio": 0.0,
+        "lightDetailVisibleRatio": 0.0
+      },
+      "display": {
+        "84": {
+          "visiblePixels": 345,
+          "componentCount": 3,
+          "mainComponentPixels": 216,
+          "mainComponentRatio": 0.626087,
+          "mainComponentBounds": [
+            24,
+            61,
+            55,
+            76
+          ],
+          "mainComponentWidth": 31,
+          "mainComponentHeight": 15,
+          "mainComponentHoles": 2
+        },
+        "60": {
+          "visiblePixels": 199,
+          "componentCount": 3,
+          "mainComponentPixels": 115,
+          "mainComponentRatio": 0.577889,
+          "mainComponentBounds": [
+            17,
+            43,
+            39,
+            54
+          ],
+          "mainComponentWidth": 22,
+          "mainComponentHeight": 11,
+          "mainComponentHoles": 0
+        }
+      }
+    },
+    "alert": {
+      "framesChecked": 48,
+      "staticMatchesAnimatedFrame": 24,
+      "palette": {
+        "alphaExtrema": [
+          [
+            0,
+            255
+          ]
+        ],
+        "transparentRatio": 0.915028,
+        "chromaticVisibleRatio": 0.0,
+        "blueDominantVisibleRatio": 0.0,
+        "lightDetailVisibleRatio": 0.0
+      },
+      "staticPalette": {
+        "alphaExtrema": [
+          [
+            0,
+            255
+          ]
+        ],
+        "transparentRatio": 0.908817,
+        "chromaticVisibleRatio": 0.0,
+        "blueDominantVisibleRatio": 0.0,
+        "lightDetailVisibleRatio": 0.0
+      },
+      "display": {
+        "84": {
+          "visiblePixels": 602,
+          "componentCount": 8,
+          "mainComponentPixels": 570,
+          "mainComponentRatio": 0.946844,
+          "mainComponentBounds": [
+            13,
+            2,
+            70,
+            41
+          ],
+          "mainComponentWidth": 57,
+          "mainComponentHeight": 39,
+          "mainComponentHoles": 4
+        },
+        "60": {
+          "visiblePixels": 329,
+          "componentCount": 10,
+          "mainComponentPixels": 310,
+          "mainComponentRatio": 0.942249,
+          "mainComponentBounds": [
+            9,
+            1,
+            50,
+            30
+          ],
+          "mainComponentWidth": 41,
+          "mainComponentHeight": 29,
+          "mainComponentHoles": 1
+        }
+      }
+    }
+  },
+  "contactSheet": {
+    "file": "style-identity-contact-sheet.png",
+    "size": [
+      1018,
+      392
+    ],
+    "sha256": "7635fc0ea9ef27be14c1c059aef7d1741918e31eaa895bf17a868a65d77e3797"
+  }
+}

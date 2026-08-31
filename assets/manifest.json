@@ -4,99 +4,164 @@
     352,
     352
   ],
+  "canvasScope": "generated-states",
   "defaultState": "dive",
   "playlist": [
     "dive",
+    "classic",
     "sonar",
     "work",
     "compose",
     "idle"
   ],
-  "playlistIntervalMs": 9000,
+  "playlistIntervalMs": 11000,
   "states": {
     "dive": {
-      "label": "DEEP DIVE",
-      "summary": "Breach, roll and return below the surface",
+      "label": "REFINED DIVE",
+      "summary": "The v0.3 refined loop, retained byte-for-byte",
       "playlist": true,
+      "source": "legacy",
       "animated": "whale-dive.webp",
       "static": "whale-dive.png",
-      "frames": 48,
-      "frameDurationMs": 40,
-      "loopDurationMs": 1920,
-      "animatedBytes": 183024,
-      "staticBytes": 7789,
-      "animatedSha256": "0312553101925f5779f2df01caa786681c6af2d894b72581d119f846b66f7f25",
-      "staticSha256": "c5fa44755e4013e854c6cd3b6714c35d2661586e4c568fdd462227c1a03cdac9"
+      "canvas": [
+        352,
+        352
+      ],
+      "frames": 60,
+      "frameDurationMs": 33,
+      "loopDurationMs": 1980,
+      "animatedBytes": 78820,
+      "staticBytes": 2623,
+      "animatedSha256": "85e3d1109e2e18c8212d0c9f44ef7e76da42cbe67257fd05529bf3469a0da9a0",
+      "staticSha256": "fad20e84aad96109c2da55a5d2deb1acf84274e5e58d1d1120725447f4342090",
+      "preservedFrom": "65e1205d1fbf4b01997e6dfc099103b0f9717e37"
+    },
+    "classic": {
+      "label": "CLASSIC",
+      "summary": "The first published loop, retained byte-for-byte",
+      "playlist": true,
+      "source": "legacy",
+      "animated": "whale-classic.webp",
+      "static": "whale-classic.png",
+      "canvas": [
+        184,
+        184
+      ],
+      "frames": 618,
+      "frameDurationMs": 17,
+      "loopDurationMs": 10506,
+      "animatedBytes": 629936,
+      "staticBytes": 3630,
+      "animatedSha256": "8af06383ee40b3dea678091f4953444235e1b27f52f70e887ead98cd0c04e6c4",
+      "staticSha256": "85fe361d6c54741e88af4542aaaac5473d98f5be3cd0e1ecfc921d747a36f7d7",
+      "preservedFrom": "95b06e3f0e6ea817d25858eb29f7064a233b3c65"
     },
     "sonar": {
       "label": "SONAR",
-      "summary": "Expanding echolocation rings for discovery",
+      "summary": "Spine-driven cruise with expanding discovery rings",
       "playlist": true,
+      "source": "generated",
       "animated": "whale-sonar.webp",
       "static": "whale-sonar.png",
+      "canvas": [
+        352,
+        352
+      ],
       "frames": 48,
       "frameDurationMs": 40,
       "loopDurationMs": 1920,
-      "animatedBytes": 231090,
-      "staticBytes": 11481,
-      "animatedSha256": "db04425c973ff1028493da533fa7a59c3c163928066f6386bed39c8280c17f4d",
-      "staticSha256": "1cf822a3e9d2a39c86f5b16a2ee20362eb859f6e91b90a4dfef420731fd70df4"
+      "animatedBytes": 235436,
+      "staticBytes": 10124,
+      "animatedSha256": "8e936c3b17eb013863cd16cdff910cbc86ce1332d1b1cb59e50a18cc4278ed3a",
+      "staticSha256": "4bb764eeccfe9abe3bef04a0f5b56f1f41e9d118dc7ee4384b724ab0010fb007"
     },
     "work": {
       "label": "TOOL RUN",
-      "summary": "Fast tail cadence, speed trails and work particles",
+      "summary": "Retimed Refined Dive breach, long-tail flip and re-entry with speed strokes",
       "playlist": true,
+      "source": "generated",
       "animated": "whale-work.webp",
       "static": "whale-work.png",
+      "canvas": [
+        352,
+        352
+      ],
       "frames": 48,
       "frameDurationMs": 40,
       "loopDurationMs": 1920,
-      "animatedBytes": 202680,
-      "staticBytes": 8823,
-      "animatedSha256": "2f7d1b82ba5a74bc060bb5411f5d4997c855aae7f4e3253ace2a8e8e2f84516b",
-      "staticSha256": "63ce8e43e078c25029ba95f39b8cff3ecca5ba5e1f2b8bd4abd2781e0076f951"
+      "animatedBytes": 98128,
+      "staticBytes": 4662,
+      "animatedSha256": "932645607eca1edbc2ff41ddd86e89b403aca7d33adc0b56a8215c85b2b2a62c",
+      "staticSha256": "9465ed6bfe0ac7f54580ac1116659be6bfe72e20b617498731e623ae2c34d6f6",
+      "derivedFrom": [
+        "whale-dive.webp"
+      ]
     },
     "compose": {
       "label": "STREAM",
-      "summary": "Token-like particles flow from the whale's path",
+      "summary": "Classic tail-first underwater S-curve with a restrained output-droplet arc",
       "playlist": true,
+      "source": "generated",
       "animated": "whale-compose.webp",
       "static": "whale-compose.png",
+      "canvas": [
+        352,
+        352
+      ],
       "frames": 48,
       "frameDurationMs": 40,
       "loopDurationMs": 1920,
-      "animatedBytes": 190016,
-      "staticBytes": 8734,
-      "animatedSha256": "e8b36cd8df58aa805e66c148ba9333e1e98ab9eeb8889b640dfcaefb41167ba8",
-      "staticSha256": "8254eeea154d319785dfd79151d0575c96452c02fc6b294815e3673ebe7ef422"
+      "animatedBytes": 336484,
+      "staticBytes": 11288,
+      "animatedSha256": "94a3f0b7fc589fea17ed8392ada8e099891312944053fb01a7b33ceb4fc2e512",
+      "staticSha256": "44b1d402cfa64d3f9dbf34abc4e2ae5b8b1a0d9105788798d118bf364b9cd940",
+      "derivedFrom": [
+        "whale-classic.webp"
+      ]
     },
     "idle": {
       "label": "CALM",
-      "summary": "Low-motion breathing loop for waiting periods",
+      "summary": "Refined Dive waterline hover with a gentle long-tail turn",
       "playlist": true,
+      "source": "generated",
       "animated": "whale-idle.webp",
       "static": "whale-idle.png",
+      "canvas": [
+        352,
+        352
+      ],
       "frames": 48,
       "frameDurationMs": 40,
       "loopDurationMs": 1920,
-      "animatedBytes": 183430,
-      "staticBytes": 8389,
-      "animatedSha256": "36b86b1d79c0d883ccb3273c28ab3115feb0e7ee0d83646d07a6f79b25b15a71",
-      "staticSha256": "bba9ea419ade3568169a21bb8bd5600d541d503607ba0c62f0347edaf4666fc3"
+      "animatedBytes": 102118,
+      "staticBytes": 2739,
+      "animatedSha256": "9628ccef2d1a43ef3afccb99e872c0f09312325d06440acbce3abf6c4487c100",
+      "staticSha256": "1599f28c354010e5a9b962a6fa1bdd6d1275e68e1fceb2151b81f23492af5f11",
+      "derivedFrom": [
+        "whale-dive.webp"
+      ]
     },
     "alert": {
       "label": "RETRY",
-      "summary": "A restrained attention pulse for errors or retries",
+      "summary": "Classic surface curl into a sudden spy-hop and full-body recoil",
       "playlist": false,
+      "source": "generated",
       "animated": "whale-alert.webp",
       "static": "whale-alert.png",
+      "canvas": [
+        352,
+        352
+      ],
       "frames": 48,
       "frameDurationMs": 40,
       "loopDurationMs": 1920,
-      "animatedBytes": 216710,
-      "staticBytes": 9741,
-      "animatedSha256": "4cfffa72182d1cbebf71ac88beb09616afd533d96ca77c3661588fdb8c9e4c22",
-      "staticSha256": "a884a059aec1317c17f9cb3d0f25aeb7e4758b688364fc9911d7cbb53a8878ab"
+      "animatedBytes": 305860,
+      "staticBytes": 11360,
+      "animatedSha256": "929ea094715c3b196a9e7f4ee4adc828039cf3ef893280b85cfc87cc988bc8a8",
+      "staticSha256": "26dd3204f3f22a655e9566915e7651e8bbe86bfdbfea2925b2e8f73987992c47",
+      "derivedFrom": [
+        "whale-classic.webp"
+      ]
     }
   }
 }

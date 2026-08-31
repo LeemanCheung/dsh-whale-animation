@@ -1,85 +1,112 @@
 <p align="center">
-  <img src="docs/hero.png" alt="dsh-whale-animation 六状态鲸鱼动画系统" width="100%" />
+  <img src="docs/hero.png" alt="dsh-whale-animation 品牌一致的鲸鱼动画系统" width="100%" />
 </p>
 
 <p align="center">
   <a href="https://awesome.re"><img src="https://awesome.re/badge.svg" alt="Awesome" /></a>
   <a href="https://awesome-dsh-plugin.com"><img src="https://awesome-dsh-plugin.com/badge.svg" alt="Awesome DSH Plugin" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-2563eb.svg" alt="MIT license" /></a>
-  <img src="https://img.shields.io/badge/version-v0.4.0-0f766e.svg" alt="v0.4.0" />
+  <img src="https://img.shields.io/badge/version-v0.5.0-0f766e.svg" alt="v0.5.0" />
+  <img src="https://img.shields.io/badge/历史动画-原样保留%202%20套-1d4ed8.svg" alt="原样保留两套历史动画" />
   <img src="https://img.shields.io/badge/runtime-offline-0f172a.svg" alt="运行时离线" />
   <img src="https://img.shields.io/badge/motion-reduced--motion%20ready-7c3aed.svg" alt="支持减少动态效果" />
 </p>
 
 <p align="center">
-  <strong>为 DeepSeek Harness Web 回合状态提供六套原创鲸鱼动画和一个轻量动画导演。</strong><br />
-  自动轮换、状态关键词覆盖、深色主题适配、运行时零网络请求，并为每套动画提供静态回退。
+  <strong>两套用户原始鲸鱼动画逐字节保留；Work、Stream、Calm、Retry 按前两套动画的黑白水墨鲸鱼语言重新制作。</strong><br />
+  支持定时轮播、关键词覆盖、深色模式、零运行时网络请求，以及每个状态独立的静态降级图。
 </p>
 
 <p align="center">
   <a href="README.md">English</a> · 简体中文
 </p>
 
-## 动画预览
+## 动态预览
 
 <p align="center">
-  <img src="docs/preview.webp" alt="Deep Dive、Sonar、Tool Run、Stream 和 Calm 五种鲸鱼动画依次播放" width="900" />
+  <img src="docs/preview.webp" alt="两套保留动画与五套重绘动画依次轮播" width="900" />
 </p>
 
-v0.4.0 不再只播放一段固定的下潜 WebP。当前 Harness 在运行回合中通常持续显示同一个 `Deep diving...` 文案，因此插件会每 **9 秒**按 `dive → sonar → work → compose → idle` 自动轮换；当未来版本或定制界面出现“搜索、执行工具、生成回答、等待、错误”等可识别文案时，关键词状态会立即覆盖定时播放列表。
+v0.5.0 纠正了 v0.4.0 的视觉方向。Sonar 保持现状，后四态不再沿用蓝色静态图标或通用鱼类轮廓；角色身体直接取自 Refined Dive 与 Classic 的不可变 alpha 轮廓。构建器重定时并重组真实的跃水、尾先 S 弧、水线悬浮、spy-hop、浪花和回弹帧，速度线、输出墨滴和提示线只作为独立语义层。
 
-## 六种状态
+两套 v0.4 以前的用户动画保持原样：
+
+- **Refined Dive**：直接从提交 `65e1205d1fbf4b01997e6dfc099103b0f9717e37` 恢复，继续作为默认状态。
+- **Classic**：直接从首个发布提交 `95b06e3f0e6ea817d25858eb29f7064a233b3c65` 恢复。
+
+CI 会重新计算这四个历史文件的 Git Blob SHA-1；任意一个字节发生变化，验证都会失败。
+
+## 七种状态
 
 <p align="center">
-  <img src="docs/state-gallery.png" alt="六种鲸鱼动画状态画廊" width="1000" />
+  <img src="docs/state-gallery.png" alt="两套保留状态和五套重绘状态画廊" width="1000" />
 </p>
 
-| 状态 | 动画表现 | 触发逻辑 |
-|---|---|---|
-| **Deep Dive** | 破水、翻滚、重新下潜 | 自动播放列表；思考、推理、分析、规划 |
-| **Sonar** | 从吻部向前传播的声呐波 | 自动播放列表；搜索、检索、浏览、调研 |
-| **Tool Run** | 高频摆尾、速度线和工作粒子 | 自动播放列表；工具、执行、命令、构建、测试 |
-| **Stream** | 类 Token 粒子连续流出 | 自动播放列表；生成、撰写、回答、流式输出 |
-| **Calm** | 低幅呼吸和气泡上浮 | 自动播放列表；等待、排队、暂停 |
-| **Retry** | 轻微摆动和注意提示 | 仅错误、失败、异常、重试关键词 |
+| 状态 | 来源 | 动作语言 | 触发逻辑 |
+|---|---|---|---|
+| **Refined Dive** | 原样保留 | v0.3 的优化跃出与下潜闭环，不重新编码 | 默认状态；轮播；思考、推理、分析、规划 |
+| **Classic** | 原样保留 | 项目首发版本的鲸鱼动画，不重新编码 | 轮播；经典、原版等显式关键词 |
+| **Sonar** | 重新绘制 | 缓慢游动，躯干波动与声呐环同步扩散 | 轮播；搜索、浏览、检索、调研 |
+| **Tool Run** | 重新绘制 | 纯黑推进、全身行波与水墨速度线 | 轮播；工具、执行、命令、构建、测试 |
+| **Stream** | 重新绘制 | 黑色鲸鱼上扬与克制墨滴弧线 | 轮播；撰写、生成、回答、输出、流式 |
+| **Calm** | 重新绘制 | 水线下悬浮、长尾漂移、气泡与克制眨眼 | 轮播；等待、排队、暂停 |
+| **Retry** | 重新绘制 | 纯黑紧凑 C 形回卷与三条提示线 | 仅错误、失败、异常和重试关键词 |
 
-英文和中文关键词均已内置。普通 `Deep diving...` 文案故意不被识别为显式状态，以便当前版本仍能完整展示五状态播放列表。
+普通的 `Deep diving...` 文案仍然不被识别为某个显式状态，因此当前 Harness 界面可以每 **11 秒**依次轮播；该时长足以让 10.506 秒的 Classic 历史动画完整播放一次：
+
+`dive → classic → sonar → work → compose → idle`
+
+一旦界面出现可识别的中英文状态文案，关键词映射会立即覆盖轮播。
+
+## 视觉规范
+
+Work、Stream、Calm、Retry 直接使用 Dive/Classic 真实帧遮罩生成，而不是重新发明一只图标鲸鱼；Sonar 保持已有生成样式。后四态强制满足：
+
+- 可见像素只使用黑白，画布为真实透明 RGBA，禁止蓝色图标；
+- 不绘制背鳍，不出现鲨鱼或普通鱼类轮廓；
+- 精确保留历史帧里的紧凑头部、快速收窄躯干、长弧尾柄、宽阔尾鳍和负空间细节；
+- 使用真实全身跃水、翻转、下潜、悬浮、S 形、spy-hop、浪花和回弹姿态，而不是移动横向胶囊；
+- 往返子序列使用余弦重定时，使反转点速度归零且没有硬切；
+- 声呐、粒子和提示线只作为辅助，不抢夺鲸鱼主体视觉。
+
+两套历史状态不会经过生成器重新绘制、压缩或统一风格，它们以原始二进制文件继续存在于轮播和发布包中。
 
 ## 核心特性
 
 | | 特性 | 说明 |
 |---|---|---|
-| 🐋 | **六套原创逐帧动画** | 每套 352 × 352、48 帧、40 ms/帧，单循环 1.92 秒。 |
-| 🎬 | **双轨动画导演** | 当前固定文案使用定时播放列表；未来状态文案使用关键词即时覆盖。 |
-| ♿ | **逐状态减少动态效果** | `prefers-reduced-motion` 下停止轮换，并为当前状态使用对应 PNG 静态帧。 |
-| 🌗 | **主题和屏幕适配** | 系统深色、`html.dark`、`data-theme="dark"` 自动反色；尺寸按 84 / 72 / 60 px 响应式收缩。 |
-| 📦 | **完全自包含** | 6 个 WebP 和 6 个 PNG 由构建脚本嵌入 `lib/client.js`，安装后不访问外部 URL。 |
-| 🧩 | **更稳健的挂载点** | 组合使用 `role="status"` 和 `_turnStatus` 类名后备，不再只依赖单个哈希类名。 |
-| 🫧 | **降低样式侵入** | 只使用目标状态元素的 `::after`，不再清空 `::before`，不改状态文案和交互。 |
-| ♻️ | **幂等且可清理** | 重复激活会先清理旧实例；卸载时移除样式、定时器、观察器和插件属性。 |
-| 🔒 | **严格纯视觉范围** | 无设置账号、无模型工具、无持久化、无工作区读取、无用户内容处理。 |
+| 🐋 | **两套原动画完整保留** | 历史 WebP 与 PNG 使用稳定路径恢复，并在 CI 中逐字节验证。 |
+| 🌊 | **四套历史轮廓重做** | Tool Run、Calm 派生自 Dive；Stream、Retry 派生自 Classic；Sonar 保持不变。 |
+| 🎬 | **双轨动画导演** | 当前固定状态文案走定时轮播；未来或定制文案走关键词即时覆盖。 |
+| ♿ | **逐状态减少动态效果** | 开启 `prefers-reduced-motion` 后停止轮播，并使用对应 PNG。 |
+| 🌗 | **适配主题与视口** | 支持系统深色模式、`html.dark`、`data-theme="dark"`，显示尺寸为 84 / 72 / 60 px。 |
+| 📦 | **运行时完全自包含** | 全部 WebP 和 PNG 内嵌到 `lib/client.js`，激活后不发起外部请求。 |
+| 🧩 | **更稳健的挂载选择器** | 同时使用 `role="status"` 语义定位与 `_turnStatus` 类名后备。 |
+| 🫧 | **低样式侵入** | 仅占用状态元素的 `::after`，不修改原始文案，也不清除 `::before`。 |
+| ♻️ | **生命周期完整清理** | 重复激活会移除旧实例；卸载时清除样式、定时器、观察器、监听器和属性。 |
+| 🔒 | **严格视觉权限边界** | 不读取账户、工具、存储、工作区或用户内容，不联网。 |
 
 ## 安装
 
-安装最新发布版到 DSH Web profile：
+安装 v0.5.0：
 
 ```powershell
-dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation#v0.4.0
+dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation#v0.5.0
 ```
 
-跟随主分支：
+跟随 `main` 分支：
 
 ```powershell
 dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation
 ```
 
-安装后硬刷新 DSH Web 页面；若当前 profile 已缓存客户端 Bundle，请重启 DSH。
+安装后对 DSH Web 执行强制刷新。如果当前 Profile 已缓存客户端 Bundle，请重启 DSH。
 
 ### 升级
 
 ```powershell
 dsh plugin --profile web remove dsh-whale-animation
-dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation#v0.4.0
+dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation#v0.5.0
 ```
 
 ### 卸载
@@ -90,118 +117,161 @@ dsh plugin --profile web remove dsh-whale-animation
 
 ## 动画规格
 
-| 属性 | 数值 |
+| 项目 | 数值 |
 |---|---:|
-| 动画状态 | 6 套 |
-| 自动播放状态 | 5 套 |
-| 源画布 | 352 × 352 px |
-| 每套帧数 | 48 |
-| 单帧时长 | 40 ms |
-| 单循环时长 | 1.920 秒 |
-| 播放列表间隔 | 9 秒 |
+| 总状态数 | 7 |
+| 原样保留状态 | 2 |
+| 重新生成状态 | 5 |
+| 自动轮播状态 | 6 |
+| 生成状态画布 | 352 × 352 px |
+| 历史状态原生画布 | Refined Dive 352 × 352；Classic 184 × 184 |
+| 重绘状态帧率 | 48 帧 × 40 ms |
+| 重绘状态闭环时长 | 1.920 秒 |
+| 历史状态时序 | 完整沿用原文件 |
+| 状态轮播间隔 | 11 秒 |
 | CSS 显示尺寸 | 84 / 72 / 60 px |
-| 动态资源合计 | 1,206,950 bytes |
-| 静态资源合计 | 54,957 bytes |
-| 预构建客户端 | 约 1.69 MB |
 | 运行时资源请求 | 0 |
 
 ## 工作原理
 
 ```mermaid
 flowchart LR
-  A[6 WebP + 6 PNG] --> B[assets/manifest.json]
-  B --> C[scripts/build-client.mjs]
-  C --> D[内嵌 data URL 客户端]
-  D --> E[role=status 回合状态 ::after]
-  F[9 秒播放列表] --> D
-  G[中英文关键词覆盖] --> D
-  H[深色与 reduced-motion] --> D
+  A[2 套原样保留动画] --> C[assets/manifest.json]
+  B[5 套确定性重绘动画] --> C
+  C --> D[scripts/build-client.mjs]
+  D --> E[内嵌 Data URL 的客户端]
+  E --> F[role=status 状态元素 ::after]
+  G[11 秒轮播] --> E
+  H[中英文关键词覆盖] --> E
+  I[深色模式与减少动态效果] --> E
 ```
 
-`lib/index.js` 仍然是刻意保持为空的 Host 入口；全部行为通过 `dsh.client` 在浏览器中运行。客户端使用 MutationObserver 处理 Harness 的局部重绘，每秒只执行一次轻量状态判断，逐帧播放由浏览器的动画 WebP 解码器完成。
+`lib/index.js` 仍然是有意保持空操作的 Host 入口，全部行为通过 `dsh.client` 在浏览器端执行。`MutationObserver` 用于处理 Harness 子树替换，一秒定时器只负责状态选择，逐帧播放由浏览器原生 WebP 解码器完成。
 
-当前目标节点是：
+目标选择器为：
 
 ```css
 .Md3f7G_turnStatus[role="status"],
 [class*="_turnStatus"][role="status"]
 ```
 
-插件会在目标元素上写入 `data-dsh-whale-host` 和 `data-dsh-whale-state`，再由 `::after` 显示对应动画。深色模式通过反色适配单色资产；减少动态效果模式使用相同状态的 PNG，并固定在默认状态或明确关键词状态。
+客户端会给状态元素写入 `data-dsh-whale-host` 和 `data-dsh-whale-state`，CSS 再通过 `::after` 绘制对应资源。减少动态效果模式下会选择对应 PNG，并冻结在默认状态或关键词显式状态。
 
 ## 开发与验证
 
-要求：**Node.js 20+**。重新生成动画和文档资产需要 Python 3 与 Pillow：
+需要 **Node.js 20+**、Python 3 和 Pillow：
 
 ```powershell
-python -m pip install Pillow
-npm run build:assets
-npm run build
-npm run check
+python -m pip install -r requirements.txt
+npm run verify
+npm run check:browser
 ```
-
-常用命令：
 
 | 命令 | 作用 |
 |---|---|
-| `npm run build:assets` | 生成 6 套 WebP、6 张 PNG、manifest、头图、预览和状态画廊 |
-| `npm run build` | 将 manifest 中的全部资源嵌入 `lib/client.js` |
-| `npm run check` | 校验动画结构、哈希、Bundle、状态导演、生命周期和 README 资产 |
-| `npm run check:browser` | 在无头 Chromium 中挂载已提交 Bundle，并生成浅色/深色烟测截图 |
-| `npm run verify` | 重建客户端并执行确定性的非浏览器检查 |
+| `npm run build:assets` | 保持两套历史资源不变，生成五套 WebP、五套 PNG、manifest、头图、预览和画廊 |
+| `npm run build:runtime-assets` | 仅重建运行时动画与 manifest；不依赖系统字体，供 CI/Release 使用 |
+| `npm run build` | 根据 manifest 把全部资源内嵌到 `lib/client.js` |
+| `npm run build:motion-audit` | 写入确定性的 12 帧接触表与运动证据报告 |
+| `npm run build:style-audit` | 写入 84/60 px 原尺寸 Dive/Classic 身份对照与色彩证据 |
+| `npm run audit:motion` | 重新计算可见帧多样性与连续性，并拒绝过期或不合格证据 |
+| `npm run audit:style` | 拒绝蓝色/彩色像素、非透明背景、复杂内部纹理和不可辨认轮廓 |
+| `npm run check` | 验证历史 Git Blob、生成时序、Bundle、动画导演、生命周期和文档资源 |
+| `npm run check:browser` | 在无头 Chromium 中挂载七种状态，并生成浅色/深色截图 |
+| `npm run verify` | 重建资产和客户端，再执行确定性非浏览器测试 |
 
 验证范围包括：
 
-- 12 个资源文件的格式、大小和 SHA-256；
-- 每个 WebP 的 48 帧、40 ms 帧时长和 1.92 秒循环；
-- manifest 与客户端内嵌 data URL 完全一致；
-- 五状态轮换、关键词覆盖、错误优先级、reduced-motion 固定；
-- 样式安装、MutationObserver、定时器和 dispose 清理；
-- README 头图、50 帧预览、状态画廊尺寸与本地链接；
-- CI 中的预构建 Bundle 一致性、真实 Chromium 状态映射、浅色/深色截图和 `npm pack` 检查。
+- 两套历史 WebP 和两套历史 PNG 的 Git Blob SHA-1；
+- 五套重绘状态的 48 帧、40 ms 帧时长和 1.92 秒闭环；
+- 后四态的真实 RGBA 透明、纯黑可见像素、极简内部细节，以及 60/84 px 轮廓可辨识度；
+- 文件体积、SHA-256、manifest 与内嵌 Data URL 的一致性；
+- 两套历史状态在轮播中的保留、中英文关键词覆盖、错误优先级与减少动态效果冻结；
+- 样式安装、`MutationObserver`、定时器释放及宿主属性清理；
+- README 头图、动态预览、状态画廊尺寸和本地链接；
+- CI 中的真实 Chromium 状态识别、浅色/深色截图和 `npm pack --dry-run`。
 
-更完整的设计取舍与后续路线见 [`docs/ANIMATION_ROADMAP.zh-CN.md`](docs/ANIMATION_ROADMAP.zh-CN.md)。
+### 运动连续性证据
+
+<p align="center">
+  <img src="docs/rebuilt-states-real-speed.webp" alt="Work、Stream、Calm、Retry 以真实 40 毫秒帧时长同步播放" width="1000" />
+</p>
+
+上图按运行时真实速度播放后四态：48 帧 × 40 ms，形成 1.92 秒无缝循环；它与 README 中为快速浏览而抽帧的多状态预览相互独立。[`docs/rebuilt-states-real-speed.json`](docs/rebuilt-states-real-speed.json) 锁定预览 SHA-256 与四个源动画哈希，CI 会拒绝过期画面。
+
+<p align="center">
+  <img src="docs/motion-contact-sheet.png" alt="每种鲸鱼状态的 12 个抽样帧与循环接缝指标" width="1200" />
+</p>
+
+[`docs/motion-audit.json`](docs/motion-audit.json) 会在 alpha 归一化后记录可见帧数量、冻结步比例、绝对变化、前景归一化变化、运动前景覆盖率、alpha 轮廓质心与预乘 RGBA 外观质心、抽样帧哈希和循环接缝。普通生成素材继续使用 4 px 质心上限；四个显式带 `derivedFrom` 的状态保留历史动画有意的全身位移，因此单独记录 24 px 上限，同时继续执行相同的步长比例、绝对变化、前景变化、覆盖率与接缝门禁。Calm 与 Retry 有意沿原姿态倒序回弹（分别 25/48、26/48 个唯一可见帧），但相邻冻结比例均为 0，中位运动前景覆盖率为 0.67–0.68，循环接缝均低于普通步长的 0.20 倍。
+
+### 60/84 px 身份证据
+
+<p align="center">
+  <img src="docs/style-identity-contact-sheet.png" alt="84 与 60 像素原尺寸下，Dive、Classic 与后四态的身份对照" width="1018" />
+</p>
+
+[`docs/style-identity-audit.json`](docs/style-identity-audit.json) 会同时验证后四态动画帧与降级 PNG 的真实透明、零蓝色/零彩色可见像素、有限内部亮色细节、静态帧映射一致，以及两个尺寸下足够完整的连通鲸鱼轮廓。接触表展示的是运行时原尺寸，而不是放大的裁剪图。图像生成姿态研究、哈希、alpha 实测与被否决方向记录在 [`docs/animation-lineage.json`](docs/animation-lineage.json)；白底 RGB 姿态研究只提供动作灵感，不承担 accepted body identity。
+
+动画设计依据和后续路线记录在 [`docs/ANIMATION_ROADMAP.zh-CN.md`](docs/ANIMATION_ROADMAP.zh-CN.md)。
 
 ## 仓库结构
 
 ```text
 assets/
-  manifest.json          动画清单、时序、文件大小与 SHA-256
-  whale-*.webp           六套动画资源
-  whale-*.png            六套 reduced-motion 静态帧
+  whale-dive.webp/.png      从 v0.3 原样保留的优化动画
+  whale-classic.webp/.png   从首发提交原样保留的经典动画
+  whale-sonar.webp/.png     重绘生成状态
+  whale-work.webp/.png      重绘生成状态
+  whale-compose.webp/.png   重绘生成状态
+  whale-idle.webp/.png      重绘生成状态
+  whale-alert.webp/.png     重绘生成状态
+  whale-static.png          兼容 v0.4 以前消费者的静态别名
+  manifest.json             来源、时序、体积、提交和 SHA-256
 src/
-  client-runtime.js      状态导演和浏览器生命周期源代码
+  client-runtime.js         动画导演和浏览器生命周期源码
 lib/
-  index.js               空 Host 入口
-  client.js              预构建、内嵌全部资产的 DSH Web 客户端
+  index.js                  空操作 Host 入口
+  client.js                 内嵌全部资源的预构建 DSH Web 客户端
 scripts/
-  build-whale-assets.py  生成动画与 README 视觉资产
-  build-client.mjs       根据 manifest 构建浏览器客户端
-  check.mjs              验证资源、Bundle 和运行时行为
-  check-readme-assets.py 验证文档视觉资产和链接
-  browser-smoke.html     覆盖六种状态的浏览器测试页面
-  check-browser.sh       执行 Chromium 烟测并生成浅色/深色截图
+  whale_assets/model.py     Sonar 模型与共享图像/构建基础能力
+  whale_assets/states.py    历史元数据与真实帧派生状态渲染器
+  build-whale-assets.py     生成重绘资源和 README 视觉资产
+  build-client.mjs          根据 manifest 构建浏览器客户端
+  check.mjs                 验证资源、Bundle 和运行时行为
+  check-readme-assets.py    验证文档视觉、链接和历史 Blob
+  check-whale-style.py      验证纯黑水墨色彩与 60/84 px 身份证据
+  audit-motion.py           验证可见帧多样性与循环连续性
+  browser-smoke.html        覆盖七种状态的浏览器测试页面
+  check-browser.sh          执行 Chromium 烟测和浅色/深色截图
 docs/
-  hero.png               README 头图
-  preview.webp           五状态动画预览
-  state-gallery.png      六状态静态画廊
-  ANIMATION_ROADMAP.zh-CN.md 设计与后续路线
+  hero.png                  README 头图
+  preview.webp              六状态轮播预览
+  state-gallery.png         七状态静态画廊
+  rebuilt-states-real-speed.webp  后四态真实 40 ms 帧速预览
+  rebuilt-states-real-speed.json  预览哈希与四个当前源动画哈希
+  motion-contact-sheet.png  每种状态 12 个抽样帧
+  motion-audit.json         可机器读取的连续性证据
+  style-identity-contact-sheet.png  原尺寸 Dive/Classic 身份对照
+  style-identity-audit.json 可机器读取的色彩与轮廓证据
+  animation-lineage.json    图像生成提示词、哈希、alpha 事实与否决记录
+  ANIMATION_ROADMAP.zh-CN.md 动画设计依据和路线图
 ```
 
-`lib/client.js` 会提交到仓库，确保 GitHub 安装无需在用户机器上执行构建，也不需要运行时下载动画文件。
+`lib/client.js` 有意提交到仓库，因此通过 GitHub 安装时无需本地构建，也无需运行时下载动画资源。
 
 ## 兼容性与限制
 
-- 仅面向 **DeepSeek Harness Web UI**，要求兼容 `@deepseek-ai/dsh-client-runtime ^0.1.0-rc.6` 的 DSH 版本。
-- 当前 Shell 若重命名 `_turnStatus` 且移除 `role="status"`，需要更新选择器。
-- 插件仍需占用目标元素的 `::after`；其他同时使用该伪元素的插件可能发生样式冲突。
-- 定时播放列表是当前固定状态文案下的兼容方案，并不代表真实模型阶段。未来若 DSH 暴露稳定阶段事件，将优先改为事件驱动。
-- 资源以内嵌方式换取零网络请求，因此 `lib/client.js` 约 1.69 MB。
+- 面向 **DeepSeek Harness Web UI**，要求 DSH 版本兼容 `@deepseek-ai/dsh-client-runtime ^0.1.0-rc.6`。
+- 如果 Shell 同时移除 `_turnStatus` 和 `role="status"`，需要更新选择器。
+- 插件占用目标元素的 `::after`，其他插件若使用同一伪元素可能发生冲突。
+- 定时轮播是适配当前固定状态文案的兼容方案，不代表模型真实执行阶段。
+- 为确保用户制作的两套原动画继续可用，首发大体积动画也被内嵌，因此客户端体积会高于 v0.4.0。
 
-## 声明
+## 归属说明
 
-本项目为独立项目，与 DeepSeek 无关联，也未获得其背书。动画是为呼应 DeepSeek Harness 鲸鱼主题状态体验而制作的原创 UI 插图。视觉设计与商标说明请参阅 [NOTICE.md](NOTICE.md)。
+本项目为独立项目，与 DeepSeek 无隶属或官方背书关系。重绘动画是围绕鲸鱼主题视觉语言创作的原创 UI 插画，并非复制官方素材。视觉设计与商标说明参见 [NOTICE.md](NOTICE.md)。
 
 ## 许可证
 
-以 [MIT License](LICENSE) 发布。版本变化见 [CHANGELOG.md](CHANGELOG.md)。
+项目采用 [MIT License](LICENSE)。版本历史见 [CHANGELOG.md](CHANGELOG.md)。
