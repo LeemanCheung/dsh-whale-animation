@@ -1,0 +1,86 @@
+name: NOCTURNE public browser verification
+on:
+  push:
+    branches: [nocturne-site]
+    paths: ['.github/workflows/nocturne-public.yml']
+permissions:
+  contents: read
+jobs:
+  public-browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install browser
+        run: |
+          python -m pip install playwright==1.55.0
+          python -m playwright install --with-deps chromium
+      - name: Inspect ordinary public browser entry
+        run: |
+          mkdir -p public-results
+          python -u - <<'PY'
+          import asyncio,json,re,traceback
+          from pathlib import Path
+          from playwright.async_api import async_playwright
+          ROOT=Path('public-results')
+          PATH='LeemanCheung/dsh-whale-animation/99048e7068e186976c6518bebb2af5994b8cd522/index.html'
+          async def main():
+              results=[]
+              async with async_playwright() as p:
+                  browser=await p.chromium.launch(args=['--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader'])
+                  for host in ['rawcdn.githack.com','raw.githack.com']:
+                      ctx=await browser.new_context(viewport={'width':390,'height':844},is_mobile=True,has_touch=True,reduced_motion='reduce')
+                      page=await ctx.new_page(); errors=[]; requests=[]
+                      page.on('pageerror',lambda e:errors.append(str(e)))
+                      page.on('requestfailed',lambda r:requests.append({'url':r.url,'error':r.failure}))
+                      row={'url':'https://'+host+'/'+PATH,'ok':False,'errors':errors,'failedRequests':requests}
+                      try:
+                          response=await page.goto(row['url'],wait_until='domcontentloaded',timeout=45000)
+                          row['status']=response.status if response else None
+                          row['headers']=await response.all_headers() if response else {}
+                          await page.wait_for_timeout(2000)
+                          row['initialUrl']=page.url
+                          row['initialText']=(await page.locator('body').inner_text())[:8000]
+                          print('ENTRY',host,json.dumps(row,ensure_ascii=False),flush=True)
+                          await page.screenshot(path=str(ROOT/(host+'-entry.png')))
+                          (ROOT/(host+'-entry.html')).write_text(await page.content())
+                          if not await page.evaluate('Boolean(window.__NOCTURNE__)'):
+                              for role in ['button','link']:
+                                  control=page.get_by_role(role,name=re.compile(r'continue|confirm|proceed|open|visit',re.I))
+                                  if await control.count():
+                                      row['confirmation']=await control.first.inner_text()
+                                      await control.first.click()
+                                      break
+                          await page.wait_for_function('window.__NOCTURNE__ && __NOCTURNE__.state.rendererName === "Three.js r180"',timeout=30000)
+                          await page.wait_for_timeout(2000)
+                          assert not errors,errors
+                          assert await page.evaluate('document.documentElement.scrollWidth<=innerWidth')
+                          row['renderer']=await page.evaluate('__NOCTURNE__.state.rendererName')
+                          await page.screenshot(path=str(ROOT/(host+'-mobile.png')))
+                          await page.locator('[data-chapter="2"]').tap()
+                          await page.wait_for_timeout(1200)
+                          assert await page.evaluate('__NOCTURNE__.state.chapter===2')
+                          await page.screenshot(path=str(ROOT/(host+'-third.png')))
+                          row['ok']=True; row['chapterSwitch']=True
+                      except Exception as e:
+                          row['exception']=repr(e)
+                          row['finalUrl']=page.url
+                          row['finalText']=(await page.locator('body').inner_text())[:8000]
+                          await page.screenshot(path=str(ROOT/(host+'-final.png')))
+                          (ROOT/(host+'-final.html')).write_text(await page.content())
+                      results.append(row)
+                      print('RESULT',json.dumps(row,ensure_ascii=False),flush=True)
+                      (ROOT/'report.json').write_text(json.dumps(results,indent=2,ensure_ascii=False))
+                      await ctx.close()
+                  await browser.close()
+              assert any(r['ok'] for r in results),'No public entry passed; see response evidence.'
+          asyncio.run(main())
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nocturne-public-browser
+          path: public-results/
+          retention-days: 30
