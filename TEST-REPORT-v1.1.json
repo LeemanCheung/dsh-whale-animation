@@ -1,0 +1,2467 @@
+{
+  "checks": [
+    {
+      "name": "chromium/phone/three-renderer",
+      "pass": true,
+      "detail": "Three.js r180"
+    },
+    {
+      "name": "chromium/phone/sculpture-visible",
+      "pass": true,
+      "detail": 1121
+    },
+    {
+      "name": "chromium/phone/no-horizontal-overflow",
+      "pass": true,
+      "detail": 390
+    },
+    {
+      "name": "chromium/phone/dock-visible",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "chromium/phone/touch-targets",
+      "pass": true,
+      "detail": [
+        {
+          "id": "notesBtn",
+          "w": 46.34375,
+          "h": 44
+        },
+        {
+          "id": "soundBtn",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "id": "nextBtn",
+          "w": 48,
+          "h": 48
+        },
+        {
+          "id": "chapter active",
+          "w": 112.65625,
+          "h": 44
+        },
+        {
+          "id": "chapter",
+          "w": 112.671875,
+          "h": 44
+        },
+        {
+          "id": "chapter",
+          "w": 112.65625,
+          "h": 44
+        },
+        {
+          "id": "pauseBtn",
+          "w": 56,
+          "h": 44
+        },
+        {
+          "id": "focusBtn",
+          "w": 56,
+          "h": 44
+        },
+        {
+          "id": "saveBtn",
+          "w": 222,
+          "h": 44
+        }
+      ]
+    },
+    {
+      "name": "chromium/phone/composition-no-overlap",
+      "pass": true,
+      "detail": {
+        "width": 390,
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "stage": {
+          "x": 0,
+          "y": 176.296875,
+          "w": 390,
+          "h": 391.6875,
+          "right": 390,
+          "bottom": 567.984375
+        },
+        "caption": {
+          "x": 20,
+          "y": 576,
+          "w": 350,
+          "h": 104,
+          "right": 370,
+          "bottom": 680
+        },
+        "dock": {
+          "x": 20,
+          "y": 696,
+          "w": 350,
+          "h": 138,
+          "right": 370,
+          "bottom": 834
+        },
+        "title": {
+          "x": 20,
+          "y": 80,
+          "w": 350,
+          "h": 85.671875,
+          "right": 370,
+          "bottom": 165.671875
+        },
+        "visible": 1121,
+        "controls": [
+          {
+            "id": "notesBtn",
+            "w": 46.34375,
+            "h": 44
+          },
+          {
+            "id": "soundBtn",
+            "w": 44,
+            "h": 44
+          },
+          {
+            "id": "nextBtn",
+            "w": 48,
+            "h": 48
+          },
+          {
+            "id": "chapter active",
+            "w": 112.65625,
+            "h": 44
+          },
+          {
+            "id": "chapter",
+            "w": 112.671875,
+            "h": 44
+          },
+          {
+            "id": "chapter",
+            "w": 112.65625,
+            "h": 44
+          },
+          {
+            "id": "pauseBtn",
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "focusBtn",
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "saveBtn",
+            "w": 222,
+            "h": 44
+          }
+        ],
+        "backend": "Three.js r180"
+      }
+    },
+    {
+      "name": "chromium/phone/chapter-2",
+      "pass": true,
+      "detail": {
+        "chapter": 1,
+        "morph": 1
+      }
+    },
+    {
+      "name": "chromium/phone/chapter-3",
+      "pass": true,
+      "detail": {
+        "chapter": 2,
+        "morph": 2
+      }
+    },
+    {
+      "name": "chromium/phone/chapter-1",
+      "pass": true,
+      "detail": {
+        "chapter": 0,
+        "morph": 0
+      }
+    },
+    {
+      "name": "chromium/phone/play-toggle",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "chromium/phone/notes-open",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "chromium/phone/notes-close",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "chromium/phone/focus-mode",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "chromium/phone/focus-exit",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "chromium/phone/poster-export",
+      "pass": true,
+      "detail": [
+        1080,
+        1440
+      ]
+    },
+    {
+      "name": "chromium/phone/safe-areas",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "chromium/phone/resize-390x640",
+      "pass": true,
+      "detail": {
+        "w": 390,
+        "h": 439,
+        "rect": {
+          "x": 0,
+          "y": 158.296875,
+          "width": 390,
+          "height": 438.6875,
+          "top": 158.296875,
+          "right": 390,
+          "bottom": 596.984375,
+          "left": 0
+        }
+      }
+    },
+    {
+      "name": "chromium/phone/resize-844x390",
+      "pass": true,
+      "detail": {
+        "w": 481,
+        "h": 242,
+        "rect": {
+          "x": 346.03125,
+          "y": 56,
+          "width": 481.078125,
+          "height": 242,
+          "top": 56,
+          "right": 827.109375,
+          "bottom": 298,
+          "left": 346.03125
+        }
+      }
+    },
+    {
+      "name": "chromium/phone/resize-390x844",
+      "pass": true,
+      "detail": {
+        "w": 390,
+        "h": 392,
+        "rect": {
+          "x": 0,
+          "y": 176.296875,
+          "width": 390,
+          "height": 391.6875,
+          "top": 176.296875,
+          "right": 390,
+          "bottom": 567.984375,
+          "left": 0
+        }
+      }
+    },
+    {
+      "name": "chromium/phone/hold-start",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "chromium/phone/hold-cancel",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "chromium/phone/real-horizontal-touch",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "chromium/phone/real-vertical-scroll",
+      "pass": true,
+      "detail": 105
+    },
+    {
+      "name": "chromium/phone/no-js-errors",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "chromium/small/three-renderer",
+      "pass": true,
+      "detail": "Three.js r180"
+    },
+    {
+      "name": "chromium/small/sculpture-visible",
+      "pass": true,
+      "detail": 623
+    },
+    {
+      "name": "chromium/small/no-horizontal-overflow",
+      "pass": true,
+      "detail": 320
+    },
+    {
+      "name": "chromium/small/dock-visible",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "chromium/small/touch-targets",
+      "pass": true,
+      "detail": [
+        {
+          "id": "notesBtn",
+          "w": 46.34375,
+          "h": 44
+        },
+        {
+          "id": "soundBtn",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "id": "nextBtn",
+          "w": 48,
+          "h": 48
+        },
+        {
+          "id": "chapter active",
+          "w": 92,
+          "h": 44
+        },
+        {
+          "id": "chapter",
+          "w": 92,
+          "h": 44
+        },
+        {
+          "id": "chapter",
+          "w": 92,
+          "h": 44
+        },
+        {
+          "id": "pauseBtn",
+          "w": 56,
+          "h": 44
+        },
+        {
+          "id": "focusBtn",
+          "w": 56,
+          "h": 44
+        },
+        {
+          "id": "saveBtn",
+          "w": 160,
+          "h": 44
+        }
+      ]
+    },
+    {
+      "name": "chromium/small/composition-no-overlap",
+      "pass": true,
+      "detail": {
+        "width": 320,
+        "innerWidth": 320,
+        "innerHeight": 568,
+        "stage": {
+          "x": 0,
+          "y": 146.390625,
+          "w": 320,
+          "h": 174.59375,
+          "right": 320,
+          "bottom": 320.984375
+        },
+        "caption": {
+          "x": 16,
+          "y": 325,
+          "w": 288,
+          "h": 90,
+          "right": 304,
+          "bottom": 415
+        },
+        "dock": {
+          "x": 16,
+          "y": 431,
+          "w": 288,
+          "h": 127,
+          "right": 304,
+          "bottom": 558
+        },
+        "title": {
+          "x": 16,
+          "y": 62,
+          "w": 288,
+          "h": 68.328125,
+          "right": 304,
+          "bottom": 130.328125
+        },
+        "visible": 623,
+        "controls": [
+          {
+            "id": "notesBtn",
+            "w": 46.34375,
+            "h": 44
+          },
+          {
+            "id": "soundBtn",
+            "w": 44,
+            "h": 44
+          },
+          {
+            "id": "nextBtn",
+            "w": 48,
+            "h": 48
+          },
+          {
+            "id": "chapter active",
+            "w": 92,
+            "h": 44
+          },
+          {
+            "id": "chapter",
+            "w": 92,
+            "h": 44
+          },
+          {
+            "id": "chapter",
+            "w": 92,
+            "h": 44
+          },
+          {
+            "id": "pauseBtn",
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "focusBtn",
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "saveBtn",
+            "w": 160,
+            "h": 44
+          }
+        ],
+        "backend": "Three.js r180"
+      }
+    },
+    {
+      "name": "chromium/small/no-js-errors",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "chromium/short/three-renderer",
+      "pass": true,
+      "detail": "Three.js r180"
+    },
+    {
+      "name": "chromium/short/sculpture-visible",
+      "pass": true,
+      "detail": 674
+    },
+    {
+      "name": "chromium/short/no-horizontal-overflow",
+      "pass": true,
+      "detail": 375
+    },
+    {
+      "name": "chromium/short/dock-visible",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "chromium/short/touch-targets",
+      "pass": true,
+      "detail": [
+        {
+          "id": "notesBtn",
+          "w": 46.34375,
+          "h": 44
+        },
+        {
+          "id": "soundBtn",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "id": "nextBtn",
+          "w": 48,
+          "h": 48
+        },
+        {
+          "id": "chapter active",
+          "w": 110.328125,
+          "h": 44
+        },
+        {
+          "id": "chapter",
+          "w": 110.328125,
+          "h": 44
+        },
+        {
+          "id": "chapter",
+          "w": 110.34375,
+          "h": 44
+        },
+        {
+          "id": "pauseBtn",
+          "w": 56,
+          "h": 44
+        },
+        {
+          "id": "focusBtn",
+          "w": 56,
+          "h": 44
+        },
+        {
+          "id": "saveBtn",
+          "w": 215,
+          "h": 44
+        }
+      ]
+    },
+    {
+      "name": "chromium/short/composition-no-overlap",
+      "pass": true,
+      "detail": {
+        "width": 375,
+        "innerWidth": 375,
+        "innerHeight": 667,
+        "stage": {
+          "x": 0,
+          "y": 169.75,
+          "w": 375,
+          "h": 221.25,
+          "right": 375,
+          "bottom": 391
+        },
+        "caption": {
+          "x": 16,
+          "y": 399,
+          "w": 343,
+          "h": 104,
+          "right": 359,
+          "bottom": 503
+        },
+        "dock": {
+          "x": 16,
+          "y": 519,
+          "w": 343,
+          "h": 138,
+          "right": 359,
+          "bottom": 657
+        },
+        "title": {
+          "x": 16,
+          "y": 76,
+          "w": 343,
+          "h": 83.453125,
+          "right": 359,
+          "bottom": 159.453125
+        },
+        "visible": 674,
+        "controls": [
+          {
+            "id": "notesBtn",
+            "w": 46.34375,
+            "h": 44
+          },
+          {
+            "id": "soundBtn",
+            "w": 44,
+            "h": 44
+          },
+          {
+            "id": "nextBtn",
+            "w": 48,
+            "h": 48
+          },
+          {
+            "id": "chapter active",
+            "w": 110.328125,
+            "h": 44
+          },
+          {
+            "id": "chapter",
+            "w": 110.328125,
+            "h": 44
+          },
+          {
+            "id": "chapter",
+            "w": 110.34375,
+            "h": 44
+          },
+          {
+            "id": "pauseBtn",
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "focusBtn",
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "saveBtn",
+            "w": 215,
+            "h": 44
+          }
+        ],
+        "backend": "Three.js r180"
+      }
+    },
+    {
+      "name": "chromium/short/no-js-errors",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "chromium/android/three-renderer",
+      "pass": true,
+      "detail": "Three.js r180"
+    },
+    {
+      "name": "chromium/android/sculpture-visible",
+      "pass": true,
+      "detail": 938
+    },
+    {
+      "name": "chromium/android/no-horizontal-overflow",
+      "pass": true,
+      "detail": 360
+    },
+    {
+      "name": "chromium/android/dock-visible",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "chromium/android/touch-targets",
+      "pass": true,
+      "detail": [
+        {
+          "id": "notesBtn",
+          "w": 46.34375,
+          "h": 44
+        },
+        {
+          "id": "soundBtn",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "id": "nextBtn",
+          "w": 48,
+          "h": 48
+        },
+        {
+          "id": "chapter active",
+          "w": 105.328125,
+          "h": 44
+        },
+        {
+          "id": "chapter",
+          "w": 105.328125,
+          "h": 44
+        },
+        {
+          "id": "chapter",
+          "w": 105.34375,
+          "h": 44
+        },
+        {
+          "id": "pauseBtn",
+          "w": 56,
+          "h": 44
+        },
+        {
+          "id": "focusBtn",
+          "w": 56,
+          "h": 44
+        },
+        {
+          "id": "saveBtn",
+          "w": 200,
+          "h": 44
+        }
+      ]
+    },
+    {
+      "name": "chromium/android/composition-no-overlap",
+      "pass": true,
+      "detail": {
+        "width": 360,
+        "innerWidth": 360,
+        "innerHeight": 740,
+        "stage": {
+          "x": 0,
+          "y": 167.1875,
+          "w": 360,
+          "h": 296.796875,
+          "right": 360,
+          "bottom": 463.984375
+        },
+        "caption": {
+          "x": 16,
+          "y": 472,
+          "w": 328,
+          "h": 104,
+          "right": 344,
+          "bottom": 576
+        },
+        "dock": {
+          "x": 16,
+          "y": 592,
+          "w": 328,
+          "h": 138,
+          "right": 344,
+          "bottom": 730
+        },
+        "title": {
+          "x": 16,
+          "y": 76,
+          "w": 328,
+          "h": 81.234375,
+          "right": 344,
+          "bottom": 157.234375
+        },
+        "visible": 938,
+        "controls": [
+          {
+            "id": "notesBtn",
+            "w": 46.34375,
+            "h": 44
+          },
+          {
+            "id": "soundBtn",
+            "w": 44,
+            "h": 44
+          },
+          {
+            "id": "nextBtn",
+            "w": 48,
+            "h": 48
+          },
+          {
+            "id": "chapter active",
+            "w": 105.328125,
+            "h": 44
+          },
+          {
+            "id": "chapter",
+            "w": 105.328125,
+            "h": 44
+          },
+          {
+            "id": "chapter",
+            "w": 105.34375,
+            "h": 44
+          },
+          {
+            "id": "pauseBtn",
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "focusBtn",
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "saveBtn",
+            "w": 200,
+            "h": 44
+          }
+        ],
+        "backend": "Three.js r180"
+      }
+    },
+    {
+      "name": "chromium/android/no-js-errors",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "chromium/wide/three-renderer",
+      "pass": true,
+      "detail": "Three.js r180"
+    },
+    {
+      "name": "chromium/wide/sculpture-visible",
+      "pass": true,
+      "detail": 1019
+    },
+    {
+      "name": "chromium/wide/no-horizontal-overflow",
+      "pass": true,
+      "detail": 430
+    },
+    {
+      "name": "chromium/wide/dock-visible",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "chromium/wide/touch-targets",
+      "pass": true,
+      "detail": [
+        {
+          "id": "notesBtn",
+          "w": 46.34375,
+          "h": 44
+        },
+        {
+          "id": "soundBtn",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "id": "nextBtn",
+          "w": 48,
+          "h": 48
+        },
+        {
+          "id": "chapter active",
+          "w": 126,
+          "h": 44
+        },
+        {
+          "id": "chapter",
+          "w": 126,
+          "h": 44
+        },
+        {
+          "id": "chapter",
+          "w": 126,
+          "h": 44
+        },
+        {
+          "id": "pauseBtn",
+          "w": 56,
+          "h": 44
+        },
+        {
+          "id": "focusBtn",
+          "w": 56,
+          "h": 44
+        },
+        {
+          "id": "saveBtn",
+          "w": 262,
+          "h": 44
+        }
+      ]
+    },
+    {
+      "name": "chromium/wide/composition-no-overlap",
+      "pass": true,
+      "detail": {
+        "width": 430,
+        "innerWidth": 430,
+        "innerHeight": 932,
+        "stage": {
+          "x": 0,
+          "y": 183.09375,
+          "w": 430,
+          "h": 472.890625,
+          "right": 430,
+          "bottom": 655.984375
+        },
+        "caption": {
+          "x": 20,
+          "y": 664,
+          "w": 390,
+          "h": 104,
+          "right": 410,
+          "bottom": 768
+        },
+        "dock": {
+          "x": 20,
+          "y": 784,
+          "w": 390,
+          "h": 138,
+          "right": 410,
+          "bottom": 922
+        },
+        "title": {
+          "x": 20,
+          "y": 80,
+          "w": 390,
+          "h": 91.578125,
+          "right": 410,
+          "bottom": 171.578125
+        },
+        "visible": 1019,
+        "controls": [
+          {
+            "id": "notesBtn",
+            "w": 46.34375,
+            "h": 44
+          },
+          {
+            "id": "soundBtn",
+            "w": 44,
+            "h": 44
+          },
+          {
+            "id": "nextBtn",
+            "w": 48,
+            "h": 48
+          },
+          {
+            "id": "chapter active",
+            "w": 126,
+            "h": 44
+          },
+          {
+            "id": "chapter",
+            "w": 126,
+            "h": 44
+          },
+          {
+            "id": "chapter",
+            "w": 126,
+            "h": 44
+          },
+          {
+            "id": "pauseBtn",
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "focusBtn",
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "saveBtn",
+            "w": 262,
+            "h": 44
+          }
+        ],
+        "backend": "Three.js r180"
+      }
+    },
+    {
+      "name": "chromium/wide/no-js-errors",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "chromium/landscape/three-renderer",
+      "pass": true,
+      "detail": "Three.js r180"
+    },
+    {
+      "name": "chromium/landscape/sculpture-visible",
+      "pass": true,
+      "detail": 575
+    },
+    {
+      "name": "chromium/landscape/no-horizontal-overflow",
+      "pass": true,
+      "detail": 844
+    },
+    {
+      "name": "chromium/landscape/dock-visible",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "chromium/landscape/touch-targets",
+      "pass": true,
+      "detail": [
+        {
+          "id": "notesBtn",
+          "w": 46.34375,
+          "h": 44
+        },
+        {
+          "id": "soundBtn",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "id": "nextBtn",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "id": "chapter active",
+          "w": 124.65625,
+          "h": 44
+        },
+        {
+          "id": "chapter",
+          "w": 124.671875,
+          "h": 44
+        },
+        {
+          "id": "chapter",
+          "w": 124.65625,
+          "h": 44
+        },
+        {
+          "id": "pauseBtn",
+          "w": 56,
+          "h": 44
+        },
+        {
+          "id": "focusBtn",
+          "w": 56,
+          "h": 44
+        },
+        {
+          "id": "saveBtn",
+          "w": 258,
+          "h": 44
+        }
+      ]
+    },
+    {
+      "name": "chromium/landscape/no-js-errors",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "chromium/tablet/three-renderer",
+      "pass": true,
+      "detail": "Three.js r180"
+    },
+    {
+      "name": "chromium/tablet/sculpture-visible",
+      "pass": true,
+      "detail": 740
+    },
+    {
+      "name": "chromium/tablet/no-horizontal-overflow",
+      "pass": true,
+      "detail": 768
+    },
+    {
+      "name": "chromium/tablet/dock-visible",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "chromium/tablet/touch-targets",
+      "pass": true,
+      "detail": [
+        {
+          "id": "notesBtn",
+          "w": 46.34375,
+          "h": 44
+        },
+        {
+          "id": "soundBtn",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "id": "nextBtn",
+          "w": 48,
+          "h": 48
+        },
+        {
+          "id": "chapter active",
+          "w": 238.65625,
+          "h": 44
+        },
+        {
+          "id": "chapter",
+          "w": 238.671875,
+          "h": 44
+        },
+        {
+          "id": "chapter",
+          "w": 238.671875,
+          "h": 44
+        },
+        {
+          "id": "pauseBtn",
+          "w": 56,
+          "h": 44
+        },
+        {
+          "id": "focusBtn",
+          "w": 56,
+          "h": 44
+        },
+        {
+          "id": "saveBtn",
+          "w": 600,
+          "h": 44
+        }
+      ]
+    },
+    {
+      "name": "chromium/tablet/composition-no-overlap",
+      "pass": true,
+      "detail": {
+        "width": 768,
+        "innerWidth": 768,
+        "innerHeight": 1024,
+        "stage": {
+          "x": 0,
+          "y": 240.546875,
+          "w": 768,
+          "h": 507.4375,
+          "right": 768,
+          "bottom": 747.984375
+        },
+        "caption": {
+          "x": 20,
+          "y": 756,
+          "w": 728,
+          "h": 104,
+          "right": 748,
+          "bottom": 860
+        },
+        "dock": {
+          "x": 20,
+          "y": 876,
+          "w": 728,
+          "h": 138,
+          "right": 748,
+          "bottom": 1014
+        },
+        "title": {
+          "x": 20,
+          "y": 80,
+          "w": 728,
+          "h": 141.578125,
+          "right": 748,
+          "bottom": 221.578125
+        },
+        "visible": 740,
+        "controls": [
+          {
+            "id": "notesBtn",
+            "w": 46.34375,
+            "h": 44
+          },
+          {
+            "id": "soundBtn",
+            "w": 44,
+            "h": 44
+          },
+          {
+            "id": "nextBtn",
+            "w": 48,
+            "h": 48
+          },
+          {
+            "id": "chapter active",
+            "w": 238.65625,
+            "h": 44
+          },
+          {
+            "id": "chapter",
+            "w": 238.671875,
+            "h": 44
+          },
+          {
+            "id": "chapter",
+            "w": 238.671875,
+            "h": 44
+          },
+          {
+            "id": "pauseBtn",
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "focusBtn",
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "saveBtn",
+            "w": 600,
+            "h": 44
+          }
+        ],
+        "backend": "Three.js r180"
+      }
+    },
+    {
+      "name": "chromium/tablet/no-js-errors",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "chromium/desktop/three-renderer",
+      "pass": true,
+      "detail": "Three.js r180"
+    },
+    {
+      "name": "chromium/desktop/sculpture-visible",
+      "pass": true,
+      "detail": 512
+    },
+    {
+      "name": "chromium/desktop/no-horizontal-overflow",
+      "pass": true,
+      "detail": 1440
+    },
+    {
+      "name": "chromium/desktop/dock-visible",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "chromium/desktop/no-js-errors",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "native-fallback",
+      "pass": true,
+      "detail": "WebGL · 本地"
+    },
+    {
+      "name": "webkit/phone/three-renderer",
+      "pass": true,
+      "detail": "Three.js r180"
+    },
+    {
+      "name": "webkit/phone/sculpture-visible",
+      "pass": true,
+      "detail": 1122
+    },
+    {
+      "name": "webkit/phone/no-horizontal-overflow",
+      "pass": true,
+      "detail": 390
+    },
+    {
+      "name": "webkit/phone/dock-visible",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "webkit/phone/touch-targets",
+      "pass": true,
+      "detail": [
+        {
+          "id": "notesBtn",
+          "w": 44.390625,
+          "h": 44
+        },
+        {
+          "id": "soundBtn",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "id": "nextBtn",
+          "w": 48,
+          "h": 48
+        },
+        {
+          "id": "chapter active",
+          "w": 112.65625,
+          "h": 44
+        },
+        {
+          "id": "chapter",
+          "w": 112.671875,
+          "h": 44
+        },
+        {
+          "id": "chapter",
+          "w": 112.671875,
+          "h": 44
+        },
+        {
+          "id": "pauseBtn",
+          "w": 56,
+          "h": 44
+        },
+        {
+          "id": "focusBtn",
+          "w": 56,
+          "h": 44
+        },
+        {
+          "id": "saveBtn",
+          "w": 222,
+          "h": 44
+        }
+      ]
+    },
+    {
+      "name": "webkit/phone/composition-no-overlap",
+      "pass": true,
+      "detail": {
+        "width": 390,
+        "innerWidth": 390,
+        "innerHeight": 844,
+        "stage": {
+          "x": 0,
+          "y": 176.296875,
+          "w": 390,
+          "h": 391.6875,
+          "right": 390,
+          "bottom": 567.984375
+        },
+        "caption": {
+          "x": 20,
+          "y": 576,
+          "w": 350,
+          "h": 104,
+          "right": 370,
+          "bottom": 680
+        },
+        "dock": {
+          "x": 20,
+          "y": 696,
+          "w": 350,
+          "h": 138,
+          "right": 370,
+          "bottom": 834
+        },
+        "title": {
+          "x": 20,
+          "y": 80,
+          "w": 350,
+          "h": 85,
+          "right": 370,
+          "bottom": 165
+        },
+        "visible": 1122,
+        "controls": [
+          {
+            "id": "notesBtn",
+            "w": 44.390625,
+            "h": 44
+          },
+          {
+            "id": "soundBtn",
+            "w": 44,
+            "h": 44
+          },
+          {
+            "id": "nextBtn",
+            "w": 48,
+            "h": 48
+          },
+          {
+            "id": "chapter active",
+            "w": 112.65625,
+            "h": 44
+          },
+          {
+            "id": "chapter",
+            "w": 112.671875,
+            "h": 44
+          },
+          {
+            "id": "chapter",
+            "w": 112.671875,
+            "h": 44
+          },
+          {
+            "id": "pauseBtn",
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "focusBtn",
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "saveBtn",
+            "w": 222,
+            "h": 44
+          }
+        ],
+        "backend": "Three.js r180"
+      }
+    },
+    {
+      "name": "webkit/phone/chapter-2",
+      "pass": true,
+      "detail": {
+        "chapter": 1,
+        "morph": 1
+      }
+    },
+    {
+      "name": "webkit/phone/chapter-3",
+      "pass": true,
+      "detail": {
+        "chapter": 2,
+        "morph": 2
+      }
+    },
+    {
+      "name": "webkit/phone/chapter-1",
+      "pass": true,
+      "detail": {
+        "chapter": 0,
+        "morph": 0
+      }
+    },
+    {
+      "name": "webkit/phone/play-toggle",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "webkit/phone/notes-open",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "webkit/phone/notes-close",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "webkit/phone/focus-mode",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "webkit/phone/focus-exit",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "webkit/phone/poster-export",
+      "pass": true,
+      "detail": [
+        1080,
+        1440
+      ]
+    },
+    {
+      "name": "webkit/phone/safe-areas",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "webkit/phone/resize-390x640",
+      "pass": true,
+      "detail": {
+        "w": 390,
+        "h": 235,
+        "rect": {
+          "x": 0,
+          "y": 158.296875,
+          "width": 390,
+          "height": 234.6875,
+          "top": 158.296875,
+          "right": 390,
+          "bottom": 392.984375,
+          "left": 0
+        }
+      }
+    },
+    {
+      "name": "webkit/phone/resize-844x390",
+      "pass": true,
+      "detail": {
+        "w": 481,
+        "h": 242,
+        "rect": {
+          "x": 346.03125,
+          "y": 56,
+          "width": 481.078125,
+          "height": 242,
+          "top": 56,
+          "right": 827.109375,
+          "bottom": 298,
+          "left": 346.03125
+        }
+      }
+    },
+    {
+      "name": "webkit/phone/resize-390x844",
+      "pass": true,
+      "detail": {
+        "w": 390,
+        "h": 392,
+        "rect": {
+          "x": 0,
+          "y": 176.296875,
+          "width": 390,
+          "height": 391.6875,
+          "top": 176.296875,
+          "right": 390,
+          "bottom": 567.984375,
+          "left": 0
+        }
+      }
+    },
+    {
+      "name": "webkit/phone/hold-start",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "webkit/phone/hold-cancel",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "webkit/phone/no-js-errors",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "webkit/small/three-renderer",
+      "pass": true,
+      "detail": "Three.js r180"
+    },
+    {
+      "name": "webkit/small/sculpture-visible",
+      "pass": true,
+      "detail": 623
+    },
+    {
+      "name": "webkit/small/no-horizontal-overflow",
+      "pass": true,
+      "detail": 320
+    },
+    {
+      "name": "webkit/small/dock-visible",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "webkit/small/touch-targets",
+      "pass": true,
+      "detail": [
+        {
+          "id": "notesBtn",
+          "w": 44.390625,
+          "h": 44
+        },
+        {
+          "id": "soundBtn",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "id": "nextBtn",
+          "w": 48,
+          "h": 48
+        },
+        {
+          "id": "chapter active",
+          "w": 92,
+          "h": 44
+        },
+        {
+          "id": "chapter",
+          "w": 92,
+          "h": 44
+        },
+        {
+          "id": "chapter",
+          "w": 92,
+          "h": 44
+        },
+        {
+          "id": "pauseBtn",
+          "w": 56,
+          "h": 44
+        },
+        {
+          "id": "focusBtn",
+          "w": 56,
+          "h": 44
+        },
+        {
+          "id": "saveBtn",
+          "w": 160,
+          "h": 44
+        }
+      ]
+    },
+    {
+      "name": "webkit/small/composition-no-overlap",
+      "pass": true,
+      "detail": {
+        "width": 320,
+        "innerWidth": 320,
+        "innerHeight": 568,
+        "stage": {
+          "x": 0,
+          "y": 146.390625,
+          "w": 320,
+          "h": 174.59375,
+          "right": 320,
+          "bottom": 320.984375
+        },
+        "caption": {
+          "x": 16,
+          "y": 325,
+          "w": 288,
+          "h": 90,
+          "right": 304,
+          "bottom": 415
+        },
+        "dock": {
+          "x": 16,
+          "y": 431,
+          "w": 288,
+          "h": 127,
+          "right": 304,
+          "bottom": 558
+        },
+        "title": {
+          "x": 16,
+          "y": 62,
+          "w": 288,
+          "h": 68,
+          "right": 304,
+          "bottom": 130
+        },
+        "visible": 623,
+        "controls": [
+          {
+            "id": "notesBtn",
+            "w": 44.390625,
+            "h": 44
+          },
+          {
+            "id": "soundBtn",
+            "w": 44,
+            "h": 44
+          },
+          {
+            "id": "nextBtn",
+            "w": 48,
+            "h": 48
+          },
+          {
+            "id": "chapter active",
+            "w": 92,
+            "h": 44
+          },
+          {
+            "id": "chapter",
+            "w": 92,
+            "h": 44
+          },
+          {
+            "id": "chapter",
+            "w": 92,
+            "h": 44
+          },
+          {
+            "id": "pauseBtn",
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "focusBtn",
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "saveBtn",
+            "w": 160,
+            "h": 44
+          }
+        ],
+        "backend": "Three.js r180"
+      }
+    },
+    {
+      "name": "webkit/small/no-js-errors",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "webkit/short/three-renderer",
+      "pass": true,
+      "detail": "Three.js r180"
+    },
+    {
+      "name": "webkit/short/sculpture-visible",
+      "pass": true,
+      "detail": 674
+    },
+    {
+      "name": "webkit/short/no-horizontal-overflow",
+      "pass": true,
+      "detail": 375
+    },
+    {
+      "name": "webkit/short/dock-visible",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "webkit/short/touch-targets",
+      "pass": true,
+      "detail": [
+        {
+          "id": "notesBtn",
+          "w": 44.390625,
+          "h": 44
+        },
+        {
+          "id": "soundBtn",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "id": "nextBtn",
+          "w": 48,
+          "h": 48
+        },
+        {
+          "id": "chapter active",
+          "w": 110.328125,
+          "h": 44
+        },
+        {
+          "id": "chapter",
+          "w": 110.328125,
+          "h": 44
+        },
+        {
+          "id": "chapter",
+          "w": 110.328125,
+          "h": 44
+        },
+        {
+          "id": "pauseBtn",
+          "w": 56,
+          "h": 44
+        },
+        {
+          "id": "focusBtn",
+          "w": 56,
+          "h": 44
+        },
+        {
+          "id": "saveBtn",
+          "w": 215,
+          "h": 44
+        }
+      ]
+    },
+    {
+      "name": "webkit/short/composition-no-overlap",
+      "pass": true,
+      "detail": {
+        "width": 375,
+        "innerWidth": 375,
+        "innerHeight": 667,
+        "stage": {
+          "x": 0,
+          "y": 169.75,
+          "w": 375,
+          "h": 221.25,
+          "right": 375,
+          "bottom": 391
+        },
+        "caption": {
+          "x": 16,
+          "y": 399,
+          "w": 343,
+          "h": 104,
+          "right": 359,
+          "bottom": 503
+        },
+        "dock": {
+          "x": 16,
+          "y": 519,
+          "w": 343,
+          "h": 138,
+          "right": 359,
+          "bottom": 657
+        },
+        "title": {
+          "x": 16,
+          "y": 76,
+          "w": 343,
+          "h": 83,
+          "right": 359,
+          "bottom": 159
+        },
+        "visible": 674,
+        "controls": [
+          {
+            "id": "notesBtn",
+            "w": 44.390625,
+            "h": 44
+          },
+          {
+            "id": "soundBtn",
+            "w": 44,
+            "h": 44
+          },
+          {
+            "id": "nextBtn",
+            "w": 48,
+            "h": 48
+          },
+          {
+            "id": "chapter active",
+            "w": 110.328125,
+            "h": 44
+          },
+          {
+            "id": "chapter",
+            "w": 110.328125,
+            "h": 44
+          },
+          {
+            "id": "chapter",
+            "w": 110.328125,
+            "h": 44
+          },
+          {
+            "id": "pauseBtn",
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "focusBtn",
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "saveBtn",
+            "w": 215,
+            "h": 44
+          }
+        ],
+        "backend": "Three.js r180"
+      }
+    },
+    {
+      "name": "webkit/short/no-js-errors",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "webkit/android/three-renderer",
+      "pass": true,
+      "detail": "Three.js r180"
+    },
+    {
+      "name": "webkit/android/sculpture-visible",
+      "pass": true,
+      "detail": 937
+    },
+    {
+      "name": "webkit/android/no-horizontal-overflow",
+      "pass": true,
+      "detail": 360
+    },
+    {
+      "name": "webkit/android/dock-visible",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "webkit/android/touch-targets",
+      "pass": true,
+      "detail": [
+        {
+          "id": "notesBtn",
+          "w": 44.390625,
+          "h": 44
+        },
+        {
+          "id": "soundBtn",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "id": "nextBtn",
+          "w": 48,
+          "h": 48
+        },
+        {
+          "id": "chapter active",
+          "w": 105.328125,
+          "h": 44
+        },
+        {
+          "id": "chapter",
+          "w": 105.328125,
+          "h": 44
+        },
+        {
+          "id": "chapter",
+          "w": 105.328125,
+          "h": 44
+        },
+        {
+          "id": "pauseBtn",
+          "w": 56,
+          "h": 44
+        },
+        {
+          "id": "focusBtn",
+          "w": 56,
+          "h": 44
+        },
+        {
+          "id": "saveBtn",
+          "w": 200,
+          "h": 44
+        }
+      ]
+    },
+    {
+      "name": "webkit/android/composition-no-overlap",
+      "pass": true,
+      "detail": {
+        "width": 360,
+        "innerWidth": 360,
+        "innerHeight": 740,
+        "stage": {
+          "x": 0,
+          "y": 167.1875,
+          "w": 360,
+          "h": 296.796875,
+          "right": 360,
+          "bottom": 463.984375
+        },
+        "caption": {
+          "x": 16,
+          "y": 472,
+          "w": 328,
+          "h": 104,
+          "right": 344,
+          "bottom": 576
+        },
+        "dock": {
+          "x": 16,
+          "y": 592,
+          "w": 328,
+          "h": 138,
+          "right": 344,
+          "bottom": 730
+        },
+        "title": {
+          "x": 16,
+          "y": 76,
+          "w": 328,
+          "h": 81,
+          "right": 344,
+          "bottom": 157
+        },
+        "visible": 937,
+        "controls": [
+          {
+            "id": "notesBtn",
+            "w": 44.390625,
+            "h": 44
+          },
+          {
+            "id": "soundBtn",
+            "w": 44,
+            "h": 44
+          },
+          {
+            "id": "nextBtn",
+            "w": 48,
+            "h": 48
+          },
+          {
+            "id": "chapter active",
+            "w": 105.328125,
+            "h": 44
+          },
+          {
+            "id": "chapter",
+            "w": 105.328125,
+            "h": 44
+          },
+          {
+            "id": "chapter",
+            "w": 105.328125,
+            "h": 44
+          },
+          {
+            "id": "pauseBtn",
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "focusBtn",
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "saveBtn",
+            "w": 200,
+            "h": 44
+          }
+        ],
+        "backend": "Three.js r180"
+      }
+    },
+    {
+      "name": "webkit/android/no-js-errors",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "webkit/wide/three-renderer",
+      "pass": true,
+      "detail": "Three.js r180"
+    },
+    {
+      "name": "webkit/wide/sculpture-visible",
+      "pass": true,
+      "detail": 1019
+    },
+    {
+      "name": "webkit/wide/no-horizontal-overflow",
+      "pass": true,
+      "detail": 430
+    },
+    {
+      "name": "webkit/wide/dock-visible",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "webkit/wide/touch-targets",
+      "pass": true,
+      "detail": [
+        {
+          "id": "notesBtn",
+          "w": 44.390625,
+          "h": 44
+        },
+        {
+          "id": "soundBtn",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "id": "nextBtn",
+          "w": 48,
+          "h": 48
+        },
+        {
+          "id": "chapter active",
+          "w": 126,
+          "h": 44
+        },
+        {
+          "id": "chapter",
+          "w": 126,
+          "h": 44
+        },
+        {
+          "id": "chapter",
+          "w": 126,
+          "h": 44
+        },
+        {
+          "id": "pauseBtn",
+          "w": 56,
+          "h": 44
+        },
+        {
+          "id": "focusBtn",
+          "w": 56,
+          "h": 44
+        },
+        {
+          "id": "saveBtn",
+          "w": 262,
+          "h": 44
+        }
+      ]
+    },
+    {
+      "name": "webkit/wide/composition-no-overlap",
+      "pass": true,
+      "detail": {
+        "width": 430,
+        "innerWidth": 430,
+        "innerHeight": 932,
+        "stage": {
+          "x": 0,
+          "y": 183.09375,
+          "w": 430,
+          "h": 472.890625,
+          "right": 430,
+          "bottom": 655.984375
+        },
+        "caption": {
+          "x": 20,
+          "y": 664,
+          "w": 390,
+          "h": 104,
+          "right": 410,
+          "bottom": 768
+        },
+        "dock": {
+          "x": 20,
+          "y": 784,
+          "w": 390,
+          "h": 138,
+          "right": 410,
+          "bottom": 922
+        },
+        "title": {
+          "x": 20,
+          "y": 80,
+          "w": 390,
+          "h": 91,
+          "right": 410,
+          "bottom": 171
+        },
+        "visible": 1019,
+        "controls": [
+          {
+            "id": "notesBtn",
+            "w": 44.390625,
+            "h": 44
+          },
+          {
+            "id": "soundBtn",
+            "w": 44,
+            "h": 44
+          },
+          {
+            "id": "nextBtn",
+            "w": 48,
+            "h": 48
+          },
+          {
+            "id": "chapter active",
+            "w": 126,
+            "h": 44
+          },
+          {
+            "id": "chapter",
+            "w": 126,
+            "h": 44
+          },
+          {
+            "id": "chapter",
+            "w": 126,
+            "h": 44
+          },
+          {
+            "id": "pauseBtn",
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "focusBtn",
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "saveBtn",
+            "w": 262,
+            "h": 44
+          }
+        ],
+        "backend": "Three.js r180"
+      }
+    },
+    {
+      "name": "webkit/wide/no-js-errors",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "webkit/landscape/three-renderer",
+      "pass": true,
+      "detail": "Three.js r180"
+    },
+    {
+      "name": "webkit/landscape/sculpture-visible",
+      "pass": true,
+      "detail": 575
+    },
+    {
+      "name": "webkit/landscape/no-horizontal-overflow",
+      "pass": true,
+      "detail": 844
+    },
+    {
+      "name": "webkit/landscape/dock-visible",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "webkit/landscape/touch-targets",
+      "pass": true,
+      "detail": [
+        {
+          "id": "notesBtn",
+          "w": 44.390625,
+          "h": 44
+        },
+        {
+          "id": "soundBtn",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "id": "nextBtn",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "id": "chapter active",
+          "w": 124.65625,
+          "h": 44
+        },
+        {
+          "id": "chapter",
+          "w": 124.671875,
+          "h": 44
+        },
+        {
+          "id": "chapter",
+          "w": 124.671875,
+          "h": 44
+        },
+        {
+          "id": "pauseBtn",
+          "w": 56,
+          "h": 44
+        },
+        {
+          "id": "focusBtn",
+          "w": 56,
+          "h": 44
+        },
+        {
+          "id": "saveBtn",
+          "w": 258,
+          "h": 44
+        }
+      ]
+    },
+    {
+      "name": "webkit/landscape/no-js-errors",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "webkit/tablet/three-renderer",
+      "pass": true,
+      "detail": "Three.js r180"
+    },
+    {
+      "name": "webkit/tablet/sculpture-visible",
+      "pass": true,
+      "detail": 740
+    },
+    {
+      "name": "webkit/tablet/no-horizontal-overflow",
+      "pass": true,
+      "detail": 768
+    },
+    {
+      "name": "webkit/tablet/dock-visible",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "webkit/tablet/touch-targets",
+      "pass": true,
+      "detail": [
+        {
+          "id": "notesBtn",
+          "w": 44.390625,
+          "h": 44
+        },
+        {
+          "id": "soundBtn",
+          "w": 44,
+          "h": 44
+        },
+        {
+          "id": "nextBtn",
+          "w": 48,
+          "h": 48
+        },
+        {
+          "id": "chapter active",
+          "w": 238.65625,
+          "h": 44
+        },
+        {
+          "id": "chapter",
+          "w": 238.671875,
+          "h": 44
+        },
+        {
+          "id": "chapter",
+          "w": 238.65625,
+          "h": 44
+        },
+        {
+          "id": "pauseBtn",
+          "w": 56,
+          "h": 44
+        },
+        {
+          "id": "focusBtn",
+          "w": 56,
+          "h": 44
+        },
+        {
+          "id": "saveBtn",
+          "w": 600,
+          "h": 44
+        }
+      ]
+    },
+    {
+      "name": "webkit/tablet/composition-no-overlap",
+      "pass": true,
+      "detail": {
+        "width": 768,
+        "innerWidth": 768,
+        "innerHeight": 1024,
+        "stage": {
+          "x": 0,
+          "y": 240.546875,
+          "w": 768,
+          "h": 507.4375,
+          "right": 768,
+          "bottom": 747.984375
+        },
+        "caption": {
+          "x": 20,
+          "y": 756,
+          "w": 728,
+          "h": 104,
+          "right": 748,
+          "bottom": 860
+        },
+        "dock": {
+          "x": 20,
+          "y": 876,
+          "w": 728,
+          "h": 138,
+          "right": 748,
+          "bottom": 1014
+        },
+        "title": {
+          "x": 20,
+          "y": 80,
+          "w": 728,
+          "h": 141,
+          "right": 748,
+          "bottom": 221
+        },
+        "visible": 740,
+        "controls": [
+          {
+            "id": "notesBtn",
+            "w": 44.390625,
+            "h": 44
+          },
+          {
+            "id": "soundBtn",
+            "w": 44,
+            "h": 44
+          },
+          {
+            "id": "nextBtn",
+            "w": 48,
+            "h": 48
+          },
+          {
+            "id": "chapter active",
+            "w": 238.65625,
+            "h": 44
+          },
+          {
+            "id": "chapter",
+            "w": 238.671875,
+            "h": 44
+          },
+          {
+            "id": "chapter",
+            "w": 238.65625,
+            "h": 44
+          },
+          {
+            "id": "pauseBtn",
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "focusBtn",
+            "w": 56,
+            "h": 44
+          },
+          {
+            "id": "saveBtn",
+            "w": 600,
+            "h": 44
+          }
+        ],
+        "backend": "Three.js r180"
+      }
+    },
+    {
+      "name": "webkit/tablet/no-js-errors",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "webkit/desktop/three-renderer",
+      "pass": true,
+      "detail": "Three.js r180"
+    },
+    {
+      "name": "webkit/desktop/sculpture-visible",
+      "pass": true,
+      "detail": 513
+    },
+    {
+      "name": "webkit/desktop/no-horizontal-overflow",
+      "pass": true,
+      "detail": 1440
+    },
+    {
+      "name": "webkit/desktop/dock-visible",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "name": "webkit/desktop/no-js-errors",
+      "pass": true,
+      "detail": []
+    }
+  ],
+  "passed": 139,
+  "failed": 0
+}

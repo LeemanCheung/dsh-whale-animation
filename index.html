@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0c0e">
+  <meta name="description" content="结、环、尘。三件镀铬雕塑，留在夜里。">
+  <title>NOCTURNE — 夜曲</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0c0e'/%3E%3Cpath d='M17 46V18l30 28V18' fill='none' stroke='%23ed553b' stroke-width='5'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./src/style.css">
+  <link rel="stylesheet" href="./src/mobile.css">
+</head>
+<body>
+  <a class="skip-link" href="#controls">跳到作品控制</a>
+  <div class="ambient" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="hairline hairline-left" aria-hidden="true"></div>
+  <div class="hairline hairline-right" aria-hidden="true"></div>
+  <div class="load-line" id="loadLine" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="wordmark" href="#study-1" aria-label="夜曲，回到第一件作品">
+      <svg class="brand-mark" viewBox="0 0 30 30" fill="none" aria-hidden="true"><path d="M6 25V5l18 20V5" stroke="currentColor" stroke-width="1.6"/><path d="M12 25V12M18 18V5" stroke="currentColor" stroke-width="1.2"/></svg>
+      <span>NOCTURNE<sup>01</sup></span>
+    </a>
+    <span class="header-caption">独立形态研究 <i>/</i> VOL. 01</span>
+    <nav class="header-actions" aria-label="页面功能">
+      <button class="text-button" id="notesBtn">手记 <span class="tiny-arrow">↗</span></button>
+      <button class="sound-button" id="soundBtn" aria-pressed="false" aria-label="开启声音">
+        <span class="sound-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span id="soundLabel">声音关闭</span>
+      </button>
+      <button class="icon-button fullscreen-button" id="fullscreenBtn" aria-label="进入全屏" title="全屏 · F">
+        <svg width="17" height="17" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M7 3H3v4m10-4h4v4M3 13v4h4m10-4v4h-4" stroke="currentColor" stroke-width="1.2"/></svg>
+      </button>
+    </nav>
+  </header>
+
+  <main id="main">
+    <div class="stage-typography" aria-hidden="true">
+      <div class="masthead-meta"><span>STUDIES IN LIGHT & FORM</span><span class="title-index">N° <span id="largeIndex">001</span></span></div>
+      <div class="masthead" id="masthead">NOCTURNE</div>
+    </div>
+    <div class="orbit-decoration" aria-hidden="true"><span class="orbit-tick t1"></span><span class="orbit-tick t2"></span><span class="orbit-tick t3"></span></div>
+    <div id="renderHost" class="render-host" role="img" aria-label="可交互的镀铬雕塑。横向拖动旋转，长按解构；上下滑动更换作品。也可使用下方按钮和键盘。" tabindex="0"></div>
+    <canvas id="dustCanvas" class="dust-canvas" aria-hidden="true"></canvas>
+    <div class="art-number" aria-hidden="true"><span id="artOrdinal">01</span><span class="art-number-rule"></span><span>03</span></div>
+    <div class="coordinates" aria-hidden="true"><span id="rotationReadout">X +000° &nbsp; Y +000°</span><span>CHROME / VARIABLE FORM</span></div>
+    <div class="side-label" aria-hidden="true">CHROME STUDIES · MMXXVI</div>
+
+    <div class="fixed-caption" id="fixedCaption" aria-live="polite" aria-atomic="true">
+      <div class="eyebrow"><span class="small-line"></span><span id="workLabel">001 — LIGATURE</span></div>
+      <h1 id="workTitle">夜曲</h1>
+      <p id="workDescription">一根闭合的线。<br>镀铬曲面，缓慢回旋。</p>
+      <button class="enter-button" id="nextBtn"><span id="nextLabel">下一件作品</span><span class="circle-arrow">↗</span></button>
+    </div>
+    <div class="live-label"><span class="live-dot"></span><span id="renderLabel">实时演算</span><span class="live-divider">/</span><span id="timeReadout">00:00</span></div>
+    <div class="hold-meter" id="holdMeter" aria-hidden="true"><span></span><small>松手，归位</small></div>
+    <div class="scroll-cue" aria-hidden="true"><span>向下，继续</span><i></i></div>
+
+    <section id="study-1" class="scroll-section" aria-label="作品一：夜曲"><h2 class="sr-only">夜曲 — 结</h2></section>
+    <section id="study-2" class="scroll-section" aria-label="作品二：回环"><h2 class="sr-only">回环 — 环</h2></section>
+    <section id="study-3" class="scroll-section" aria-label="作品三：余尘"><h2 class="sr-only">余尘 — 尘</h2></section>
+  </main>
+
+  <footer class="control-dock" id="controls">
+    <div class="dock-top">
+      <div class="chapters" role="group" aria-label="选择作品">
+        <button class="chapter active" data-chapter="0" aria-pressed="true"><span class="chapter-no">01</span><span class="chapter-name">结</span><i></i></button>
+        <button class="chapter" data-chapter="1" aria-pressed="false"><span class="chapter-no">02</span><span class="chapter-name">环</span><i></i></button>
+        <button class="chapter" data-chapter="2" aria-pressed="false"><span class="chapter-no">03</span><span class="chapter-name">尘</span><i></i></button>
+      </div>
+      <div class="interaction-hint"><span class="mouse-icon" aria-hidden="true"></span><span id="interactionHint">拖动旋转 <b>·</b> 按住解构</span></div>
+      <div class="dock-actions">
+        <button class="icon-button" id="pauseBtn" aria-label="暂停动画" aria-pressed="false" title="暂停 · 空格"><svg viewBox="0 0 18 18" width="16" height="16" aria-hidden="true"><path id="pauseIcon" d="M6 4v10M12 4v10" stroke="currentColor" stroke-width="1.5"/></svg></button>
+        <button class="icon-button focus-button" id="focusBtn" aria-label="无字观赏模式" aria-pressed="false" title="无字观赏 · H"><svg width="19" height="19" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M2 10s3-5 8-5 8 5 8 5-3 5-8 5-8-5-8-5Z" stroke="currentColor"/><circle cx="10" cy="10" r="2.2" stroke="currentColor"/></svg></button>
+        <button class="save-button" id="saveBtn">保存此刻 <span>↗</span></button>
+      </div>
+    </div>
+    <div class="progress-track" aria-hidden="true"><span id="progressFill"></span></div>
+    <div class="dock-bottom"><span>数字雕塑 <span class="muted-slash">/</span> MMXXVI</span><span class="bottom-center">FORM / LIGHT / MOTION</span><span class="serial">EDITION 001—003 <span class="red-cross">+</span></span></div>
+  </footer>
+  <button id="leaveFocus" class="leave-focus">退出观赏 <span>↙</span></button>
+  <div class="cursor" id="cursor" aria-hidden="true"><span>HOLD</span></div>
+  <div class="toast" id="toast" role="status"></div>
+
+  <dialog class="notes-dialog" id="notesDialog" aria-labelledby="notesTitle">
+    <button class="close-notes icon-button" id="closeNotes" aria-label="关闭手记">✕</button>
+    <div class="notes-overline">FIELD NOTES — 001</div>
+    <h2 id="notesTitle">夜里，<br><em>只看形状。</em></h2>
+    <p class="notes-intro">一根线打成结，几道圆环错开，最后，曲面散成薄片。<br>同一束光，照过三种形状。</p>
+    <dl class="notes-specs"><div><dt>材料</dt><dd>虚拟镀铬 / 程序化光场</dd></div><div><dt>形态</dt><dd>结 · 环 · 尘</dd></div><div><dt>工具</dt><dd>Three.js / GLSL / Web Audio</dd></div><div><dt>当前渲染</dt><dd id="backendLabel">WebGL</dd></div></dl>
+    <div class="notes-controls"><span>拖动 <b>转动雕塑</b></span><span>按住 <b>解构 / 松开复原</b></span><span>上下滑动 / 1 2 3 <b>更换作品</b></span><span>空格 <b>暂停</b></span><span>H / F <b>无字 / 全屏</b></span><span>方向键 <b>调整视角</b></span></div>
+    <p class="notes-foot">声音默认关闭。静音，也是一种看法。</p>
+  </dialog>
+  <dialog class="export-dialog" id="exportDialog" aria-labelledby="exportTitle">
+    <div class="export-head"><h2 id="exportTitle">留一张。</h2><button class="icon-button" id="closeExport" aria-label="关闭图片">✕</button></div>
+    <img id="exportImage" alt="当前视角的夜曲雕塑海报">
+    <p>长按图片保存，或用下方按钮。</p>
+    <div class="export-actions"><a id="downloadPoster" download="NOCTURNE.png">下载图片 ↗</a><button id="sharePoster" hidden>分享图片 ↗</button></div>
+  </dialog>
+  <noscript><div class="no-script">这件作品需要 JavaScript。开启后，光会亮起来。</div></noscript>
+  <script src="./src/app.js"></script>
+</body>
+</html>
