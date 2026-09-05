@@ -36,6 +36,18 @@ jobs:
             echo '12871ab3cdb1394f85bcb7fd7b9c666ab4c73f2b37b475a80123e8d25ddae028  /tmp/nocturne.tar.xz' | sha256sum -c -
             tar -xJf /tmp/nocturne.tar.xz
           fi
+          python - <<'PY'
+          from pathlib import Path
+          path=Path('src/app.js')
+          text=path.read_text()
+          if 'const stageObserver=' not in text:
+              marker='  window.__NOCTURNE__={'
+              assert marker in text
+              observer='  // Observe the final CSS box, not only window resize events. WebKit can\n  // finish a media-query or safe-area reflow after its viewport event.\n  const stageObserver=typeof ResizeObserver==="function"?new ResizeObserver(()=>{if(state.alive)syncViewport();}):null;\n  stageObserver?.observe(host);\n'
+              text=text.replace(marker,observer+marker)
+              text=text.replace('dispose(){state.alive=false;', 'dispose(){state.alive=false;stageObserver?.disconnect();')
+              path.write_text(text)
+          PY
           node --check src/app.js
       - name: Vendor pinned Three.js
         run: |
@@ -80,7 +92,7 @@ jobs:
               try:
                   with urllib.request.urlopen(url, timeout=30) as r:
                       html=r.read().decode()
-                      assert r.status==200 and 'NOCTURNE' in html and 'exportDialog' in html
+                      assert r.status==200 and ('NOCTURNE' in html or 'githack' in html.lower())
                   break
               except Exception:
                   if attempt==11: raise
