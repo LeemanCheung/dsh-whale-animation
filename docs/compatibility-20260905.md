@@ -2,6 +2,8 @@
 
 Checked 2026-09-05 for dsh-whale-animation 0.7.1.
 
+The exact release matrix and successful Host/Client activation in the real QA 3081 and original Web 3080 Profiles are recorded in [COMPATIBILITY.md](../COMPATIBILITY.md). Unverified older alpha releases remain unknown.
+
 - The new DSH client no longer provides `dsh-client-runtime`. This plugin has no imports from that package, so its obsolete browser injection and peer were removed. Cordis 4.0.2 supplies the effect lifecycle.
 - The installed `dsh-client-ui-chat@0.1.2-rc.1` still renders the turn status with a `turnStatus` CSS-module class, `role="status"`, and `aria-live="polite"`.
 - Both original raster assets retain their exact Git blobs, SHA-256 values, dimensions, frame counts and timing. No SVG or additional action state was added.

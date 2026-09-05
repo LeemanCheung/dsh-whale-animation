@@ -28,7 +28,8 @@
     "README.md",
     "README.zh-CN.md",
     "LICENSE",
-    "NOTICE.md"
+    "NOTICE.md",
+    "COMPATIBILITY.md"
   ],
   "keywords": ["dsh", "deepseek-harness", "dsh-plugin", "animation", "whale"],
   "repository": {
@@ -44,6 +45,12 @@
     "bundle": { "patch": "./cordis.patch.yml" },
     "client": {
       "platform": "web"
+    },
+    "compatibility": {
+      "dshReleases": {
+        "0.1.2-rc.1": "compatible"
+      },
+      "profiles": ["web"]
     }
   },
   "scripts": {
