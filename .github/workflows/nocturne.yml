@@ -1,0 +1,131 @@
+name: NOCTURNE mobile verification and publication
+on:
+  push:
+    branches: [nocturne-site]
+    paths:
+      - 'payload/**'
+      - '.github/workflows/nocturne.yml'
+      - 'tests/**'
+      - 'src/**'
+      - 'index.html'
+permissions:
+  contents: write
+concurrency:
+  group: nocturne-site
+  cancel-in-progress: false
+jobs:
+  verify-publish:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      LIBGL_ALWAYS_SOFTWARE: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: nocturne-site
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Unpack authored source
+        run: |
+          if [ ! -f index.html ]; then
+            cat payload/part* > /tmp/nocturne.tar.xz
+            echo '12871ab3cdb1394f85bcb7fd7b9c666ab4c73f2b37b475a80123e8d25ddae028  /tmp/nocturne.tar.xz' | sha256sum -c -
+            tar -xJf /tmp/nocturne.tar.xz
+          fi
+          node --check src/app.js
+      - name: Vendor pinned Three.js
+        run: |
+          npm install --ignore-scripts --no-audit --no-fund --no-save three@0.180.0
+          mkdir -p vendor
+          cp node_modules/three/build/three.module.min.js vendor/
+          cp node_modules/three/build/three.core.min.js vendor/
+          cp node_modules/three/LICENSE vendor/THREE-LICENSE.txt
+          node build.mjs
+      - name: Install test browsers
+        run: |
+          python -m pip install playwright==1.55.0
+          python -m playwright install --with-deps chromium webkit
+      - name: Test mobile layouts and real renderers
+        run: |
+          node server.mjs > /tmp/nocturne-server.log 2>&1 &
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:3000/ >/dev/null && break || sleep 1; done
+          xvfb-run -a python tests/browser_checks.py
+      - name: Publish verified files to isolated branch
+        id: publish
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          cp test-results/report.json TEST-REPORT-v1.1.json
+          printf 'node_modules/\n__pycache__/\ntest-results/\npackage-lock.json\n' > .gitignore
+          git add index.html src vendor build.mjs server.mjs LICENSE README.md tests/browser_checks.py NOCTURNE.html TEST-REPORT-v1.1.json .gitignore
+          git commit -m 'Publish verified NOCTURNE 1.1 mobile site [skip ci]' || test -z "$(git status --porcelain --untracked-files=no)"
+          git push origin HEAD:nocturne-site
+          SHA=$(git rev-parse HEAD)
+          URL="https://rawcdn.githack.com/LeemanCheung/dsh-whale-animation/$SHA/index.html"
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+          echo "NOCTURNE_PUBLIC_URL=$URL" >> "$GITHUB_ENV"
+          printf '## Public site\n%s\n\nIsolated branch: nocturne-site. Main and plugin assets are unchanged.\n' "$URL" >> "$GITHUB_STEP_SUMMARY"
+      - name: Verify public HTTPS and capture online mobile page
+        run: |
+          python - <<'PY'
+          import asyncio, json, os, re, time, urllib.request
+          from pathlib import Path
+          from playwright.async_api import async_playwright
+          url=os.environ['NOCTURNE_PUBLIC_URL']
+          for attempt in range(12):
+              try:
+                  with urllib.request.urlopen(url, timeout=30) as r:
+                      html=r.read().decode()
+                      assert r.status==200 and 'NOCTURNE' in html and 'exportDialog' in html
+                  break
+              except Exception:
+                  if attempt==11: raise
+                  time.sleep(5)
+          async def check():
+              async with async_playwright() as p:
+                  browser=await p.chromium.launch(args=['--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader'])
+                  ctx=await browser.new_context(viewport={'width':390,'height':844},is_mobile=True,has_touch=True,reduced_motion='reduce')
+                  page=await ctx.new_page()
+                  errors=[]
+                  page.on('pageerror',lambda e: errors.append(str(e)))
+                  await page.goto(url, wait_until='domcontentloaded', timeout=60000)
+                  await page.wait_for_timeout(1500)
+                  if not await page.evaluate('Boolean(window.__NOCTURNE__)'):
+                      Path('test-results/public-entry.html').write_text(await page.content())
+                      await page.screenshot(path='test-results/public-entry.png')
+                      for role in ['button','link']:
+                          controls=page.get_by_role(role, name=re.compile(r'continue|confirm|proceed|open|visit',re.I))
+                          if await controls.count():
+                              await controls.first.click()
+                              break
+                  await page.wait_for_function('window.__NOCTURNE__ && __NOCTURNE__.state.rendererName === "Three.js r180"',timeout=60000)
+                  await page.wait_for_timeout(2000)
+                  assert not errors,errors
+                  assert await page.evaluate('document.documentElement.scrollWidth<=innerWidth')
+                  await page.screenshot(path='test-results/public-mobile.png')
+                  await page.locator('[data-chapter="2"]').tap()
+                  await page.wait_for_timeout(1500)
+                  assert await page.evaluate('__NOCTURNE__.state.chapter===2')
+                  await page.screenshot(path='test-results/public-third.png')
+                  Path('test-results/public-verification.json').write_text(json.dumps({'url':url,'status':200,'engine':'Three.js r180','viewport':[390,844],'chapterSwitch':True,'errors':errors},indent=2))
+                  await browser.close()
+          asyncio.run(check())
+          PY
+      - name: Package source
+        if: always()
+        run: |
+          if [ -f index.html ]; then
+            tar -czf NOCTURNE-1.1-source.tar.gz index.html src vendor build.mjs server.mjs LICENSE README.md tests NOCTURNE.html
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nocturne-release-and-verification
+          path: |
+            test-results/
+            NOCTURNE-1.1-source.tar.gz
+          retention-days: 30
