@@ -40,13 +40,37 @@ jobs:
           from pathlib import Path
           path=Path('src/app.js')
           text=path.read_text()
+          if '  function fitStage(){' not in text:
+              a=text.index('  function syncViewport(){')
+              b=text.index('  function scheduleResize()',a)
+              replacement='''  function fitStage(){
+              // Only update backing stores here; never mutate the observed CSS box.
+              stageRect=host.getBoundingClientRect();
+              const w=Math.max(1,Math.round(stageRect.width)),h=Math.max(1,Math.round(stageRect.height));
+              if(state.width!==w||state.height!==h){
+                state.width=w;state.height=h;
+                state.ratio=Math.min(devicePixelRatio||1,mobileQuery.matches?1.5:1.25,Math.sqrt(1300000/(w*h)));
+                renderer?.resize(w,h,state.ratio);lastSignature='';resizeDust();
+              }
+            }
+            function syncViewport(){
+              const vv=window.visualViewport;
+              const height=vv&&Math.abs(vv.scale-1)<.01?vv.height:innerHeight;
+              const value=`${Math.round(height)}px`;
+              if(document.documentElement.style.getPropertyValue('--view-height')!==value)
+                document.documentElement.style.setProperty('--view-height',value);
+              fitStage();onScroll();
+            }
+          '''
+              text=text[:a]+replacement+text[b:]
           if 'const stageObserver=' not in text:
               marker='  window.__NOCTURNE__={'
               assert marker in text
-              observer='  // Observe the final CSS box, not only window resize events. WebKit can\n  // finish a media-query or safe-area reflow after its viewport event.\n  const stageObserver=typeof ResizeObserver==="function"?new ResizeObserver(()=>{if(state.alive)syncViewport();}):null;\n  stageObserver?.observe(host);\n'
+              observer='  // Observe final CSS layout after WebKit viewport and media-query updates.\n  // Defer GPU backing-store work until outside ResizeObserver delivery.\n  const stageObserver=typeof ResizeObserver==="function"?new ResizeObserver(()=>{if(state.alive)requestAnimationFrame(fitStage);}):null;\n  stageObserver?.observe(host);\n'
               text=text.replace(marker,observer+marker)
               text=text.replace('dispose(){state.alive=false;', 'dispose(){state.alive=false;stageObserver?.disconnect();')
-              path.write_text(text)
+          text=text.replace('new ResizeObserver(()=>{if(state.alive)syncViewport();})','new ResizeObserver(()=>{if(state.alive)requestAnimationFrame(fitStage);})')
+          path.write_text(text)
           PY
           node --check src/app.js
       - name: Vendor pinned Three.js
