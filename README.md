@@ -2,6 +2,8 @@
 
 Two original whale animations for DeepSeek Harness Web. Nothing else.
 
+v0.7.1 supports DSH 0.1.2-rc.1 without the retired, unused client-runtime injection. Background tabs pause document polling and refresh immediately when visible. Windows and Linux build the same LF-normalized client, checked by both CI platforms.
+
 | Refined Dive | Classic |
 |---|---|
 | <img src="assets/whale-dive.webp" alt="Refined Dive" width="180" /> | <img src="assets/whale-classic.webp" alt="Classic" width="180" /> |
@@ -11,7 +13,7 @@ Two original whale animations for DeepSeek Harness Web. Nothing else.
 - **Refined Dive**: restored from commit `65e1205d1fbf4b01997e6dfc099103b0f9717e37`.
 - **Classic**: restored from first-published commit `95b06e3f0e6ea817d25858eb29f7064a233b3c65`.
 - Both animated WebPs and both reduced-motion PNGs are verified by Git blob SHA-1, SHA-256, frame count, and timing.
-- The timed director alternates `dive → classic` every 11 seconds. Explicit classic/original wording selects Classic immediately; thinking/reasoning wording selects Dive.
+- The director plays one full Dive loop (1.980 s), then one full Classic loop (10.506 s). Status-text requests also wait for the current loop to finish.
 - Dark theme, 84/72/60 px responsive sizing, reduced-motion PNGs, offline embedding, and lifecycle cleanup remain supported.
 
 Removed in v0.7.0: Spout, Sonar, Tool Run, Stream, Calm, Retry, all generated art sources, and their build pipeline.

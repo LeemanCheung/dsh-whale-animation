@@ -6,7 +6,9 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const manifestPath = resolve(root, 'assets/manifest.json')
 const runtimePath = resolve(root, 'src/client-runtime.js')
 const manifest = JSON.parse(await readFile(manifestPath, 'utf8'))
-const runtime = await readFile(runtimePath, 'utf8')
+// Git can check JavaScript out as CRLF on Windows. The embedded module must
+// still be byte-identical to the artifact rebuilt by Linux CI.
+const runtime = (await readFile(runtimePath, 'utf8')).replace(/\r\n?/g, '\n')
 
 if (manifest.schemaVersion !== 1) throw new Error(`Unsupported asset manifest schema: ${manifest.schemaVersion}`)
 if (!Array.isArray(manifest.playlist) || manifest.playlist.length === 0) throw new Error('Animation playlist is empty')
@@ -58,12 +60,13 @@ const cssRules = [
 for (const state of stateKeys) {
   cssRules.push(
     `@keyframes dsh-whale-switch-${state} { from { opacity: .42; transform: translateY(-50%) scale(.92); } to { opacity: .96; transform: translateY(-50%) scale(1); } }`,
-    `${hostSelector}[data-dsh-whale-state="${state}"]::after { background-image: url("${assets[state].animated}"); animation: dsh-whale-switch-${state} 180ms cubic-bezier(.2,.8,.2,1); }`,
+    `${hostSelector}[data-dsh-whale-state="${state}"]::after { background-image: var(--dsh-whale-current-image); animation: dsh-whale-switch-${state} 180ms cubic-bezier(.2,.8,.2,1); }`,
   )
 }
 cssRules.push(
   `@media (prefers-color-scheme: dark) { ${hostSelector}::after { filter: invert(1); } }`,
   `html.dark ${hostSelector}::after, html[data-theme="dark"] ${hostSelector}::after { filter: invert(1); }`,
+  `html.light ${hostSelector}::after, html[data-theme="light"] ${hostSelector}::after { filter: none; }`,
   `@media (prefers-reduced-motion: reduce) { ${hostSelector}::after { animation: none !important; transition: none; } }`,
 )
 for (const state of stateKeys) {
@@ -80,7 +83,8 @@ const replacements = new Map([
   ['__WHALE_STATE_KEYS__', JSON.stringify(stateKeys)],
   ['__WHALE_PLAYLIST__', JSON.stringify(manifest.playlist)],
   ['__WHALE_DEFAULT_STATE__', JSON.stringify(manifest.defaultState)],
-  ['__WHALE_PLAYLIST_INTERVAL_MS__', JSON.stringify(manifest.playlistIntervalMs)],
+  ['__WHALE_STATE_DURATIONS_MS__', JSON.stringify(Object.fromEntries(stateKeys.map(state => [state, manifest.states[state].loopDurationMs])))],
+  ['__WHALE_ANIMATED_ASSETS__', JSON.stringify(Object.fromEntries(stateKeys.map(state => [state, assets[state].animated])))],
   ['__WHALE_CSS__', JSON.stringify(css)],
 ])
 let body = runtime

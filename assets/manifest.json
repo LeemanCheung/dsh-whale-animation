@@ -6,7 +6,7 @@
     "dive",
     "classic"
   ],
-  "playlistIntervalMs": 11000,
+  "playlistCycleDurationMs": 12486,
   "states": {
     "dive": {
       "label": "REFINED DIVE",

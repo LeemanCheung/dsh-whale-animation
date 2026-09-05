@@ -8,6 +8,7 @@ import vm from 'node:vm'
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const manifest = JSON.parse(await readFile(resolve(root, 'assets/manifest.json'), 'utf8'))
 const client = await readFile(resolve(root, 'lib/client.js'), 'utf8')
+assert.ok(!client.includes('\r'), 'client bundle must use canonical LF on Windows and Linux')
 const packageJson = JSON.parse(await readFile(resolve(root, 'package.json'), 'utf8'))
 const expectedStates = ['dive', 'classic']
 const expected = {
@@ -47,11 +48,13 @@ function webpDurations(data) {
   return durations
 }
 
-assert.equal(packageJson.version, '0.7.0')
+assert.equal(packageJson.version, '0.7.1')
+assert.ok(!packageJson.peerDependencies['@deepseek-ai/dsh-client-runtime'])
+assert.ok(!(packageJson.dsh.client.inject ?? []).includes('@deepseek-ai/dsh-client-runtime'))
 assert.deepEqual(Object.keys(manifest.states), expectedStates)
 assert.deepEqual(manifest.playlist, expectedStates)
 assert.equal(manifest.defaultState, 'dive')
-assert.equal(manifest.playlistIntervalMs, 11000)
+assert.equal(manifest.playlistCycleDurationMs, 12486)
 assert.equal(manifest.canvasScope, 'per-state')
 
 const assetNames = (await readdir(resolve(root, 'assets'))).sort()
@@ -115,9 +118,96 @@ assert.equal(plugin.resolveWhaleState('经典鲸鱼'), 'classic')
 assert.equal(plugin.resolveWhaleState('Analyzing the request'), 'dive')
 assert.equal(plugin.resolveWhaleState('Searching the web'), null)
 assert.equal(plugin.chooseWhaleState('Deep diving...', 0), 'dive')
-assert.equal(plugin.chooseWhaleState('Deep diving...', 11000), 'classic')
-assert.equal(plugin.chooseWhaleState('Deep diving...', 22000), 'dive')
+assert.equal(plugin.chooseWhaleState('Deep diving...', 1979), 'dive')
+assert.equal(plugin.chooseWhaleState('Deep diving...', 1980), 'classic')
+assert.equal(plugin.chooseWhaleState('Deep diving...', 12485), 'classic')
+assert.equal(plugin.chooseWhaleState('Deep diving...', 12486), 'dive')
 assert.equal(plugin.chooseWhaleState('Deep diving...', 11000, true), 'dive')
+
+// A hidden DSH tab should not poll the full document. Resuming it must mount
+// existing status text immediately, and hot reload must dispose every listener.
+const attributes = new Map()
+const properties = new Map()
+const host = {
+  textContent: 'Deep diving...', isConnected: true,
+  style: { setProperty: (name, value) => properties.set(name, value), removeProperty: name => properties.delete(name) },
+  getAttribute: name => attributes.get(name),
+  setAttribute: (name, value) => attributes.set(name, value),
+  removeAttribute: name => attributes.delete(name),
+}
+const listeners = new Map()
+let timerCount = 0
+let clearedTimers = 0
+let removedStyles = 0
+let disconnectedObservers = 0
+let clockNow = 0
+let timeoutCallback
+let timeoutDelay
+let createdImageUrls = 0
+const revokedImageUrls = new Set()
+context.Date = { now: () => clockNow }
+context.URL = {
+  createObjectURL: () => `blob:whale-${++createdImageUrls}`,
+  revokeObjectURL: url => revokedImageUrls.add(url),
+}
+context.Blob = Blob
+context.atob = value => Buffer.from(value, 'base64').toString('binary')
+context.document = {
+  hidden: true,
+  documentElement: {},
+  head: { appendChild() {} },
+  createElement: () => ({ dataset: {}, remove() { removedStyles += 1 } }),
+  querySelector: () => null,
+  querySelectorAll: selector => selector === plugin.statusSelector ? [host] : [],
+  addEventListener: (name, callback) => listeners.set(name, callback),
+  removeEventListener: name => listeners.delete(name),
+}
+context.setTimeout = (callback, delay) => { timeoutCallback = callback; timeoutDelay = delay; return ++timerCount }
+context.clearTimeout = () => { clearedTimers += 1 }
+context.MutationObserver = class { observe() {} disconnect() { disconnectedObservers += 1 } }
+let dispose
+plugin.apply({ effect(start) { dispose = start() } })
+assert.equal(timerCount, 0)
+assert.equal(attributes.size, 0)
+context.document.hidden = false
+listeners.get('visibilitychange')()
+assert.equal(timerCount, 1)
+assert.equal(timeoutDelay, 1980)
+assert.equal(attributes.get('data-dsh-whale-state'), 'dive')
+assert.equal(properties.get('--dsh-whale-current-image'), 'url("blob:whale-1")')
+clockNow = 1980
+timeoutCallback()
+assert.equal(attributes.get('data-dsh-whale-state'), 'classic')
+assert.equal(properties.get('--dsh-whale-current-image'), 'url("blob:whale-2")')
+assert.ok(revokedImageUrls.has('blob:whale-1'))
+assert.equal(timeoutDelay, 10506)
+host.textContent = 'Analyzing the request'
+clockNow = 4000
+timeoutCallback()
+assert.equal(attributes.get('data-dsh-whale-state'), 'classic', 'status changes must wait until the current loop finishes')
+assert.equal(timeoutDelay, 8486)
+clockNow = 12486
+timeoutCallback()
+assert.equal(attributes.get('data-dsh-whale-state'), 'dive')
+clockNow = 14499
+timeoutCallback()
+assert.equal(timeoutDelay, 1947, 'late repeat callbacks must keep the existing decoder clock')
+context.document.hidden = true
+listeners.get('visibilitychange')()
+assert.equal(clearedTimers, timerCount)
+assert.equal(properties.size, 0)
+clockNow = 50000
+context.document.hidden = false
+listeners.get('visibilitychange')()
+assert.equal(attributes.get('data-dsh-whale-state'), 'dive', 'visibility resume restarts the same complete loop')
+assert.equal(timeoutDelay, 1980)
+dispose()
+assert.equal(listeners.size, 0)
+assert.equal(attributes.size, 0)
+assert.equal(properties.size, 0)
+assert.equal(revokedImageUrls.size, createdImageUrls)
+assert.equal(removedStyles, 1)
+assert.equal(disconnectedObservers, 1)
 
 const packedAssets = (await stat(resolve(root, 'lib/client.js'))).size
 console.log(JSON.stringify({

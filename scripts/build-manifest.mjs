@@ -94,7 +94,7 @@ const manifest = {
   canvasScope: 'per-state',
   defaultState: 'dive',
   playlist: ['dive', 'classic'],
-  playlistIntervalMs: 11_000,
+  playlistCycleDurationMs: Object.values(states).reduce((total, state) => total + state.loopDurationMs, 0),
   states,
 }
 

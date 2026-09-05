@@ -14,7 +14,10 @@ concurrency:
 
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -25,9 +28,10 @@ jobs:
       - name: Verify committed build outputs
         run: git diff --exit-code -- assets/manifest.json lib/client.js
       - name: Run Chromium browser smoke test
+        if: runner.os == 'Linux'
         run: bash scripts/check-browser.sh
       - name: Upload browser screenshots
-        if: always()
+        if: always() && runner.os == 'Linux'
         uses: actions/upload-artifact@v4
         with:
           name: whale-browser-smoke
@@ -35,6 +39,7 @@ jobs:
           if-no-files-found: error
           include-hidden-files: true
       - name: Validate package contents
+        shell: bash
         run: |
           npm pack --dry-run 2>&1 | tee /tmp/npm-pack.txt
           if grep -E 'artwork-sources|docs/|whale-(spout|sonar|work|compose|idle|alert)' /tmp/npm-pack.txt; then

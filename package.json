@@ -1,6 +1,6 @@
 {
   "name": "dsh-whale-animation",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Two byte-preserved original whale animation loops for DeepSeek Harness Web.",
   "license": "MIT",
   "author": "Leeman Cheung",
@@ -20,6 +20,7 @@
     "scripts/build-client.mjs",
     "scripts/build-manifest.mjs",
     "scripts/check-browser.sh",
+    "scripts/check-playback.py",
     "scripts/check-workflows.mjs",
     "scripts/check.mjs",
     "cordis.patch.yml",
@@ -42,7 +43,6 @@
   "dsh": {
     "bundle": { "patch": "./cordis.patch.yml" },
     "client": {
-      "inject": ["@deepseek-ai/dsh-client-runtime"],
       "platform": "web"
     }
   },
@@ -51,10 +51,10 @@
     "build": "node scripts/build-client.mjs",
     "check": "node scripts/check-workflows.mjs && node scripts/check.mjs",
     "check:browser": "bash scripts/check-browser.sh",
+    "check:playback": "python scripts/check-playback.py",
     "verify": "npm run build:assets && npm run build && npm run check"
   },
   "peerDependencies": {
-    "@deepseek-ai/cordis": "^4.0.1",
-    "@deepseek-ai/dsh-client-runtime": "^0.1.0-rc.6"
+    "@deepseek-ai/cordis": "^4.0.2"
   }
 }
