@@ -1,22 +1,27 @@
 # dsh-whale-animation
 
-DeepSeek Harness Web 鲸鱼插件现在只保留两套原始动画，不再包含任何新增美术状态。
+在 DeepSeek Harness Web 的任务状态旁播放黑白鲸鱼动画。**v0.8.0 保留原有 Dive、Classic，新增探泡、疾游、回旋、吐息四个生图动作。**
 
-v0.7.1 已适配 DSH 0.1.2-rc.1：移除了新版已不再提供、插件本身也未使用的旧 client-runtime 依赖。后台标签页暂停页面扫描，恢复可见时立即更新。Windows 与 Linux 构建现在使用相同的 LF 输出，并由双平台 CI 检查。
+![四个新动作预览](docs/four-actions/preview.gif)
 
-| Refined Dive | Classic |
-|---|---|
-| <img src="assets/whale-dive.webp" alt="Refined Dive" width="180" /> | <img src="assets/whale-classic.webp" alt="Classic" width="180" /> |
+预览GIF为20fps，四个动作保持各自真实速度；插件使用60fps的原生WebP。探泡采用自然往返，回旋保持小幅C形收放，不将整张logo僵硬旋转。
 
-## 范围
+| 动作 | 场景 | 画面 |
+| --- | --- | --- |
+| Dive／Classic | 原始默认动画 | 原文件和时序逐字节保留 |
+| 探泡 Scout | 搜索、检索、读取 | 跟随气泡，身体与尾部自然往返 |
+| 疾游 Surge | 运行、执行、测试 | 躯干轻微S形发力，尾鳍跟随 |
+| 回旋 Flow | 编写、输出 | C形躯干收放，腹部与尾部协同变化 |
+| 吐息 Breathe | 等待、连接、重试 | 拱背吐息，落下水滴后放松 |
 
-- **Refined Dive**：来自提交 `65e1205d1fbf4b01997e6dfc099103b0f9717e37`。
-- **Classic**：来自首发提交 `95b06e3f0e6ea817d25858eb29f7064a233b3c65`。
-- 两个 WebP 和两个减少动态效果 PNG 均校验 Git Blob SHA-1、SHA-256、帧数和时序。
-- 按 `dive → classic` 播放完整循环：Dive 1.980 秒，Classic 10.506 秒。状态文字要求切换时，也先播完当前循环。
-- 保留深色主题、84/72/60 px 响应式尺寸、减少动态效果、离线内嵌与完整生命周期清理。
+## 保留与行为
 
-v0.7.0 已删除：Spout、Sonar、Tool Run、Stream、Calm、Retry、全部生成美术源图及其构建链。
+- 原有两个WebP、两个减少动画PNG及兼容静帧均有固定哈希校验，绝不重新编码。
+- 新动作每组8张ImageGen原画，共32张；播放帧包含明确记录的补帧，不能视为新原画数量。
+- 探泡144帧/2.4秒，疾游120帧/2秒，回旋180帧/3秒，吐息216帧/3.6秒。探泡往返会重新经过相同姿态，不虚报144张独立原画。
+- 未识别状态按六个动作轮播；切换时先播完当前循环。状态文字匹配仅选择画面，不证明工具完成、任务成功或其他业务结果。
+- 84/72/60px响应尺寸、深浅主题、减少动画PNG、后台暂停和卸载清理均保留。素材准备异常时静态回退。
+- 所有美术离线内嵌，无SVG鲸鱼、外部图片请求或额外模型调用。插件不改变字体、模型、权限、会话或养成数据。
 
 ## 安装
 
@@ -24,30 +29,25 @@ v0.7.0 已删除：Spout、Sonar、Tool Run、Stream、Calm、Retry、全部生�
 dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation
 ```
 
-升级后请重启 DSH，或对 DSH Web 强制刷新。
+已有用户环境请在安全时机加载更新；本轮开发验证使用隔离DSH，不自动重启日常服务。
 
-## 验证
+## 开发与验证
 
 ```powershell
 npm run verify
+npm run check:package
 npm run check:browser
-npm pack --dry-run
 ```
 
-`npm run verify` 只重建 `assets/manifest.json` 与 `lib/client.js`，绝不会重新生成或重新编码两套原始动画。
+Git源码包含原图、提示词和来源记录。需要重建或核验生图资产时：
 
-安装了 Python Playwright 和 Chrome 的开发机还可运行 `npm run check:playback`，实测完整轮换时长、后台恢复、主题和减少动态效果。详细记录见 [2026-09-05 兼容与播放验收](docs/compatibility-20260905.md)。
+```powershell
+python -m pip install -r requirements-art.txt
+npm run art:check
+```
 
-## 运行时合约
+安装了Python Playwright和Chrome的开发机可运行 `npm run check:playback`。真实浏览器检查与来源说明见[四动作记录](docs/four-actions/README.md)和[兼容记录](COMPATIBILITY.md)。
 
-| 项目 | Refined Dive | Classic |
-|---|---:|---:|
-| 画布 | 352 × 352 | 184 × 184 |
-| 帧数 | 60 | 618 |
-| 单帧时长 | 33 ms | 17 ms |
-| 循环时长 | 1.980 秒 | 10.506 秒 |
-| 来源 | 逐字节保留 | 逐字节保留 |
-
-本项目独立开发，与 DeepSeek 不存在隶属或官方背书关系。详见 [NOTICE.md](NOTICE.md)。
+运行安装包不重复携带生成原图，原图保留在GitHub源码；`art:check`需在完整Git检出目录运行。项目独立开发，不是DeepSeek官方logo或官方动画。详见[NOTICE](NOTICE.md)。
 
 [English](README.md) · 简体中文

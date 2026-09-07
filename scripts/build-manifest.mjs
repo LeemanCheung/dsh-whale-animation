@@ -89,11 +89,32 @@ const diveStatic = await readFile(resolve(root, 'assets', 'whale-dive.png'))
 const compatibilityStatic = await readFile(resolve(root, 'assets', 'whale-static.png'))
 if (!diveStatic.equals(compatibilityStatic)) throw new Error('whale-static.png must remain the Dive compatibility alias')
 
+for (const state of ['scout', 'surge', 'flow', 'breathe']) {
+  const reportPath = `artwork-sources/four-actions/${state}-report.json`
+  const report = JSON.parse(await readFile(resolve(root, reportPath), 'utf8'))
+  const animatedName = `whale-${state}.webp`
+  const staticName = `whale-${state}.png`
+  const animated = await readFile(resolve(root, 'assets', animatedName))
+  const reduced = await readFile(resolve(root, 'assets', staticName))
+  const durations = webpDurations(animated)
+  if (sha256(animated) !== report.animatedSha256 || sha256(reduced) !== report.staticSha256) throw new Error(`${state}: art report is stale`)
+  if (sha256(await readFile(resolve(root, `artwork-sources/four-actions/${state}.png`))) !== report.sourceSha256) throw new Error(`${state}: generated source changed`)
+  if (report.generatedDrawings !== 8 || report.fps !== 60 || JSON.stringify(durations) !== JSON.stringify(report.durationsMs)) throw new Error(`${state}: generated drawing or playback contract changed`)
+  states[state] = {
+    label: report.label, summary: report.summary, playlist: true, source: 'imagegen-raster',
+    animated: animatedName, static: staticName, canvas: report.canvas,
+    frames: report.frames, fps: report.fps, generatedDrawings: report.generatedDrawings, nativeFrames: report.nativeFrames,
+    interpolatedFrames: report.interpolatedFrames, loopDurationMs: report.loopDurationMs,
+    animatedBytes: animated.length, staticBytes: reduced.length,
+    animatedSha256: sha256(animated), staticSha256: sha256(reduced), provenance: reportPath,
+  }
+}
+
 const manifest = {
   schemaVersion: 1,
   canvasScope: 'per-state',
   defaultState: 'dive',
-  playlist: ['dive', 'classic'],
+  playlist: ['dive', 'classic', 'scout', 'surge', 'flow', 'breathe'],
   playlistCycleDurationMs: Object.values(states).reduce((total, state) => total + state.loopDurationMs, 0),
   states,
 }

@@ -1,22 +1,29 @@
 # dsh-whale-animation
 
-Two original whale animations for DeepSeek Harness Web. Nothing else.
+A quiet, monochrome whale beside DeepSeek Harness Web turn status. **v0.8.0 preserves Dive and Classic and adds four original ImageGen actions: Scout, Surge, Flow and Breathe.**
 
-v0.7.1 supports DSH 0.1.2-rc.1 without the retired, unused client-runtime injection. Background tabs pause document polling and refresh immediately when visible. Windows and Linux build the same LF-normalized client, checked by both CI platforms.
+![Four new actions](docs/four-actions/preview.gif)
 
-| Refined Dive | Classic |
-|---|---|
-| <img src="assets/whale-dive.webp" alt="Refined Dive" width="180" /> | <img src="assets/whale-classic.webp" alt="Classic" width="180" /> |
+This20fps review GIF keeps each action's real timing. Runtime assets are native60fps WebPs.
 
-## Scope
+| Action | Visual | Status wording |
+| --- | --- | --- |
+| Dive / Classic | Original bytes and timings retained | Original/default |
+| Scout | Curious bubble tracking with a natural return trip | Searching / reading |
+| Surge | Gentle torso flex and tail propulsion | Running / testing |
+| Flow | A compact C-shaped body coils and relaxes | Writing / composing |
+| Breathe | Arch, exhale and settle | Waiting / connecting |
 
-- **Refined Dive**: restored from commit `65e1205d1fbf4b01997e6dfc099103b0f9717e37`.
-- **Classic**: restored from first-published commit `95b06e3f0e6ea817d25858eb29f7064a233b3c65`.
-- Both animated WebPs and both reduced-motion PNGs are verified by Git blob SHA-1, SHA-256, frame count, and timing.
-- The director plays one full Dive loop (1.980 s), then one full Classic loop (10.506 s). Status-text requests also wait for the current loop to finish.
-- Dark theme, 84/72/60 px responsive sizing, reduced-motion PNGs, offline embedding, and lifecycle cleanup remain supported.
+Each new action uses8 generated drawings,32 in total, plus documented raster in-betweens. Scout is144 frames/2.4s, Surge120/2s, Flow180/3s and Breathe216/3.6s. Scout intentionally revisits poses on its return trip; playback frame count is not generated-art count.
 
-Removed in v0.7.0: Spout, Sonar, Tool Run, Stream, Calm, Retry, all generated art sources, and their build pipeline.
+## Behavior
+
+- Original PNG/WebP bytes, frame counts and timing are hash-locked. They are never re-encoded.
+- Unrecognized status text rotates all six actions. Status changes wait for a complete encoded cycle.
+- Keyword matching chooses a visual, not a claim about actual tool success or completion.
+- Preserve84/72/60px responsive sizes, light/dark themes, PNG reduced motion, hidden-tab suspension and complete disposal.
+- Decode assets lazily and use static fallback if preparation fails.
+- No SVG whales, external image requests, extra model calls, font overrides or user data/settings changes.
 
 ## Install
 
@@ -24,28 +31,25 @@ Removed in v0.7.0: Spout, Sonar, Tool Run, Stream, Calm, Retry, all generated ar
 dsh plugin --profile web add github:LeemanCheung/dsh-whale-animation
 ```
 
-Restart DSH or hard-refresh DSH Web after upgrading.
+Load updates at a safe time for your existing sessions. Development verification uses an isolated DSH home and does not restart the user's daily service.
 
 ## Verify
 
-```powershell
+```text
 npm run verify
+npm run check:package
 npm run check:browser
-npm pack --dry-run
 ```
 
-`npm run verify` regenerates only `assets/manifest.json` and `lib/client.js`; it never regenerates or re-encodes either original animation.
+For raster reconstruction from a full Git checkout:
 
-## Runtime contract
+```text
+python -m pip install -r requirements-art.txt
+npm run art:check
+```
 
-| Property | Refined Dive | Classic |
-|---|---:|---:|
-| Canvas | 352 × 352 | 184 × 184 |
-| Frames | 60 | 618 |
-| Frame duration | 33 ms | 17 ms |
-| Loop duration | 1.980 s | 10.506 s |
-| Source | byte-preserved | byte-preserved |
+With Python Playwright and Chrome installed, run `npm run check:playback`. Read the [source and animation notes](docs/four-actions/README.md) and [exact compatibility record](COMPATIBILITY.md). Raw generation PNGs remain in Git; runtime packages include selected animation assets and lightweight provenance, not duplicate source sheets.
 
-The plugin is independent and is not affiliated with or endorsed by DeepSeek. See [NOTICE.md](NOTICE.md).
+Independent project, not an official DeepSeek logo or animation. See [NOTICE](NOTICE.md).
 
 English · [简体中文](README.zh-CN.md)

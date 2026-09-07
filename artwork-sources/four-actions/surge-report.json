@@ -1,0 +1,351 @@
+{
+  "state": "surge",
+  "label": "SURGE",
+  "summary": "A traveling body flex and tail-powered swim",
+  "source": "artwork-sources/four-actions/surge.png",
+  "sourceSha256": "40ffff616eeaf48a4c7bc59db282af349f353b8b2005b714393c198ad0060a77",
+  "identitySha256": "e4950766636b071da4508892f4981b484f52278ccec6e2c5743e849e12dfb924",
+  "canvas": [
+    352,
+    352
+  ],
+  "generatedDrawings": 8,
+  "nativeFrameIndices": [
+    0,
+    15,
+    30,
+    45,
+    60,
+    75,
+    90,
+    105
+  ],
+  "nativePoseOrder": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "nativeFrames": 8,
+  "returnTrip": false,
+  "interpolatedFrames": 112,
+  "frames": 120,
+  "fps": 60,
+  "durationsMs": [
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17,
+    17,
+    16,
+    17
+  ],
+  "loopDurationMs": 2000,
+  "posterPose": 1,
+  "nativePoseRecords": [
+    {
+      "pose": 1,
+      "bodyBox": [
+        34,
+        304,
+        299,
+        174
+      ],
+      "sourceEye": [
+        275.3478,
+        330.5
+      ],
+      "scale": 0.6792582,
+      "offset": [
+        80.96769714355469,
+        -74.49479675292969
+      ],
+      "sourceComponents": [
+        2
+      ],
+      "registeredAlphaSha256": "135be446dc84f89a76efaa97b8bcc37d8dbd28959fc9d867dd9c6de024194eaf"
+    },
+    {
+      "pose": 2,
+      "bodyBox": [
+        376,
+        303,
+        301,
+        173
+      ],
+      "sourceEye": [
+        619.381,
+        330.5
+      ],
+      "scale": 0.6792582,
+      "offset": [
+        -152.7196044921875,
+        -74.49479675292969
+      ],
+      "sourceComponents": [
+        1
+      ],
+      "registeredAlphaSha256": "e993373fd3294432c451c9fcf6e0c0022ad4b1c6df04c021cbdf070574c2bc58"
+    },
+    {
+      "pose": 3,
+      "bodyBox": [
+        717,
+        304,
+        304,
+        166
+      ],
+      "sourceEye": [
+        962.5,
+        330.5
+      ],
+      "scale": 0.6792582,
+      "offset": [
+        -385.7860107421875,
+        -74.49479675292969
+      ],
+      "sourceComponents": [
+        3
+      ],
+      "registeredAlphaSha256": "15ac57470cd0f9d426373fba70033183150bf3469a03fa1e679b8860402161bf"
+    },
+    {
+      "pose": 4,
+      "bodyBox": [
+        1052,
+        305,
+        315,
+        140
+      ],
+      "sourceEye": [
+        1308.8298,
+        330.4468
+      ],
+      "scale": 0.6792582,
+      "offset": [
+        -621.0333862304688,
+        -74.45870208740234
+      ],
+      "sourceComponents": [
+        4
+      ],
+      "registeredAlphaSha256": "1b70c8a7fd8f7f84c6119ac5a451976666900f6fc3905cc3ebc65c15da35eeb5"
+    },
+    {
+      "pose": 5,
+      "bodyBox": [
+        33,
+        671,
+        300,
+        171
+      ],
+      "sourceEye": [
+        275.2609,
+        699.1739
+      ],
+      "scale": 0.6792582,
+      "offset": [
+        81.02680206298828,
+        -324.9195861816406
+      ],
+      "sourceComponents": [
+        5
+      ],
+      "registeredAlphaSha256": "e8a2f541a6b6e0e5c5663b885af15b9854e742708bec212e755d88bc25b1ab24"
+    },
+    {
+      "pose": 6,
+      "bodyBox": [
+        364,
+        672,
+        313,
+        173
+      ],
+      "sourceEye": [
+        619.4091,
+        699.1591
+      ],
+      "scale": 0.6792582,
+      "offset": [
+        -152.7386932373047,
+        -324.90960693359375
+      ],
+      "sourceComponents": [
+        6
+      ],
+      "registeredAlphaSha256": "0cf5cfbe27aeb0b0579ed24f798fa6e3e0c898351e6b085736cd327f90da4fac"
+    },
+    {
+      "pose": 7,
+      "bodyBox": [
+        721,
+        673,
+        300,
+        163
+      ],
+      "sourceEye": [
+        962.5,
+        699.3043
+      ],
+      "scale": 0.6792582,
+      "offset": [
+        -385.7860107421875,
+        -325.0082092285156
+      ],
+      "sourceComponents": [
+        7
+      ],
+      "registeredAlphaSha256": "1d2f25ad67d18cd6644c6c00b384d0bbea4c4bbd582518f6404c7ae20152df46"
+    },
+    {
+      "pose": 8,
+      "bodyBox": [
+        1069,
+        673,
+        298,
+        169
+      ],
+      "sourceEye": [
+        1308.898,
+        699.1224
+      ],
+      "scale": 0.6792582,
+      "offset": [
+        -621.07958984375,
+        -324.8846130371094
+      ],
+      "sourceComponents": [
+        8
+      ],
+      "registeredAlphaSha256": "38b0d8bc2dc00d978488a093ebe6fdf94c214b87279ba0662e72b29ae02a3178"
+    }
+  ],
+  "metrics": {
+    "uniqueFrames": 120,
+    "minimumAdjacentAlphaDelta": 0.099472,
+    "transparentMarginPx": 43,
+    "maximumAdjacentAlphaDelta": 0.406323,
+    "loopSeamAlphaDelta": 0.124532,
+    "registeredTorsoMaximumDelta": 6.214239
+  },
+  "method": "uniform source-eye registration; restrained generated pose family; bidirectional DIS raster in-betweens",
+  "animatedSha256": "9475f714cc8d53fac487b3a5550fa6172702f37d6f44a8caafea95eda0c9607e",
+  "staticSha256": "773294eabd21c5adfc8f0b5db9318320b2b6d408352bf3b0eb09e911307b916e"
+}

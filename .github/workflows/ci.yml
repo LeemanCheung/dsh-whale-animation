@@ -23,7 +23,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Build and verify two preserved loops
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned raster verification dependencies
+        run: python -m pip install -r requirements-art.txt
+      - name: Verify ImageGen raster reconstruction
+        run: npm run art:check
+      - name: Build and verify six loops
         run: npm run verify
       - name: Verify committed build outputs
         run: git diff --exit-code -- assets/manifest.json lib/client.js
@@ -39,10 +46,4 @@ jobs:
           if-no-files-found: error
           include-hidden-files: true
       - name: Validate package contents
-        shell: bash
-        run: |
-          npm pack --dry-run 2>&1 | tee /tmp/npm-pack.txt
-          if grep -E 'artwork-sources|docs/|whale-(spout|sonar|work|compose|idle|alert)' /tmp/npm-pack.txt; then
-            echo "Non-original animation content leaked into the package" >&2
-            exit 1
-          fi
+        run: npm run check:package
