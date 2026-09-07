@@ -31,13 +31,14 @@ with sync_playwright() as playwright:
     """)
     page.goto(URL, wait_until="networkidle")
     statuses = page.locator('[role="status"]')
-    assert statuses.count() == 2
+    assert statuses.count() == 6
+    assert statuses.evaluate_all("nodes => nodes.map(n => n.dataset.dshWhaleState)") == ['dive','classic','scout','surge','flow','breathe']
     # Ask to switch while Dive is playing. The current cycle must finish first.
     statuses.first.evaluate("node => { node.textContent = 'Classic whale animation...'; }")
     assert statuses.first.get_attribute("data-dsh-whale-state") == "dive"
     page.wait_for_function("window.playbackEvents.length >= 2", timeout=5000)
     # Return to the automatic two-state playlist for the end of Classic.
-    statuses.first.evaluate("node => { node.textContent = 'Deep diving...'; }")
+    statuses.first.evaluate("node => { node.textContent = 'Analyzing...'; }")
     page.screenshot(path=str(ARTIFACTS / "playback-light.png"), full_page=True)
     page.wait_for_function("window.playbackEvents.length >= 3", timeout=14000)
     timeline = page.evaluate("window.playbackEvents.slice(0, 3)")
@@ -60,6 +61,7 @@ with sync_playwright() as playwright:
     page.emulate_media(reduced_motion="reduce")
     page.wait_for_timeout(50)
     assert statuses.first.evaluate("node => getComputedStyle(node, '::after').backgroundImage.startsWith('url(\"data:image/png;')")
+    assert all(statuses.evaluate_all("nodes => nodes.map(node => getComputedStyle(node, '::after').backgroundImage.startsWith('url(\"data:image/png;'))"))
     before = len(page.evaluate("window.playbackEvents"))
     page.wait_for_timeout(2200)
     assert len(page.evaluate("window.playbackEvents")) == before
@@ -72,7 +74,7 @@ with sync_playwright() as playwright:
 
 result = {
     "ok": True,
-    "states": ["dive", "classic"],
+    "states": ["dive", "classic", "scout", "surge", "flow", "breathe"],
     "timeline": timeline,
     "measuredStateDurationMs": durations,
     "expectedStateDurationMs": [1980, 10506],

@@ -1,0 +1,38 @@
+{
+  "date": "2026-09-07",
+  "revision": "restrained-continuous-pose-family",
+  "referenceRoles": {
+    "identity": "Original generated identity inspired by the user's references, not an official logo",
+    "flow": "flow-reference.png: registered C-pose from the initial generated flow source",
+    "surge": "identity.png",
+    "scout": "identity.png",
+    "breathe": "surge.png"
+  },
+  "generations": [
+    {
+      "name": "identity",
+      "method": "built-in image_gen",
+      "prompt": "Use case: stylized-concept. Create ONE premium raster character identity illustration for a small DeepSeek-inspired animated whale companion, on a genuinely transparent background. Input image 1 is only the visual language and original motion reference; input image 2 is the user's silhouette reference, NOT an image to copy. Design an ORIGINAL living ink whale, not the official logo and not a generic dolphin. A compact plump rounded head facing right and slightly up, gentle smiling upturned short snout with absolutely NO protruding beak, tiny confident white eye, full smooth forehead, beautiful clean white crescent negative-space belly continuing into the tail curve. Short chest flipper hangs from the underside; one small soft dorsal fin, no spikes. Back/torso is distinctly rounded and flexible, narrows into a long expressive S-curved tail stock and a two-lobed fluke curling upward to the left. The body and tail should form a graceful open C-like silhouette, with head volume about 40 percent of the full whale silhouette length. Flat pure black ink and transparent/white negative space only; crisp clean antialiased edges, no blue, no grey shading, no gradients, no 3D, no photorealism, no ocean, no waves, no bubbles, no text, no logo lettering, no box or circle. Draw the entire whale large, centered with generous transparent margin. Make it charismatic, poised, intelligent, recognizable at 60px, not fat clip-art and not an orca/dolphin. This image will define the head shape and belly marking for four different articulated animations."
+    },
+    {
+      "name": "surge",
+      "method": "built-in image_gen",
+      "prompt": "Make a 4 columns x 2 rows animation sheet of EIGHT evenly spaced sequential key poses on perfectly plain white. Same original rounded smiling ink whale as reference. Preserve the head shape, small white eye, short rounded snout, white crescent belly, small underside fin, tapered torso and two-lobed tail. BLACK AND WHITE ONLY. SURGE action: horizontal swimming in place, face always right. In ALL eight frames the eye is at the same position, head has the same size and angle, whale total length is the same. A modest smooth S-shaped bend travels through the MIDDLE TORSO and tail. Frame1 neutral;2 torso arches by only 10 degrees while tail lags;3 arch reaches15 degrees with fin sweeping back;4 approaches neutral with tail up;5 torso hollows10 degrees;6 hollows15 degrees with tail lag;7 returns toward neutral;8 almost identical to1. No head-up diagonal leap or head-down dive. No big bends or rapid changes. The torso must curve, not just the tail. Adjacent poses differ only slightly as a real coherent animator's sequence, NOT eight separate designs. All body parts stay connected. Generous20% white margin per cel. No ocean, waterline, bubbles, trails, effects, text, numbers, grid or checkerboard. Simple confident original DeepSeek-inspired silhouette, no official logo copy and no dolphin beak."
+    },
+    {
+      "name": "flow",
+      "method": "built-in image_gen",
+      "prompt": "Generate EIGHT coherent sequential animation poses in a 4-column 2-row sheet on plain pure white. Use EXACTLY this referenced compact curled C-shaped ink whale as the starting shape: head at top right, body curls left and around underneath, tail points right INSIDE the C. Preserve this compact C silhouette in ALL EIGHT CELLS. DO NOT straighten or elongate the whale. One tiny eye and crescent white belly, rounded smiling snout, one underside fin and two-lobed tail. Black and white raster ink. Animation: a subtle expressive body coil, the belly and BACK contract smoothly by about10% over frames1-4 while tail inside the C tilts15 degrees, then unwind those same small changes smoothly over frames5-8. The round head remains the same size and location, only the torso and fin/tail articulate; no rigid rotation. Each adjacent pose differs little; frame8 is nearly frame1. No paper texture, shadows, background effects, grids, bubbles, waves or text. Entire whale in each cell with15% margin. Need true character consistency and continuity, not eight independent designs."
+    },
+    {
+      "name": "scout",
+      "method": "built-in image_gen",
+      "prompt": "Generate a4-column by2-row sprite sheet of EIGHT gently sequential poses of the SAME referenced original round-headed black ink whale. Plain pure white background, no checkerboard or text. Maintain identical head scale, white eye, short smiling snout, belly crescent and body length. Whale always diagonally swimming toward upper right, with an OPEN relaxed S body, NEVER a closed C. A tiny single outlined bubble is above and a little ahead of nose in every cel. SCOUT: the head subtly follows this bubble upward then returns. Across frames1-4, tilt head/chest up by only6 degrees and flex the middle torso slightly; tail follows with a10degree gentle curl. Across5-8 smoothly return. The back and belly must visibly articulate a little, not a rigid full-body sticker. Do NOT make a big turn or change posture family; consecutive frames should be very similar with small progressive motion. Same tiny bubble size, no other effects. Whole body readable and unclipped with20% white margins. Flat original black-and-white whale mascot, no dolphin beak, no blue, no official logo copy."
+    },
+    {
+      "name": "breathe",
+      "method": "built-in image_gen",
+      "prompt": "Generate EIGHT sequential key poses arranged4columns2rows on plain pure white background. Same rounded black ink whale shown in the reference, tiny white eye, white belly ribbon, expressive short chest fin and forked tail. Maintain the same horizontal swimming posture and identical scale in ALL eight cels, head RIGHT. BREATHE: calm buoyant breathing, back expands and arches only8degrees then settles, belly and chest fin gently follow. Frame1 resting;2 chest rises a little;3 small black two-line spout begins above forehead;4 spout reaches modest peak, torso exhales;5 spout becomes two small falling drops;6 drops fade as chest settles;7 rests;8 nearly identical to1. Only a short thin ripple below the chest, at the same height in each cel. NO diagonal jumps, C-shape curl, somersault, big pose change, enormous fountain, bubbles from mouth or scattered decoration. Adjacent drawings MUST be small progressive changes of the SAME body, not separate illustrations. Head remains same shape, no beak. Full body within each cel and ample20% margins. No grid, labels, checkerboard, gradient or color."
+    }
+  ]
+}
