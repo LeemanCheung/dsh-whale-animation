@@ -60,17 +60,18 @@ const cssRules = [
 for (const state of stateKeys) {
   cssRules.push(
     `@keyframes dsh-whale-switch-${state} { from { opacity: .42; transform: translateY(-50%) scale(.92); } to { opacity: .96; transform: translateY(-50%) scale(1); } }`,
-    `${hostSelector}[data-dsh-whale-state="${state}"] { --dsh-whale-static-image: url("${assets[state].static}"); }`,
-    `${hostSelector}[data-dsh-whale-state="${state}"]::after { background-image: var(--dsh-whale-current-image, var(--dsh-whale-static-image)); animation: dsh-whale-switch-${state} 180ms cubic-bezier(.2,.8,.2,1); }`,
+    `${hostSelector}[data-dsh-whale-state="${state}"]::after { background-image: var(--dsh-whale-current-image); animation: dsh-whale-switch-${state} 180ms cubic-bezier(.2,.8,.2,1); }`,
   )
 }
 cssRules.push(
   `@media (prefers-color-scheme: dark) { ${hostSelector}::after { filter: invert(1); } }`,
   `html.dark ${hostSelector}::after, html[data-theme="dark"] ${hostSelector}::after { filter: invert(1); }`,
   `html.light ${hostSelector}::after, html[data-theme="light"] ${hostSelector}::after { filter: none; }`,
-  `${hostSelector}[data-dsh-whale-fallback="true"]::after { background-image: var(--dsh-whale-static-image); animation: none; }`,
-  `@media (prefers-reduced-motion: reduce) { ${hostSelector}::after { background-image: var(--dsh-whale-static-image) !important; animation: none !important; transition: none; } }`,
+  `@media (prefers-reduced-motion: reduce) { ${hostSelector}::after { animation: none !important; transition: none; } }`,
 )
+for (const state of stateKeys) {
+  cssRules.push(`@media (prefers-reduced-motion: reduce) { ${hostSelector}[data-dsh-whale-state="${state}"]::after { background-image: url("${assets[state].static}"); } }`)
+}
 cssRules.push(
   `@media (max-width: 720px) { ${hostSelector}::after { width: 72px; height: 72px; margin-left: 4px; } }`,
   `@media (max-width: 480px) { ${hostSelector}::after { width: 60px; height: 60px; margin-left: 2px; } }`,

@@ -21,8 +21,8 @@ rm -rf "$PROFILE" "$DOM" "$LIGHT" "$DARK"
 
 FLAGS=(--headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage --disable-background-networking --disable-extensions --no-first-run --allow-file-access-from-files --virtual-time-budget=1500 --user-data-dir="$PROFILE")
 timeout 45s "$CHROME" "${FLAGS[@]}" --dump-dom "$HTML_URL" > "$DOM"
-grep -q 'data-smoke="dive,classic,scout,surge,flow,breathe"' "$DOM"
+grep -q 'data-smoke="dive,classic"' "$DOM"
 timeout 45s "$CHROME" "${FLAGS[@]}" --hide-scrollbars --window-size=1000,700 --screenshot="$LIGHT" "$HTML_URL" >/dev/null
 timeout 45s "$CHROME" "${FLAGS[@]}" --hide-scrollbars --window-size=1000,700 --screenshot="$DARK" "$HTML_URL?dark=1" >/dev/null
 test -s "$LIGHT" && test -s "$DARK"
-printf '{"ok":true,"chrome":"%s","states":["dive","classic","scout","surge","flow","breathe"],"screenshots":["%s","%s"]}\n' "$CHROME" "$LIGHT" "$DARK"
+printf '{"ok":true,"chrome":"%s","states":["dive","classic"],"screenshots":["%s","%s"]}\n' "$CHROME" "$LIGHT" "$DARK"

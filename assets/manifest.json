@@ -4,13 +4,9 @@
   "defaultState": "dive",
   "playlist": [
     "dive",
-    "classic",
-    "scout",
-    "surge",
-    "flow",
-    "breathe"
+    "classic"
   ],
-  "playlistCycleDurationMs": 23486,
+  "playlistCycleDurationMs": 12486,
   "states": {
     "dive": {
       "label": "REFINED DIVE",
@@ -51,98 +47,6 @@
       "animatedSha256": "8af06383ee40b3dea678091f4953444235e1b27f52f70e887ead98cd0c04e6c4",
       "staticSha256": "85fe361d6c54741e88af4542aaaac5473d98f5be3cd0e1ecfc921d747a36f7d7",
       "preservedFrom": "95b06e3f0e6ea817d25858eb29f7064a233b3c65"
-    },
-    "scout": {
-      "label": "SCOUT",
-      "summary": "Curious bubble tracking with a curling torso",
-      "playlist": true,
-      "source": "imagegen-raster",
-      "animated": "whale-scout.webp",
-      "static": "whale-scout.png",
-      "canvas": [
-        352,
-        352
-      ],
-      "frames": 144,
-      "fps": 60,
-      "generatedDrawings": 8,
-      "nativeFrames": 14,
-      "interpolatedFrames": 130,
-      "loopDurationMs": 2400,
-      "animatedBytes": 541152,
-      "staticBytes": 5343,
-      "animatedSha256": "f3e526aacfe6cef50e73244e57567f5376fa5695339b548ba4c454781ed02bbb",
-      "staticSha256": "0ef22447c68fae14d24d970753f55d2c6c127684d889a437da88529f04a62201",
-      "provenance": "artwork-sources/four-actions/scout-report.json"
-    },
-    "surge": {
-      "label": "SURGE",
-      "summary": "A traveling body flex and tail-powered swim",
-      "playlist": true,
-      "source": "imagegen-raster",
-      "animated": "whale-surge.webp",
-      "static": "whale-surge.png",
-      "canvas": [
-        352,
-        352
-      ],
-      "frames": 120,
-      "fps": 60,
-      "generatedDrawings": 8,
-      "nativeFrames": 8,
-      "interpolatedFrames": 112,
-      "loopDurationMs": 2000,
-      "animatedBytes": 333784,
-      "staticBytes": 3888,
-      "animatedSha256": "9475f714cc8d53fac487b3a5550fa6172702f37d6f44a8caafea95eda0c9607e",
-      "staticSha256": "773294eabd21c5adfc8f0b5db9318320b2b6d408352bf3b0eb09e911307b916e",
-      "provenance": "artwork-sources/four-actions/surge-report.json"
-    },
-    "flow": {
-      "label": "FLOW",
-      "summary": "A compact C-shaped torso softly coils and relaxes",
-      "playlist": true,
-      "source": "imagegen-raster",
-      "animated": "whale-flow.webp",
-      "static": "whale-flow.png",
-      "canvas": [
-        352,
-        352
-      ],
-      "frames": 180,
-      "fps": 60,
-      "generatedDrawings": 8,
-      "nativeFrames": 8,
-      "interpolatedFrames": 172,
-      "loopDurationMs": 3000,
-      "animatedBytes": 550696,
-      "staticBytes": 4578,
-      "animatedSha256": "15aeb3d54a109e23667d2375ae503ff2050d2e0517f76dd521e1186f6fd905bd",
-      "staticSha256": "d06e47257c4ab28bb399f2fb2ff93798cc2f666b8ed2e00fb126a76278f052ba",
-      "provenance": "artwork-sources/four-actions/flow-report.json"
-    },
-    "breathe": {
-      "label": "BREATHE",
-      "summary": "Rise, arch, exhale and settle",
-      "playlist": true,
-      "source": "imagegen-raster",
-      "animated": "whale-breathe.webp",
-      "static": "whale-breathe.png",
-      "canvas": [
-        352,
-        352
-      ],
-      "frames": 216,
-      "fps": 60,
-      "generatedDrawings": 8,
-      "nativeFrames": 8,
-      "interpolatedFrames": 208,
-      "loopDurationMs": 3600,
-      "animatedBytes": 509996,
-      "staticBytes": 3536,
-      "animatedSha256": "6c7fdde2f90bf0abbf90b45560bc0168b2bfd305346462358db780fc1da5102f",
-      "staticSha256": "80ce137bbb50154f69f9615d3752c7677af0d1850f38d705c32b30c77d8390c2",
-      "provenance": "artwork-sources/four-actions/breathe-report.json"
     }
   }
 }

@@ -1,7 +1,7 @@
 {
   "name": "dsh-whale-animation",
-  "version": "0.8.0",
-  "description": "Two preserved original loops and four articulated ImageGen whale actions for DeepSeek Harness Web.",
+  "version": "0.7.1",
+  "description": "Two byte-preserved original whale animation loops for DeepSeek Harness Web.",
   "license": "MIT",
   "author": "Leeman Cheung",
   "type": "module",
@@ -16,16 +16,6 @@
     "assets",
     "lib",
     "src",
-    "artwork-sources/four-actions/*.json",
-    "docs/four-actions/*.md",
-    "docs/four-actions/*-contact.png",
-    "docs/four-actions/*.json",
-    "DESIGN.md",
-    "requirements-art.txt",
-    "scripts/build-imagegen-actions.py",
-    "scripts/build-preview.py",
-    "scripts/check-package.mjs",
-    "scripts/art-preview.html",
     "scripts/browser-smoke.html",
     "scripts/build-client.mjs",
     "scripts/build-manifest.mjs",
@@ -64,15 +54,11 @@
     }
   },
   "scripts": {
-    "art:build": "python scripts/build-imagegen-actions.py --publish",
-    "art:check": "python scripts/build-imagegen-actions.py --check",
-    "preview:build": "python scripts/build-preview.py",
     "build:assets": "node scripts/build-manifest.mjs",
     "build": "node scripts/build-client.mjs",
     "check": "node scripts/check-workflows.mjs && node scripts/check.mjs",
     "check:browser": "bash scripts/check-browser.sh",
     "check:playback": "python scripts/check-playback.py",
-    "check:package": "node scripts/check-package.mjs",
     "verify": "npm run build:assets && npm run build && npm run check"
   },
   "peerDependencies": {

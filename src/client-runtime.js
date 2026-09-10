@@ -3,7 +3,6 @@ const STATUS_SELECTOR = '.Md3f7G_turnStatus[role="status"], [class*="_turnStatus
 const HOST_SELECTOR = '[data-dsh-whale-host="true"]';
 const HOST_ATTRIBUTE = 'data-dsh-whale-host';
 const STATE_ATTRIBUTE = 'data-dsh-whale-state';
-const FALLBACK_ATTRIBUTE = 'data-dsh-whale-fallback';
 const STATE_KEYS = __WHALE_STATE_KEYS__;
 const PLAYLIST = __WHALE_PLAYLIST__;
 const DEFAULT_STATE = __WHALE_DEFAULT_STATE__;
@@ -13,9 +12,6 @@ const PLAYLIST_DURATION_MS = PLAYLIST.reduce((total, state) => total + STATE_DUR
 const css = __WHALE_CSS__;
 
 const EXACT_STATE_ALIASES = new Map([
-  ['dive', 'dive'], ['scout', 'scout'], ['探泡', 'scout'],
-  ['surge', 'surge'], ['疾游', 'surge'], ['flow', 'flow'], ['回旋', 'flow'],
-  ['breathe', 'breathe'], ['吐息', 'breathe'],
   ['classic', 'classic'],
   ['original', 'classic'],
   ['经典', 'classic'],
@@ -23,10 +19,6 @@ const EXACT_STATE_ALIASES = new Map([
 ]);
 
 const KEYWORD_GROUPS = [
-  { state: 'scout', keywords: ['searching', 'retrieving', 'browsing', 'reading', '搜索', '检索', '浏览', '读取'] },
-  { state: 'surge', keywords: ['running', 'executing', 'testing', 'building', '运行', '执行', '测试', '构建'] },
-  { state: 'flow', keywords: ['writing', 'composing', 'drafting', 'streaming', '撰写', '编写', '起草', '输出中'] },
-  { state: 'breathe', keywords: ['waiting', 'connecting', 'retrying', '等待', '连接中', '重试'] },
   {
     state: 'classic',
     keywords: ['classic whale', 'legacy whale', 'original whale', '经典鲸鱼', '原版鲸鱼', '旧版鲸鱼'],
@@ -72,7 +64,6 @@ function removeOwnedDom() {
   for (const host of document.querySelectorAll(HOST_SELECTOR)) {
     host.removeAttribute(HOST_ATTRIBUTE);
     host.removeAttribute(STATE_ATTRIBUTE);
-    host.removeAttribute(FALLBACK_ATTRIBUTE);
     host.style.removeProperty('--dsh-whale-current-image');
   }
 }
@@ -131,17 +122,9 @@ function apply(ctx) {
       releaseImage(host, entry);
       entry.state = nextState;
       entry.reduced = motionQuery.matches;
-      host.removeAttribute(FALLBACK_ATTRIBUTE);
-      entry.failed = false;
       if (!entry.reduced) {
-        try {
-          entry.imageUrl = freshImageUrl(nextState);
-          host.style.setProperty('--dsh-whale-current-image', `url("${entry.imageUrl}")`);
-        } catch {
-          // A malformed optional asset cannot break the user's status area.
-          entry.failed = true;
-          host.setAttribute(FALLBACK_ATTRIBUTE, 'true');
-        }
+        entry.imageUrl = freshImageUrl(nextState);
+        host.style.setProperty('--dsh-whale-current-image', `url("${entry.imageUrl}")`);
       }
       host.setAttribute(HOST_ATTRIBUTE, 'true');
       host.setAttribute(STATE_ATTRIBUTE, nextState);
@@ -256,8 +239,9 @@ function apply(ctx) {
         }
       }
       if (!disposed && !document.hidden) {
-        // Decode each small asset on first use; a bad optional state must not
-        // prevent the preserved default from mounting.
+        if (!motionQuery.matches && typeof Blob === 'function') {
+          for (const state of STATE_KEYS) prepareBlob(state);
+        }
         scan();
       }
     };
@@ -286,14 +270,13 @@ function apply(ctx) {
         if (host.getAttribute(HOST_ATTRIBUTE) === 'true') {
           host.removeAttribute(HOST_ATTRIBUTE);
           host.removeAttribute(STATE_ATTRIBUTE);
-          host.removeAttribute(FALLBACK_ATTRIBUTE);
         }
       }
       tracked.clear();
       decodedBlobs.clear();
       style.remove();
     };
-  }, `${PLUGIN_ID}: two preserved loops and four ImageGen actions`);
+  }, `${PLUGIN_ID}: preserved two-loop whale director`);
 }
 
 exports.apply = apply;

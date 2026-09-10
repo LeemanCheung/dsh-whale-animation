@@ -1,13 +1,5 @@
 # Changelog
 
-## 0.8.0
-
-- Preserve the original Dive and Classic PNG/WebP bytes and timings; add Scout, Surge, Flow and Breathe from32 selected ImageGen drawings.
-- Use restrained articulated pose families with60fps raster in-betweens, an explicit Scout return trip, per-state PNG reduced-motion fallback and complete-cycle state changes.
-- Resolve searching, running, writing and waiting text to the matching visual. Unknown text uses the six-loop playlist; keywords do not claim tool completion or success.
-- Decode assets lazily, fall back to static art on resource preparation failure and retain theme, background-tab suspension and full disposal behavior.
-- Ship source provenance and verification tooling; keep raw generation PNGs in Git rather than doubling the runtime archive. Add six-state browser and package checks.
-
 ## [0.7.1] - 2026-09-05
 
 ### Fixed

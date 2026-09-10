@@ -29,13 +29,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-      - name: Verify generated source reconstruction
-        run: |
-          python -m pip install -r requirements-art.txt
-          npm run art:check
       - name: Build and verify release payload
         run: |
           npm run verify
@@ -60,7 +53,7 @@ jobs:
         run: |
           set -euo pipefail
           TARBALL="$(npm pack --silent)"
-          npm run check:package
+          if tar -tzf "$TARBALL" | grep -E 'artwork-sources|docs/|whale-(spout|sonar|work|compose|idle|alert)'; then exit 1; fi
           sha256sum "$TARBALL" > SHA256SUMS.txt
           echo "tarball=$TARBALL" >> "$GITHUB_OUTPUT"
       - name: Publish GitHub release
