@@ -35,10 +35,39 @@ with sync_playwright() as playwright:
     # Ask to switch while Dive is playing. The current cycle must finish first.
     statuses.first.evaluate("node => { node.textContent = 'Classic whale animation...'; }")
     assert statuses.first.get_attribute("data-dsh-whale-state") == "dive"
+    def replace_status(*, subtree: bool = False) -> None:
+        continuity = statuses.first.evaluate("""async (node, subtree) => {
+          const image = node.style.getPropertyValue('--dsh-whale-current-image');
+          const state = node.dataset.dshWhaleState;
+          const independent = document.querySelectorAll('[role="status"]')[1];
+          const independentImage = independent.style.getPropertyValue('--dsh-whale-current-image');
+          const previous = subtree ? node.parentElement : node;
+          const replacement = previous.cloneNode(true);
+          const status = subtree ? replacement.querySelector('[role="status"]') : replacement;
+          status.removeAttribute('data-dsh-whale-host');
+          status.removeAttribute('data-dsh-whale-state');
+          status.style.removeProperty('--dsh-whale-current-image');
+          previous.replaceWith(replacement);
+          // Allow MutationObserver and its queued scan to finish, without
+          // crossing a timer deadline between separate browser round trips.
+          await new Promise(resolve => queueMicrotask(() => queueMicrotask(resolve)));
+          return {
+            imagePreserved: status.style.getPropertyValue('--dsh-whale-current-image') === image,
+            statePreserved: status.dataset.dshWhaleState === state,
+            independentUnchanged: independent.style.getPropertyValue('--dsh-whale-current-image') === independentImage,
+          };
+        }""", subtree)
+        assert all(continuity.values()), continuity
+
+    for _ in range(3):
+        page.wait_for_timeout(250)
+        replace_status()
     page.wait_for_function("window.playbackEvents.length >= 2", timeout=5000)
     # Return to the automatic two-state playlist for the end of Classic.
     statuses.first.evaluate("node => { node.textContent = 'Deep diving...'; }")
     page.screenshot(path=str(ARTIFACTS / "playback-light.png"), full_page=True)
+    replace_status(subtree=True)
+    assert statuses.first.get_attribute("data-dsh-whale-state") == "classic"
     page.wait_for_function("window.playbackEvents.length >= 3", timeout=14000)
     timeline = page.evaluate("window.playbackEvents.slice(0, 3)")
     assert [event["state"] for event in timeline] == ["dive", "classic", "dive"], timeline
@@ -77,6 +106,9 @@ result = {
     "measuredStateDurationMs": durations,
     "expectedStateDurationMs": [1980, 10506],
     "statusSwitchDeferred": True,
+    "statusReplacementPreservesLoop": True,
+    "subtreeReplacementPreservesLoop": True,
+    "independentStatusUnchanged": True,
     "darkTheme": True,
     "explicitLightThemeOnDarkOs": True,
     "mobileWidth": 390,

@@ -164,8 +164,42 @@ function apply(ctx) {
         entry = { nextAt: null, state: null };
         metadata.set(host, entry);
       }
+      entry.parent = host.parentElement;
       tracked.add(host);
       refreshHost(host, now);
+    }
+
+    function transferHost(previous, replacement) {
+      const entry = metadata.get(previous);
+      // Keep the resource identity and loop deadline when a render replaces the
+      // status element. Revoking this URL would restart its animated decoder.
+      metadata.delete(previous);
+      tracked.delete(previous);
+      metadata.set(replacement, entry);
+      replacement.setAttribute(HOST_ATTRIBUTE, 'true');
+      if (entry.state !== null) replacement.setAttribute(STATE_ATTRIBUTE, entry.state);
+      if (entry.imageUrl) replacement.style.setProperty('--dsh-whale-current-image', `url("${entry.imageUrl}")`);
+      previous.removeAttribute(HOST_ATTRIBUTE);
+      previous.removeAttribute(STATE_ATTRIBUTE);
+      previous.style.removeProperty('--dsh-whale-current-image');
+    }
+
+    function preserveReplacedHosts(hosts) {
+      const removed = [...tracked].filter(host => host.isConnected === false);
+      const added = hosts.filter(host => !metadata.has(host));
+      // Match distinct status containers before considering a whole-subtree
+      // replacement. Ambiguous groups start independently rather than sharing
+      // another visible turn's director.
+      for (const host of [...added]) {
+        const matches = removed.filter(previous => metadata.get(previous).parent === host.parentElement);
+        const siblings = added.filter(candidate => candidate.parentElement === host.parentElement);
+        if (matches.length !== 1 || siblings.length !== 1) continue;
+        const previous = matches[0];
+        transferHost(previous, host);
+        removed.splice(removed.indexOf(previous), 1);
+        added.splice(added.indexOf(host), 1);
+      }
+      if (removed.length === 1 && added.length === 1) transferHost(removed[0], added[0]);
     }
 
     function pruneDisconnected() {
@@ -183,7 +217,9 @@ function apply(ctx) {
     function scan() {
       if (disposed || document.hidden) return;
       const now = Date.now();
-      for (const host of document.querySelectorAll(STATUS_SELECTOR)) attachHost(host, now);
+      const hosts = [...document.querySelectorAll(STATUS_SELECTOR)];
+      preserveReplacedHosts(hosts);
+      for (const host of hosts) attachHost(host, now);
       pruneDisconnected();
       for (const host of tracked) refreshHost(host, now);
       scheduleNextCycle();

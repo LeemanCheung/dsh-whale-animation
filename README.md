@@ -14,6 +14,7 @@ v0.7.1 supports DSH 0.1.2-rc.1 without the retired, unused client-runtime inject
 - **Classic**: restored from first-published commit `95b06e3f0e6ea817d25858eb29f7064a233b3c65`.
 - Both animated WebPs and both reduced-motion PNGs are verified by Git blob SHA-1, SHA-256, frame count, and timing.
 - The director plays one full Dive loop (1.980 s), then one full Classic loop (10.506 s). Status-text requests also wait for the current loop to finish.
+- An unambiguous status-node replacement in the same DOM update preserves its current loop and deadline. Separate status containers keep independent playback; an update with no status ends that playback session.
 - Dark theme, 84/72/60 px responsive sizing, reduced-motion PNGs, offline embedding, and lifecycle cleanup remain supported.
 
 Removed in v0.7.0: Spout, Sonar, Tool Run, Stream, Calm, Retry, all generated art sources, and their build pipeline.
@@ -35,6 +36,10 @@ npm pack --dry-run
 ```
 
 `npm run verify` regenerates only `assets/manifest.json` and `lib/client.js`; it never regenerates or re-encodes either original animation.
+
+Release publication also runs the Chromium browser smoke test and stops if it fails.
+
+On Windows, run `check:browser` with Git Bash on `PATH` and set `CHROME_BIN` to the Chrome executable when Chrome is not on `PATH`.
 
 ## Runtime contract
 

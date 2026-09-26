@@ -1,5 +1,13 @@
 # Changelog
 
+## [Unreleased]
+
+### Fixed
+
+- Preserve the current animation resource and loop deadline across unambiguous status-node replacements in the same DOM update, while keeping separate status containers independent.
+- Require the Chromium browser smoke test to pass in the release workflow before publishing.
+- Convert the browser fixture URL for Windows Chrome when running the smoke test in Git Bash.
+
 ## [0.7.1] - 2026-09-05
 
 ### Fixed
