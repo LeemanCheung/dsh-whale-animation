@@ -14,7 +14,7 @@ v0.7.1 supports DSH 0.1.2-rc.1 without the retired, unused client-runtime inject
 - **Classic**: restored from first-published commit `95b06e3f0e6ea817d25858eb29f7064a233b3c65`.
 - Both animated WebPs and both reduced-motion PNGs are verified by Git blob SHA-1, SHA-256, frame count, and timing.
 - The director plays one full Dive loop (1.980 s), then one full Classic loop (10.506 s). Status-text requests also wait for the current loop to finish.
-- An unambiguous status-node replacement in the same DOM update preserves its current loop and deadline. Separate status containers keep independent playback; an update with no status ends that playback session.
+- An unambiguous status-node replacement under the same parent preserves its current loop and deadline. Across parents, playback is inherited only when a single DOM mutation records the replacement of the containing subtree; separate removal/insertion records start independent playback. An update with no status ends that playback session.
 - Dark theme, 84/72/60 px responsive sizing, reduced-motion PNGs, offline embedding, and lifecycle cleanup remain supported.
 
 Removed in v0.7.0: Spout, Sonar, Tool Run, Stream, Calm, Retry, all generated art sources, and their build pipeline.

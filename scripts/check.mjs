@@ -260,10 +260,16 @@ assert.equal(replacement.attributes.get('data-dsh-whale-state'), 'classic')
 assert.equal(sibling.attributes.get('data-dsh-whale-state'), 'dive')
 assert.equal(timeoutDelay, 1480)
 
-// A single replaced subtree can carry its director even when its parent changes.
+// A single MutationRecord proves that the old and new hosts belong to the
+// subtrees exchanged by one replace operation, even when their parents differ.
 clockNow = 55000
-replacement = replaceStatus(replacement, {})
-mutationCallback()
+const previousSubtreeStatus = replacement
+const previousSubtree = replacement.parentElement
+previousSubtree.contains = node => node === previousSubtreeStatus
+const subtreeContainer = {}
+const nextSubtree = { parentNode: subtreeContainer, contains: node => node === replacement }
+replacement = replaceStatus(replacement, nextSubtree)
+mutationCallback([{ type: 'childList', target: subtreeContainer, removedNodes: [previousSubtree], addedNodes: [nextSubtree] }])
 assert.equal(replacement.attributes.get('data-dsh-whale-state'), 'classic')
 assert.equal(replacement.properties.get('--dsh-whale-current-image'), classicImage)
 clockNow = 55980
@@ -273,6 +279,34 @@ assert.equal(timeoutDelay, 6506)
 clockNow = 62486
 timeoutCallback()
 assert.equal(replacement.attributes.get('data-dsh-whale-state'), 'dive')
+
+// One removal and one insertion in the same observer batch are independent
+// when they occur in different containers. The new turn owns a fresh deadline.
+clockNow = 63000
+const removedSibling = sibling
+const removedImage = sibling.properties.get('--dsh-whale-current-image')
+sibling = makeHost('Deep diving...', {})
+removedSibling.isConnected = false
+statusHosts = statusHosts.map(node => node === removedSibling ? sibling : node)
+mutationCallback([
+  { type: 'childList', target: removedSibling.parentElement, removedNodes: [removedSibling], addedNodes: [] },
+  { type: 'childList', target: sibling.parentElement, removedNodes: [], addedNodes: [sibling] },
+])
+assert.equal(sibling.attributes.get('data-dsh-whale-state'), 'dive', 'an unrelated new container must start its own playlist')
+assert.notEqual(sibling.properties.get('--dsh-whale-current-image'), removedImage)
+clockNow = 63100
+replacement.isConnected = false
+statusHosts = [sibling]
+mutationCallback([{ type: 'childList', target: replacement.parentElement, removedNodes: [replacement], addedNodes: [] }])
+assert.equal(timeoutDelay, 1880, 'the unrelated status must have its own complete first-loop deadline')
+
+// A scan without structural records must not guess a cross-parent replacement.
+clockNow = 63200
+const unrelatedImage = sibling.properties.get('--dsh-whale-current-image')
+sibling = replaceStatus(sibling, {})
+mutationCallback()
+assert.notEqual(sibling.properties.get('--dsh-whale-current-image'), unrelatedImage)
+assert.equal(timeoutDelay, 1980)
 
 // An update with no live status ends the director; a later turn starts afresh.
 for (const node of statusHosts) node.isConnected = false

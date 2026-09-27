@@ -15,6 +15,53 @@ ARTIFACTS.mkdir(exist_ok=True)
 with sync_playwright() as playwright:
     browser = playwright.chromium.launch(channel="chrome", headless=True)
     errors: list[str] = []
+    regression_page = browser.new_page()
+    regression_page.on("pageerror", lambda error: errors.append(str(error)))
+    regression_page.goto(URL, wait_until="networkidle")
+    unrelated_status = regression_page.evaluate("""async () => {
+      const [independent, previous] = document.querySelectorAll('[role="status"]');
+      const previousParent = previous.parentElement;
+      const oldState = previous.dataset.dshWhaleState;
+      const oldImage = previous.style.getPropertyValue('--dsh-whale-current-image');
+      const nextParent = document.createElement('article');
+      const next = document.createElement('div');
+      next.className = 'regression_turnStatus';
+      next.setAttribute('role', 'status');
+      next.textContent = 'Deep diving...';
+      nextParent.appendChild(next);
+      window.unrelatedStatusEvents = [];
+      new MutationObserver(() => {
+        const state = next.dataset.dshWhaleState;
+        if (window.unrelatedStatusEvents.at(-1)?.state !== state)
+          window.unrelatedStatusEvents.push({state, at: performance.now()});
+      }).observe(next, {attributes: true, attributeFilter: ['data-dsh-whale-state']});
+      const batches = [];
+      const recorder = new MutationObserver(records => batches.push(records));
+      recorder.observe(document.documentElement, {childList: true, subtree: true});
+      previous.remove();
+      independent.parentElement.appendChild(nextParent);
+      await new Promise(resolve => queueMicrotask(() => queueMicrotask(resolve)));
+      recorder.disconnect();
+      const records = batches.flat();
+      return {
+        oldState,
+        newState: next.dataset.dshWhaleState,
+        freshImage: next.style.getPropertyValue('--dsh-whale-current-image') !== oldImage,
+        singleObserverBatch: batches.length === 1,
+        differentContainers: previousParent !== next.parentElement,
+        separateRemovalAndInsertion: records.some(record => record.target === previousParent && record.removedNodes[0] === previous && record.addedNodes.length === 0)
+          && records.some(record => record.target === independent.parentElement && record.addedNodes[0] === nextParent && record.removedNodes.length === 0),
+      };
+    }""")
+    assert unrelated_status["oldState"] == "classic", unrelated_status
+    assert unrelated_status["newState"] == "dive", unrelated_status
+    assert all(unrelated_status[key] for key in ["freshImage", "singleObserverBatch", "differentContainers", "separateRemovalAndInsertion"]), unrelated_status
+    regression_page.wait_for_function("window.unrelatedStatusEvents.length >= 2", timeout=5000)
+    unrelated_timeline = regression_page.evaluate("window.unrelatedStatusEvents.slice(0, 2)")
+    assert [event["state"] for event in unrelated_timeline] == ["dive", "classic"], unrelated_timeline
+    unrelated_duration = unrelated_timeline[1]["at"] - unrelated_timeline[0]["at"]
+    assert abs(unrelated_duration - 1980) < 150, unrelated_duration
+    regression_page.close()
     page = browser.new_page(viewport={"width": 1000, "height": 700})
     page.on("pageerror", lambda error: errors.append(str(error)))
     page.add_init_script("""
@@ -109,6 +156,8 @@ result = {
     "statusReplacementPreservesLoop": True,
     "subtreeReplacementPreservesLoop": True,
     "independentStatusUnchanged": True,
+    "unrelatedStatus": unrelated_status,
+    "unrelatedStatusFirstLoopMs": unrelated_duration,
     "darkTheme": True,
     "explicitLightThemeOnDarkOs": True,
     "mobileWidth": 390,

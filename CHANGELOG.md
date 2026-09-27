@@ -5,6 +5,7 @@
 ### Fixed
 
 - Preserve the current animation resource and loop deadline across unambiguous status-node replacements in the same DOM update, while keeping separate status containers independent.
+- Require a recorded subtree replacement before transferring playback across parents; removing a turn and adding an unrelated turn in the same observer batch now starts fresh playback.
 - Require the Chromium browser smoke test to pass in the release workflow before publishing.
 - Convert the browser fixture URL for Windows Chrome when running the smoke test in Git Bash.
 
