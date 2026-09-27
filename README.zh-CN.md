@@ -14,6 +14,7 @@ v0.7.1 已适配 DSH 0.1.2-rc.1：移除了新版已不再提供、插件本身�
 - **Classic**：来自首发提交 `95b06e3f0e6ea817d25858eb29f7064a233b3c65`。
 - 两个 WebP 和两个减少动态效果 PNG 均校验 Git Blob SHA-1、SHA-256、帧数和时序。
 - 按 `dive → classic` 播放完整循环：Dive 1.980 秒，Classic 10.506 秒。状态文字要求切换时，也先播完当前循环。
+- 同一父容器中能明确对应的新旧状态节点沿用当前循环及切换时间。跨父容器时，必须由一条 DOM 变更记录证明包含它们的子树被直接替换；分别删除和新增的节点独立起播。页面更新后没有状态节点时结束本轮播放。
 - 保留深色主题、84/72/60 px 响应式尺寸、减少动态效果、离线内嵌与完整生命周期清理。
 
 v0.7.0 已删除：Spout、Sonar、Tool Run、Stream、Calm、Retry、全部生成美术源图及其构建链。
@@ -35,6 +36,10 @@ npm pack --dry-run
 ```
 
 `npm run verify` 只重建 `assets/manifest.json` 与 `lib/client.js`，绝不会重新生成或重新编码两套原始动画。
+
+Release 发布还会执行 Chromium 浏览器烟测；烟测失败时停止发布。
+
+Windows 上运行 `check:browser` 时，需要将 Git Bash 加入 `PATH`；Chrome 不在 `PATH` 中时，通过 `CHROME_BIN` 指定其可执行文件。
 
 安装了 Python Playwright 和 Chrome 的开发机还可运行 `npm run check:playback`，实测完整轮换时长、后台恢复、主题和减少动态效果。详细记录见 [2026-09-05 兼容与播放验收](docs/compatibility-20260905.md)。
 

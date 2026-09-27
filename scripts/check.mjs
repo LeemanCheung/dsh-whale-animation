@@ -126,15 +126,21 @@ assert.equal(plugin.chooseWhaleState('Deep diving...', 11000, true), 'dive')
 
 // A hidden DSH tab should not poll the full document. Resuming it must mount
 // existing status text immediately, and hot reload must dispose every listener.
-const attributes = new Map()
-const properties = new Map()
-const host = {
-  textContent: 'Deep diving...', isConnected: true,
-  style: { setProperty: (name, value) => properties.set(name, value), removeProperty: name => properties.delete(name) },
-  getAttribute: name => attributes.get(name),
-  setAttribute: (name, value) => attributes.set(name, value),
-  removeAttribute: name => attributes.delete(name),
+const statusParent = {}
+function makeHost(textContent = 'Deep diving...', parentElement = statusParent) {
+  const attributes = new Map()
+  const properties = new Map()
+  return {
+    textContent, parentElement, isConnected: true, attributes, properties,
+    style: { setProperty: (name, value) => properties.set(name, value), removeProperty: name => properties.delete(name) },
+    getAttribute: name => attributes.get(name),
+    setAttribute: (name, value) => attributes.set(name, value),
+    removeAttribute: name => attributes.delete(name),
+  }
 }
+const host = makeHost()
+const { attributes, properties } = host
+let statusHosts = [host]
 const listeners = new Map()
 let timerCount = 0
 let clearedTimers = 0
@@ -144,6 +150,7 @@ let clockNow = 0
 let timeoutCallback
 let timeoutDelay
 let createdImageUrls = 0
+let mutationCallback
 const revokedImageUrls = new Set()
 context.Date = { now: () => clockNow }
 context.URL = {
@@ -158,13 +165,18 @@ context.document = {
   head: { appendChild() {} },
   createElement: () => ({ dataset: {}, remove() { removedStyles += 1 } }),
   querySelector: () => null,
-  querySelectorAll: selector => selector === plugin.statusSelector ? [host] : [],
+  querySelectorAll: selector => selector === plugin.statusSelector ? statusHosts : [],
   addEventListener: (name, callback) => listeners.set(name, callback),
   removeEventListener: name => listeners.delete(name),
 }
 context.setTimeout = (callback, delay) => { timeoutCallback = callback; timeoutDelay = delay; return ++timerCount }
 context.clearTimeout = () => { clearedTimers += 1 }
-context.MutationObserver = class { observe() {} disconnect() { disconnectedObservers += 1 } }
+context.queueMicrotask = callback => callback()
+context.MutationObserver = class {
+  constructor(callback) { mutationCallback = callback }
+  observe() {}
+  disconnect() { disconnectedObservers += 1 }
+}
 let dispose
 plugin.apply({ effect(start) { dispose = start() } })
 assert.equal(timerCount, 0)
@@ -201,10 +213,118 @@ context.document.hidden = false
 listeners.get('visibilitychange')()
 assert.equal(attributes.get('data-dsh-whale-state'), 'dive', 'visibility resume restarts the same complete loop')
 assert.equal(timeoutDelay, 1980)
+
+function replaceStatus(previous, parentElement = previous.parentElement) {
+  const replacement = makeHost(previous.textContent, parentElement)
+  previous.isConnected = false
+  statusHosts = statusHosts.map(node => node === previous ? replacement : node)
+  return replacement
+}
+
+// Replacing a live status node must keep its loop deadline and image resource.
+// Otherwise frequent UI renders prevent the automatic playlist from advancing.
+clockNow = 50600
+host.textContent = 'Deep diving...'
+const firstImage = properties.get('--dsh-whale-current-image')
+let replacement = replaceStatus(host)
+mutationCallback()
+assert.equal(timeoutDelay, 1380, 'status replacement must preserve the remaining loop time')
+assert.equal(replacement.properties.get('--dsh-whale-current-image'), firstImage)
+assert.equal(attributes.size, 0, 'the old node must relinquish plugin attributes')
+assert.equal(properties.size, 0)
+clockNow = 51980
+timeoutCallback()
+assert.equal(replacement.attributes.get('data-dsh-whale-state'), 'classic')
+const classicImage = replacement.properties.get('--dsh-whale-current-image')
+clockNow = 54000
+replacement.textContent = 'Deep diving...'
+replacement = replaceStatus(replacement)
+mutationCallback()
+assert.equal(replacement.attributes.get('data-dsh-whale-state'), 'classic')
+assert.equal(replacement.properties.get('--dsh-whale-current-image'), classicImage)
+assert.equal(timeoutDelay, 8486)
+
+// A separate status starts independently. Concurrent replacements retain their
+// own parent identities, even if the DOM order changes in the same update.
+let sibling = makeHost('Deep diving...', {})
+statusHosts.push(sibling)
+mutationCallback()
+assert.equal(sibling.attributes.get('data-dsh-whale-state'), 'dive')
+assert.notEqual(sibling.properties.get('--dsh-whale-current-image'), classicImage)
+clockNow = 54500
+replacement = replaceStatus(replacement)
+sibling = replaceStatus(sibling)
+statusHosts.reverse()
+mutationCallback()
+assert.equal(replacement.attributes.get('data-dsh-whale-state'), 'classic')
+assert.equal(sibling.attributes.get('data-dsh-whale-state'), 'dive')
+assert.equal(timeoutDelay, 1480)
+
+// A single MutationRecord proves that the old and new hosts belong to the
+// subtrees exchanged by one replace operation, even when their parents differ.
+clockNow = 55000
+const previousSubtreeStatus = replacement
+const previousSubtree = replacement.parentElement
+previousSubtree.contains = node => node === previousSubtreeStatus
+const subtreeContainer = {}
+const nextSubtree = { parentNode: subtreeContainer, contains: node => node === replacement }
+replacement = replaceStatus(replacement, nextSubtree)
+mutationCallback([{ type: 'childList', target: subtreeContainer, removedNodes: [previousSubtree], addedNodes: [nextSubtree] }])
+assert.equal(replacement.attributes.get('data-dsh-whale-state'), 'classic')
+assert.equal(replacement.properties.get('--dsh-whale-current-image'), classicImage)
+clockNow = 55980
+timeoutCallback()
+assert.equal(sibling.attributes.get('data-dsh-whale-state'), 'classic')
+assert.equal(timeoutDelay, 6506)
+clockNow = 62486
+timeoutCallback()
+assert.equal(replacement.attributes.get('data-dsh-whale-state'), 'dive')
+
+// One removal and one insertion in the same observer batch are independent
+// when they occur in different containers. The new turn owns a fresh deadline.
+clockNow = 63000
+const removedSibling = sibling
+const removedImage = sibling.properties.get('--dsh-whale-current-image')
+sibling = makeHost('Deep diving...', {})
+removedSibling.isConnected = false
+statusHosts = statusHosts.map(node => node === removedSibling ? sibling : node)
+mutationCallback([
+  { type: 'childList', target: removedSibling.parentElement, removedNodes: [removedSibling], addedNodes: [] },
+  { type: 'childList', target: sibling.parentElement, removedNodes: [], addedNodes: [sibling] },
+])
+assert.equal(sibling.attributes.get('data-dsh-whale-state'), 'dive', 'an unrelated new container must start its own playlist')
+assert.notEqual(sibling.properties.get('--dsh-whale-current-image'), removedImage)
+clockNow = 63100
+replacement.isConnected = false
+statusHosts = [sibling]
+mutationCallback([{ type: 'childList', target: replacement.parentElement, removedNodes: [replacement], addedNodes: [] }])
+assert.equal(timeoutDelay, 1880, 'the unrelated status must have its own complete first-loop deadline')
+
+// A scan without structural records must not guess a cross-parent replacement.
+clockNow = 63200
+const unrelatedImage = sibling.properties.get('--dsh-whale-current-image')
+sibling = replaceStatus(sibling, {})
+mutationCallback()
+assert.notEqual(sibling.properties.get('--dsh-whale-current-image'), unrelatedImage)
+assert.equal(timeoutDelay, 1980)
+
+// An update with no live status ends the director; a later turn starts afresh.
+for (const node of statusHosts) node.isConnected = false
+statusHosts = []
+mutationCallback()
+assert.equal(revokedImageUrls.size, createdImageUrls)
+clockNow = 70000
+const nextTurn = makeHost()
+statusHosts = [nextTurn]
+mutationCallback()
+assert.equal(nextTurn.attributes.get('data-dsh-whale-state'), 'dive')
+assert.equal(timeoutDelay, 1980)
 dispose()
 assert.equal(listeners.size, 0)
 assert.equal(attributes.size, 0)
 assert.equal(properties.size, 0)
+assert.equal(nextTurn.attributes.size, 0)
+assert.equal(nextTurn.properties.size, 0)
 assert.equal(revokedImageUrls.size, createdImageUrls)
 assert.equal(removedStyles, 1)
 assert.equal(disconnectedObservers, 1)

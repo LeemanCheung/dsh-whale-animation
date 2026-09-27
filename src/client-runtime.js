@@ -86,6 +86,7 @@ function apply(ctx) {
     let disposed = false;
     let scanQueued = false;
     let timer = null;
+    let replacementRecords = [];
 
     function releaseImage(host, entry) {
       if (entry.imageUrl?.startsWith('blob:')) URL.revokeObjectURL(entry.imageUrl);
@@ -164,8 +165,55 @@ function apply(ctx) {
         entry = { nextAt: null, state: null };
         metadata.set(host, entry);
       }
+      entry.parent = host.parentElement;
       tracked.add(host);
       refreshHost(host, now);
+    }
+
+    function transferHost(previous, replacement) {
+      const entry = metadata.get(previous);
+      // Keep the resource identity and loop deadline when a render replaces the
+      // status element. Revoking this URL would restart its animated decoder.
+      metadata.delete(previous);
+      tracked.delete(previous);
+      metadata.set(replacement, entry);
+      replacement.setAttribute(HOST_ATTRIBUTE, 'true');
+      if (entry.state !== null) replacement.setAttribute(STATE_ATTRIBUTE, entry.state);
+      if (entry.imageUrl) replacement.style.setProperty('--dsh-whale-current-image', `url("${entry.imageUrl}")`);
+      previous.removeAttribute(HOST_ATTRIBUTE);
+      previous.removeAttribute(STATE_ATTRIBUTE);
+      previous.style.removeProperty('--dsh-whale-current-image');
+    }
+
+    function preserveReplacedHosts(hosts, records) {
+      const removed = [...tracked].filter(host => host.isConnected === false);
+      const added = hosts.filter(host => !metadata.has(host));
+      // Match distinct status containers before considering a whole-subtree
+      // replacement. Ambiguous groups start independently rather than sharing
+      // another visible turn's director.
+      for (const host of [...added]) {
+        const matches = removed.filter(previous => metadata.get(previous).parent === host.parentElement);
+        const siblings = added.filter(candidate => candidate.parentElement === host.parentElement);
+        if (matches.length !== 1 || siblings.length !== 1) continue;
+        const previous = matches[0];
+        transferHost(previous, host);
+        removed.splice(removed.indexOf(previous), 1);
+        added.splice(added.indexOf(host), 1);
+      }
+      for (const record of records) {
+        const previousRoot = record.removedNodes[0];
+        const replacementRoot = record.addedNodes[0];
+        // A cross-parent handoff needs one native replacement operation whose
+        // old/new subtrees contain these hosts. Separate removal and insertion
+        // records, or an added subtree moved elsewhere later, are not evidence.
+        if (replacementRoot.parentNode !== record.target) continue;
+        const previousHosts = removed.filter(host => previousRoot === host || previousRoot.contains(host));
+        const replacementHosts = added.filter(host => replacementRoot === host || replacementRoot.contains(host));
+        if (previousHosts.length !== 1 || replacementHosts.length !== 1) continue;
+        transferHost(previousHosts[0], replacementHosts[0]);
+        removed.splice(removed.indexOf(previousHosts[0]), 1);
+        added.splice(added.indexOf(replacementHosts[0]), 1);
+      }
     }
 
     function pruneDisconnected() {
@@ -181,9 +229,13 @@ function apply(ctx) {
     }
 
     function scan() {
+      const records = replacementRecords;
+      replacementRecords = [];
       if (disposed || document.hidden) return;
       const now = Date.now();
-      for (const host of document.querySelectorAll(STATUS_SELECTOR)) attachHost(host, now);
+      const hosts = [...document.querySelectorAll(STATUS_SELECTOR)];
+      preserveReplacedHosts(hosts, records);
+      for (const host of hosts) attachHost(host, now);
       pruneDisconnected();
       for (const host of tracked) refreshHost(host, now);
       scheduleNextCycle();
@@ -203,8 +255,14 @@ function apply(ctx) {
       if (Number.isFinite(nextAt)) timer = setTimeout(scan, Math.max(0, nextAt - Date.now()));
     }
 
-    function scheduleScan() {
-      if (scanQueued || disposed) return;
+    function scheduleScan(records = []) {
+      if (disposed) return;
+      for (const record of records) {
+        if (record.type === 'childList' && record.removedNodes.length === 1 && record.addedNodes.length === 1) {
+          replacementRecords.push(record);
+        }
+      }
+      if (scanQueued) return;
       scanQueued = true;
       const enqueue = typeof queueMicrotask === 'function'
         ? queueMicrotask
@@ -274,6 +332,7 @@ function apply(ctx) {
       }
       tracked.clear();
       decodedBlobs.clear();
+      replacementRecords = [];
       style.remove();
     };
   }, `${PLUGIN_ID}: preserved two-loop whale director`);

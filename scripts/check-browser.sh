@@ -13,6 +13,10 @@ if [[ -z "$CHROME" ]]; then echo "No Chrome/Chromium binary found" >&2; exit 1; 
 ARTIFACTS="$ROOT/.artifacts"
 PROFILE="$ARTIFACTS/chrome-profile"
 HTML_URL="file://$ROOT/scripts/browser-smoke.html"
+if command -v cygpath >/dev/null 2>&1; then
+  # Windows Chrome needs a drive-letter file URL, not Git Bash's /c/... path.
+  HTML_URL="file:///$(cygpath -m "$ROOT")/scripts/browser-smoke.html"
+fi
 DOM="$ARTIFACTS/browser-smoke-dom.html"
 LIGHT="$ARTIFACTS/browser-smoke-light.png"
 DARK="$ARTIFACTS/browser-smoke-dark.png"
